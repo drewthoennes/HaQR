@@ -1,0 +1,20 @@
+version: "3"
+services:
+  app:
+    container_name: app
+    restart: always
+    build: .
+    environment:
+      - MONGODB_URI=mongodb://mongo/air_pantry
+      - PORT=8080
+    ports:
+      - "8080:8080"
+    links:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./data/mongodb/db:/data/db
+    ports:
+      - "27017:27017"
