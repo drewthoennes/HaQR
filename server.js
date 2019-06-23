@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const chalk = require('chalk');
 let config = require('./config');
 
+require('dotenv').config();
+
 // Determine configuration
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'production') {
 	config = config.prod;
