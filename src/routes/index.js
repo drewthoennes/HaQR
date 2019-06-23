@@ -9,6 +9,7 @@ module.exports = function() {
 
   require('./auth')(router);
   require('./hackers')(router);
+  require('./users')(router);
   require('./health')(router);
   require('./error')(router);
 
