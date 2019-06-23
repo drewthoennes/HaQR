@@ -10,7 +10,7 @@
   },
   "license": "MIT",
   "_moduleAliases": {
-    "@root": "./",
+    "@": "./",
     "@b": "./src"
   },
   "devDependencies": {

@@ -3,16 +3,16 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const chalk = require('chalk');
-let config = require('./config');
+let config = require('./config')();
 
 require('dotenv').config();
 
-// Determine configuration
+// Announce environment
 if (!process.env.NODE_ENV || process.env.NODE_ENV === 'production') {
-	config = config.prod;
+	console.log('Running application for production');
 }
 else {
-	config = config.dev;
+	console.log('Running application for development');
 }
 
 // Set up Express.js
