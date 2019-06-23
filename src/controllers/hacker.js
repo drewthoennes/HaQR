@@ -2,11 +2,11 @@ const {Hacker} = require('@b/models');
 const bluebird = require('bluebird');
 
 exports.getAllHackers = (qr) => {
-    return Hacker.find().select('-_id -qr').exec();
+    return Hacker.find().select('-_id').exec();
 };
 
 exports.getHacker = (qr) => {
-    return Hacker.findOne({qr: qr}).select('-_id -qr').exec();
+    return Hacker.findOne({qr: qr}).select('-_id').exec();
 };
 
 exports.updateHacker = (qr, fields) => {
