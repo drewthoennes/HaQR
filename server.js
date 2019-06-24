@@ -34,7 +34,19 @@ app.use(function(err, req, res, next) {
 });
 
 // Catch all for backend API
-app.use(require('./src/routes')());
+app.use(require('./src/backend/routes')());
+
+app.get('/index.html', (req, res) => {
+	res.redirect('/');
+});
+
+// Frontend endpoints
+app.use('/public', express.static(`${__dirname}/dist`));
+
+// Catch all for frontend routes
+app.all('/*', function(req, res) {
+	res.sendFile(`${__dirname}/dist/index.html`);
+});
 
 server.listen(PORT);
 

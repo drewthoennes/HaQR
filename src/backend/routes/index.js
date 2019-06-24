@@ -3,7 +3,7 @@ const express = require('express');
 module.exports = function() {
   let router = express.Router();
 
-  router.get('/', (req, res) => {
+  router.get('/api', (req, res) => {
     res.json({'message': 'BoilermakeQR API'});
   });
 

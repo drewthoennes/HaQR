@@ -5,6 +5,7 @@ module.exports = () => {
     return {
       'port': 8080,
       'host': 'https://boilermakeqr.herokuapp.com',
+      'name': 'BoilerMakeQR',
       'database': {
         'uri': 'mongodb://localhost:27017/boilermakeqr',
         'reconnectInterval': 10000
@@ -16,6 +17,7 @@ module.exports = () => {
   return {
     'port': 8080,
     'host': 'http://localhost:8080',
+    'name': 'BoilerMakeQR',
     'database': {
       'uri': 'mongodb://localhost:27017/boilermakeqr',
       'reconnectInterval': 10000
