@@ -6,7 +6,7 @@ exports.getAllHackers = (qr) => {
 };
 
 exports.getHacker = (qr) => {
-    return Hacker.findOne({qr: qr}).select('-_id -fields').exec();
+    return Hacker.findOne({qr: qr}).select('-_id').exec();
 };
 
 exports.updateHacker = (qr, fields) => {
