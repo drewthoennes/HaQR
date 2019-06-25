@@ -61,6 +61,7 @@ class HackersPage extends React.Component {
 
   onQRScan(data) {
     console.log(data);
+    alert(data);
   }
 
   onQRError(error) {
