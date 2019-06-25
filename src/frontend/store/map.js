@@ -1,5 +1,9 @@
 let mapStateToProps = (state) => {
-    return {}
+    return {
+        account: {
+            token: state.account.token
+        }
+    }
 };
 
 export default mapStateToProps;

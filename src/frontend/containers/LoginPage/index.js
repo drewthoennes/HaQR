@@ -3,11 +3,14 @@ import {connect} from 'react-redux';
 import map from '@/store/map';
 import {parseQuery} from '@/utils';
 import axios from 'axios';
+import store from '@/store';
+import {setToken} from '@/store/actions';
+import {withRouter} from 'react-router-dom';
 import './styles.scss';
 
 class LoginPage extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
     };
@@ -16,7 +19,13 @@ class LoginPage extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.getToken());
+    let token = this.getToken();
+
+    if (token) {
+      localStorage.setItem('token', token);
+      store.dispatch(setToken(token));
+      this.props.history.push('/hackers');
+    }
   }
 
   getToken() {
@@ -25,9 +34,11 @@ class LoginPage extends React.Component {
       return;
     }
 
-    return query.find(q => {
+    let pair = query.find(q => {
       return q.indexOf('token=') != -1;
     });
+
+    return pair.substr(pair.indexOf('=') + 1);
   }
 
   authenticate() {
@@ -47,4 +58,4 @@ class LoginPage extends React.Component {
   }
 };
 
-export default connect(map)(LoginPage);
+export default connect(map)(withRouter(LoginPage));

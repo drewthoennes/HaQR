@@ -53,8 +53,9 @@
     "module-alias": "^2.2.0",
     "mongoose": "^5.5.4",
     "path": "^0.12.7",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "react-qr-reader": "^2.2.1",
     "react-redux": "^7.1.0",
     "react-router-dom": "^4.3.1",
     "redux": "^4.0.1"

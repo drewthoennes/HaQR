@@ -1,0 +1,19 @@
+#hackersPage {
+    .content {
+        p {
+            margin: 0px;
+        }
+    }
+
+    .qrReader {
+        width: 320px;
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        margin-left: -160px;
+    }
+
+    .blur {
+        background: rgba(0, 0, 0, 0.6);
+    }
+}
