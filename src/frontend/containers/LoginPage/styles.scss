@@ -1,3 +1,9 @@
+$xl: 1200px;
+$lg: 1000px;
+$md: 800px;
+$sm: 600px;
+$xs: 400px;
+
 #loginPage {
     .content {
         background: rgba(0, 0, 0, 0.05);
@@ -38,6 +44,26 @@
                     margin: 0px;
                     line-height: 30px;
                 }
+            }
+
+            @media only screen and (max-width: $lg) {
+                width: 50%;
+                margin-left: 25%;
+            }
+
+            @media only screen and (max-width: $md) {
+                width: 60%;
+                margin-left: 20%;
+            }
+
+            @media only screen and (max-width: $sm) {
+                width: 70%;
+                margin-left: 15%;
+            }
+
+            @media only screen and (max-width: $xs) {
+                width: 80%;
+                margin-left: 10%;
             }
         }
     }

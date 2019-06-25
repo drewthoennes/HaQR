@@ -1,7 +1,45 @@
+$xl: 1200px;
+$lg: 1000px;
+$md: 800px;
+$sm: 600px;
+$xs: 400px;
+
 #hackersPage {
     .content {
+        padding: 20px 15%;
+        background: rgba(0, 0, 0, 0.05);
+
         p {
             margin: 0px;
+        }
+
+        .btn {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+        }
+
+        & > .row {
+            justify-content: space-between;
+            margin: 0px 0px 20px 0px;
+
+            input {
+                padding: 5px;
+            }
+        }
+
+        .list-group {
+        }
+
+        @media only screen and (max-width: $lg) {
+            padding: 20px 10%;
+        }
+
+        @media only screen and (max-width: $md) {
+            padding: 20px 5%;
+        }
+
+        @media only screen and (max-width: $sm) {
+            padding: 20px;
         }
     }
 
