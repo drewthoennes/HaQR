@@ -1,0 +1,44 @@
+#loginPage {
+    .content {
+        background: rgba(0, 0, 0, 0.05);
+
+        #loginPanel {
+            height: 50%;
+            width: 30%;
+            left: 50%;
+            margin-left: 35%;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            background: white;
+
+            h1 {
+                text-align: center;
+                margin: 0px;
+                font-size: 36px;
+            }
+
+            p {
+                margin: 0px 40px 20px 40px;
+                line-height: 25px;
+            }
+
+            button {
+                margin: 0px 40px;
+                padding: 20px;
+                background: #24292e;
+                color: white;
+                font-size: 14px;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+
+                svg {
+                    font-size: 30px;
+                }
+
+                p {
+                    margin: 0px;
+                    line-height: 30px;
+                }
+            }
+        }
+    }
+}

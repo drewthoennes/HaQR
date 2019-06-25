@@ -10,7 +10,7 @@ const Router = () => {
       <Switch>
         <Route path="/login" render={() => <LoginPage/>}/>
         <Route path="/hackers" render={() => <HackersPage/>}/>
-        <Route path="*" render={() => <Redirect to='/hackers'/>}/>
+        <Route path="*" render={() => <Redirect to='/login'/>}/>
       </Switch>
     </BrowserRouter>
   );

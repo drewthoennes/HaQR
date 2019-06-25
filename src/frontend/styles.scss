@@ -1,5 +1,6 @@
 #app, html {
     height: 100%;
+    font-family: 'Roboto', sans-serif;
 }
 
 body {
@@ -9,4 +10,38 @@ body {
 
 .tall {
     height: 100%;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+
+    &-center {
+        justify-content: center;
+    }
+
+    &-around {
+        justify-content: space-around;
+    }
+
+    &-between {
+        justify-content: space-between;
+    }
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+
+    &-center {
+        justify-content: center;
+    }
+
+    &-around {
+        justify-content: space-around;
+    }
+
+    &-between {
+        justify-content: space-between;
+    }
 }
