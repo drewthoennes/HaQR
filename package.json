@@ -5,7 +5,7 @@
   "private": true,
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "dev": "webpack-dev-server --inline --progress --config config/webpack.dev.config.js",
     "build-dev": "webpack --config config/webpack.dev.config.js",
     "build": "webpack --config config/webpack.prod.config.js",
     "start-dev": "npm run build-dev; node server.js",
@@ -40,7 +40,7 @@
     "webpack": "^4.25.1",
     "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.3.1",
+    "webpack-dev-server": "^3.7.2",
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {

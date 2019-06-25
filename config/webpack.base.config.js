@@ -13,6 +13,10 @@ module.exports = {
     path: resolve('dist'),
     publicPath: '/public/'
   },
+  devServer: {
+    contentBase: resolve('dist'),
+    compress: true
+  },
   resolve: {
     extensions: ['.js', '.json', '.scss'],
     alias: {
