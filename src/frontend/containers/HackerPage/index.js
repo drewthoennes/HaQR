@@ -6,8 +6,6 @@ import {withRouter} from 'react-router-dom';
 import {capitalizeFirst} from '@/utils';
 import './styles.scss';
 
-import QRReader from '@/components/QRReader';
-
 class HackerPage extends React.Component {
   constructor(props) {
     super(props);
@@ -91,7 +89,10 @@ class HackerPage extends React.Component {
       for (let field in this.state.hacker.fields) {
         fields.push(
           <div className="hackerField" key={`${this.state.hacker.qr}-${field}`}>
-            <p>{capitalizeFirst(field)}</p>
+            <div className="d-flex">
+              <h4>{capitalizeFirst(field)}</h4>
+              <h2 className="horizontal-line"></h2>
+            </div>
             <div className="list-group">
               {
                 this.state.hacker.fields[field].map((property, index) => (

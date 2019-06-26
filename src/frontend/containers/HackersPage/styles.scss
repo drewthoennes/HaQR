@@ -18,12 +18,21 @@ $xs: 400px;
             border: 1px solid rgba(0, 0, 0, 0.15);
         }
 
+        .fa-camera {
+            font-size: 20px;
+        }
+
         & > .row {
             justify-content: space-between;
             margin: 0px 0px 20px 0px;
 
             input {
                 padding: 5px;
+                width: 30%;
+
+                @media only screen and (max-width: $sm) {
+                    width: 70%;   
+                }
             }
         }
 

@@ -5,6 +5,8 @@ import axios from 'axios';
 import store from '@/store';
 import {removeToken} from '@/store/actions';
 import {withRouter} from 'react-router-dom';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faCamera} from '@fortawesome/free-solid-svg-icons';
 import './styles.scss';
 
 import QRReader from '@/components/QRReader';
@@ -96,8 +98,12 @@ class HackersPage extends React.Component {
         <div className="sidebar"></div>
         <div className={`content tall${this.state.showScanner ? ' blur' : ''}`}>
           <div className="row">
-            <input type="text" value={this.state.search} onChange={this.onSearchChange} placeholder="Search..."/>
-            <button className="btn" onClick={this.showScanner}>Scan</button>
+            <input className="form-control" type="text" value={this.state.search} onChange={this.onSearchChange} placeholder="Search..."/>
+            <button className="btn" onClick={this.showScanner}>
+              <div className="column justify-contents-center">
+                <FontAwesomeIcon icon={faCamera}/>
+              </div>
+              </button>
           </div>
 
           <div className="list-group">

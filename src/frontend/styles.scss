@@ -1,3 +1,7 @@
+html {
+    background: rgba(0, 0, 0, 0.05);
+}
+
 #app, html {
     height: 100%;
     font-family: 'Roboto', sans-serif;
@@ -44,4 +48,10 @@ body {
     &-between {
         justify-content: space-between;
     }
+}
+
+.horizontal-line {
+    width: 100%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    margin: 0px 0 20px 10px;
 }

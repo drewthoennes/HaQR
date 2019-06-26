@@ -27,11 +27,15 @@ $xs: 400px;
             }
         }
 
+        .hackerField:last-child {
+            margin-bottom: 20px;
+        }
+
         .list-group {
             margin-bottom: 20px;
 
             .list-group-item.row {
-                margin: 0px;
+                margin: 0px 0px 5px 0px;
             }
         }
 
