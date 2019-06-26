@@ -24,11 +24,12 @@ class HackersPage extends React.Component {
     this.showScanner = this.showScanner.bind(this);
     this.hideScanner = this.hideScanner.bind(this);
     this.getHackers = this.getHackers.bind(this);
+    this.onQRScan = this.onQRScan.bind(this);
+    this.openHackerPage = this.openHackerPage.bind(this);
     this.logout = this.logout.bind(this);
   }
 
   componentDidMount() {
-    console.log(this.props.account.token);
     this.getHackers();
   }
 
@@ -60,12 +61,15 @@ class HackersPage extends React.Component {
   }
 
   onQRScan(data) {
-    console.log(data);
-    alert(data);
+    this.props.history.push(`/hackers/${data}`);
   }
 
   onQRError(error) {
     console.error(error);
+  }
+  
+  openHackerPage(qr) {
+    this.props.history.push(`/hackers/${qr}`);
   }
 
   logout() {
@@ -79,7 +83,7 @@ class HackersPage extends React.Component {
     let hackers = this.state.hackers.filter(hacker => {
       return hacker ? hacker.name.toLowerCase().includes(search) : false;
     }).map(hacker => (
-      <button className="list-group-item" key={hacker.qr}>{hacker.name} ({hacker.email})</button>
+      <button className="list-group-item" key={hacker.qr} onClick={() => this.openHackerPage(hacker.qr)}>{hacker.name} ({hacker.email})</button>
     ));
 
     let scanner = '';

@@ -4,7 +4,7 @@ $md: 800px;
 $sm: 600px;
 $xs: 400px;
 
-#hackersPage {
+#hackerPage {
     .content {
         padding: 20px 15%;
         background: rgba(0, 0, 0, 0.05);
@@ -13,13 +13,13 @@ $xs: 400px;
             margin: 0px;
         }
 
-        .btn {
+        .btn-blank {
             background: white;
             border: 1px solid rgba(0, 0, 0, 0.15);
         }
 
         & > .row {
-            justify-content: space-between;
+            justify-content: flex-start;
             margin: 0px 0px 20px 0px;
 
             input {
@@ -27,13 +27,11 @@ $xs: 400px;
             }
         }
 
-        .list-group .list-group-item {
-            &:hover {
-                background: rgba(0, 0, 0, 0.01);
-            }
+        .list-group {
+            margin-bottom: 20px;
 
-            &:focus {
-                outline: none;
+            .list-group-item.row {
+                margin: 0px;
             }
         }
 
