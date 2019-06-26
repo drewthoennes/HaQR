@@ -19,8 +19,7 @@ exports.authorize = (req) => {
 
         let account = {
             github: {
-                username: res.data.login,
-                email: res.data.email
+                username: res.data.login // , email: res.data.email // Add email checking
             }
         };
 
