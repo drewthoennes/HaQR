@@ -15,6 +15,12 @@ var UserSchema = new Schema({
     email: {
       type: String
     }
+  },
+  role: {
+    type: String,
+    enum: ['member', 'organizer', 'admin'],
+    required: true,
+    default: 'member'
   }
 }, {
   collection: 'users'

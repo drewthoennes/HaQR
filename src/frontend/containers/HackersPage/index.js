@@ -6,7 +6,7 @@ import store from '@/store';
 import {removeToken} from '@/store/actions';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faCamera} from '@fortawesome/free-solid-svg-icons';
+import {faCamera, faUser} from '@fortawesome/free-solid-svg-icons';
 import './styles.scss';
 
 import QRReader from '@/components/QRReader';
@@ -106,17 +106,23 @@ class HackersPage extends React.Component {
         <div className={`content tall${this.state.showScanner ? ' blur' : ''}`}>
           <div className="row">
             <input className="form-control" type="text" value={this.state.search} onChange={this.onSearchChange} placeholder="Search..."/>
-            <button className="btn" onClick={this.showScanner}>
-              <div className="column justify-contents-center">
-                <FontAwesomeIcon icon={faCamera}/>
-              </div>
+            <div>
+              <button className="btn" onClick={this.showScanner}>
+                <div className="column justify-contents-center">
+                  <FontAwesomeIcon icon={faCamera}/>
+                </div>
               </button>
+              <button className="btn" onClick={this.logout}>
+                <div className="column justify-contents-center">
+                  <FontAwesomeIcon icon={faUser}/>
+                </div>
+              </button>
+            </div>
           </div>
 
           <div className="list-group">
             {hackers}
           </div>
-          <button className="btn" onClick={this.logout} style={{marginTop: '20px'}}>Logout</button>
         </div>
 
         {scanner}

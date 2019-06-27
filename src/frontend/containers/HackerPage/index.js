@@ -98,7 +98,7 @@ class HackerPage extends React.Component {
         fields.push(
           <div className="hackerField" key={`${this.state.hacker.qr}-${field}`}>
             <div className="d-flex">
-              <h4>{capitalizeFirst(field)}</h4>
+              <h5>{capitalizeFirst(field)}</h5>
               <h2 className="horizontal-line"></h2>
             </div>
             <div className="list-group">
@@ -122,6 +122,13 @@ class HackerPage extends React.Component {
       }
     }
 
+    let name = '';
+    if (!this.state.error && this.state.hacker) {
+      name = (
+        <h3 className="nameHeader">{this.state.hacker.name}</h3>
+      );
+    }
+
     return (
       <div id="hackerPage" className="tall">
         <div className="sidebar"></div>
@@ -129,7 +136,7 @@ class HackerPage extends React.Component {
           <div className="row">
             <button className="btn btn-blank" onClick={this.onBackClick}>Back</button>
           </div>
-
+          {name}
           {this.state.error ? <p>{this.state.error}</p> : fields}
         </div>
       </div>

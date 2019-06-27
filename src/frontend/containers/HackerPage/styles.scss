@@ -18,6 +18,10 @@ $xs: 400px;
             border: 1px solid rgba(0, 0, 0, 0.15);
         }
 
+        .btn-success, .btn-danger {
+            min-width: 110px;
+        }
+
         & > .row {
             justify-content: flex-start;
             margin: 0px 0px 20px 0px;
@@ -25,6 +29,11 @@ $xs: 400px;
             input {
                 padding: 5px;
             }
+        }
+
+        .nameHeader {
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         .hackerField:last-child {
