@@ -7,6 +7,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {} from '@fortawesome/free-solid-svg-icons';
 import './styles.scss';
 
+import Topbar from '@/containers/Topbar';
 import HackersView from './_hackersView';
 import UsersView from './_usersView';
 import MetricsView from './_metricsView';
@@ -50,18 +51,22 @@ class AdminPage extends React.Component {
     }
 
     return (
-      <div id="adminPage" className="tall row">
-        <div id="sidebar" className="tall column justify-content-center">
-          <div className="list-group">
-            <button className="list-group-item" onClick={() => this.changeView('hackers')}>Hackers</button>
-            <button className="list-group-item" onClick={() => this.changeView('users')}>Users</button>
-            <button className="list-group-item" onClick={() => this.changeView('metrics')}>Metrics</button>
-            <button className="list-group-item" onClick={() => this.changeView('settings')}>Settings</button>
-          </div>
-        </div>
+      <div id="adminPage" className="tall column">
+        <Topbar/>
 
-        <div className="content">
-          {view}
+        <div className="content tall row">
+          <div id="sidebar" className="tall column justify-content-start">
+            <div className="list-group">
+              <button className="list-group-item" onClick={() => this.changeView('hackers')}>Hackers</button>
+              <button className="list-group-item" onClick={() => this.changeView('users')}>Users</button>
+              <button className="list-group-item" onClick={() => this.changeView('metrics')}>Metrics</button>
+              <button className="list-group-item" onClick={() => this.changeView('settings')}>Settings</button>
+            </div>
+          </div>
+
+          <div className="view">
+            {view}
+          </div>
         </div>
       </div>
     );

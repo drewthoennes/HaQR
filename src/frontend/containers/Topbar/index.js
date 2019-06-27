@@ -6,12 +6,10 @@ import store from '@/store';
 import {removeToken} from '@/store/actions';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {} from '@fortawesome/free-solid-svg-icons';
+import {faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
 import './styles.scss';
 
-import Topbar from '@/containers/Topbar';
-
-class UnauthorizedPage extends React.Component {
+class Topbar extends React.Component {
   constructor(props) {
     super(props);
 
@@ -19,6 +17,9 @@ class UnauthorizedPage extends React.Component {
     };
 
     this.logout = this.logout.bind(this);
+  }
+
+  componentDidMount() {
   }
 
   logout() {
@@ -29,15 +30,13 @@ class UnauthorizedPage extends React.Component {
 
   render() {
     return (
-      <div id="unauthorizedPage" className="tall">
-        <Topbar/>
-        <div className="content tall column justify-content-center">
-          <h4>You don't have access to access this service</h4>
-          <p>Please contact the BoilerMake team if you should have access.</p>
-        </div>
+      <div id="topbar" className="row justify-content-end">
+          <div className="topbar-item column justify-content-center" onClick={this.logout}>
+              <FontAwesomeIcon icon={faSignOutAlt}/>
+          </div>
       </div>
     );
   }
 };
 
-export default connect(map)(withRouter(UnauthorizedPage));
+export default connect(map)(withRouter(Topbar));

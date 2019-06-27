@@ -5,7 +5,7 @@ $sm: 600px;
 $xs: 400px;
 
 #adminPage {
-    .content {
+    .view {
         width: 80%;
         padding: 20px 15%;
         background: rgba(0, 0, 0, 0.05);
@@ -32,7 +32,7 @@ $xs: 400px;
 
 #sidebar {
     width: 20%;
-    padding: 0px 20px;
+    padding: 20px;
     background: rgba(0, 0, 0, 0.05);
 
     .list-group .list-group-item {

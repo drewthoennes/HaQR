@@ -5,10 +5,11 @@ $sm: 600px;
 $xs: 400px;
 
 #hackersPage {
+    background: rgba(0, 0, 0, 0.05);
+    
     .content {
         width: 100%;
         padding: 20px 15%;
-        background: rgba(0, 0, 0, 0.05);
 
         p {
             margin: 0px;
@@ -37,7 +38,7 @@ $xs: 400px;
                 width: 30%;
 
                 @media only screen and (max-width: $sm) {
-                    width: 60%;
+                    width: 70%;
                 }
             }
         }

@@ -1,0 +1,20 @@
+$xl: 1200px;
+$lg: 1000px;
+$md: 800px;
+$sm: 600px;
+$xs: 400px;
+
+#topbar {
+    background: rgba(0, 0, 0, 0.025);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    .topbar-item {
+        padding: 10px 20px;
+        border-left: 1px solid rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+
+        svg {
+            font-size: 20px;
+        }
+    }
+}

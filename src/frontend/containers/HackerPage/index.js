@@ -6,6 +6,8 @@ import {withRouter} from 'react-router-dom';
 import {capitalizeFirst} from '@/utils';
 import './styles.scss';
 
+import Topbar from '@/containers/Topbar';
+
 class HackerPage extends React.Component {
   constructor(props) {
     super(props);
@@ -130,8 +132,8 @@ class HackerPage extends React.Component {
     }
 
     return (
-      <div id="hackerPage" className="tall">
-        <div className="sidebar"></div>
+      <div id="hackerPage" className="tall column">
+        <Topbar/>
         <div className="content tall">
           <div className="row">
             <button className="btn btn-blank" onClick={this.onBackClick}>Back</button>

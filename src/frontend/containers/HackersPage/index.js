@@ -9,6 +9,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCamera, faUser} from '@fortawesome/free-solid-svg-icons';
 import './styles.scss';
 
+import Topbar from '@/containers/Topbar';
 import QRReader from '@/components/QRReader';
 
 class HackersPage extends React.Component {
@@ -29,7 +30,6 @@ class HackersPage extends React.Component {
     this.getHackers = this.getHackers.bind(this);
     this.onQRScan = this.onQRScan.bind(this);
     this.openHackerPage = this.openHackerPage.bind(this);
-    this.logout = this.logout.bind(this);
   }
 
   componentDidMount() {
@@ -80,13 +80,6 @@ class HackersPage extends React.Component {
   openHackerPage(qr) {
     this.props.history.push(`/hackers/${qr}`);
   }
-
-  logout() {
-    localStorage.removeItem('token');
-    store.dispatch(removeToken());
-    this.props.history.push('/login');
-  }
-
   render() {
     let search = this.state.search.toLowerCase();
     let hackers = this.state.hackers.filter(hacker => {
@@ -103,22 +96,16 @@ class HackersPage extends React.Component {
     }
 
     return (
-      <div id="hackersPage" className="tall row">
+      <div id="hackersPage" className="tall column">
+        <Topbar/>
         <div className={`content tall${this.state.showScanner ? ' blur' : ''}`}>
           <div className="row">
             <input className="form-control" type="text" value={this.state.search} onChange={this.onSearchChange} placeholder="Search..."/>
-            <div>
-              <button className="btn" onClick={this.showScanner}>
-                <div className="column justify-contents-center">
-                  <FontAwesomeIcon icon={faCamera}/>
-                </div>
-              </button>
-              <button className="btn" onClick={this.logout}>
-                <div className="column justify-contents-center">
-                  <FontAwesomeIcon icon={faUser}/>
-                </div>
-              </button>
-            </div>
+            <button className="btn" onClick={this.showScanner}>
+              <div className="column justify-contents-center">
+                <FontAwesomeIcon icon={faCamera}/>
+              </div>
+            </button>
           </div>
 
           <div className="list-group">
