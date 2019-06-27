@@ -5,10 +5,11 @@ $sm: 600px;
 $xs: 400px;
 
 #adminPage {
+    background: rgba(0, 0, 0, 0.05);
+
     .view {
         width: 80%;
         padding: 20px 15%;
-        background: rgba(0, 0, 0, 0.05);
 
         p {
             margin: 0px;
