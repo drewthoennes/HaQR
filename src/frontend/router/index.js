@@ -4,6 +4,7 @@ import {Switch, Route, BrowserRouter, Redirect} from 'react-router-dom';
 import LoginPage from '@/containers/LoginPage';
 import HackersPage from '@/containers/HackersPage';
 import HackerPage from '@/containers/HackerPage';
+import UnauthorizedPage from '@/containers/UnauthorizedPage';
 
 const Router = () => {
   return (
@@ -12,6 +13,7 @@ const Router = () => {
         <Route path="/login" render={() => <LoginPage/>}/>
         <Route exact path="/hackers" render={() => <HackersPage/>}/>
         <Route path="/hackers/:qr" render={() => <HackerPage/>}/>
+        <Route path="/unauthorized" render={() => <UnauthorizedPage/>}/>
         <Route path="*" render={() => <Redirect to='/login'/>}/>
       </Switch>
     </BrowserRouter>

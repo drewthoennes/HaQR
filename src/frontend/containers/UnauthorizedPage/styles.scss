@@ -1,0 +1,37 @@
+$xl: 1200px;
+$lg: 1000px;
+$md: 800px;
+$sm: 600px;
+$xs: 400px;
+
+#unauthorizedPage {
+    background: rgba(0, 0, 0, 0.05);
+
+    .topbar {
+        padding: 20px;
+
+        .btn-blank {
+            cursor: pointer;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+        }
+    }
+
+    .content {
+        height: calc(100% - 100px);
+
+        h4, p {
+            text-align: center;
+        }
+
+        @media only screen and (max-width: $md) {
+            h4 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 12px;
+            }
+        }
+    }
+}

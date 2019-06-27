@@ -19,7 +19,8 @@ class HackersPage extends React.Component {
       hackers: [],
       search: '',
       loaded: false,
-      showScanner: false
+      showScanner: false,
+      unauthorized: false
     };
 
     this.onSearchChange = this.onSearchChange.bind(this);
@@ -45,11 +46,17 @@ class HackersPage extends React.Component {
         Authorization: `token ${this.props.account.token}`
       }
     }).then(res => {
+      console.log(res.data.status);
+
       if (res.data.hackers) {
         this.setState({hackers: res.data.hackers});
       }
       else {
         console.error('Could not retrieve hackers list');
+      }
+    }).catch(err => {
+      if (err.response.status === 401) {
+        this.props.history.push('/unauthorized');
       }
     });
   }

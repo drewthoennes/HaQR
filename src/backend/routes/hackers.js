@@ -12,7 +12,7 @@ module.exports = function(router) {
         res.status(500).json({'error': 'Unable to find a hacker with that qr code'});
       });
     }).catch(err => {
-      res.json({'error': err});
+      res.status(401).json({'error': 'There was an error authenticating your account'});
     });
   });
 
@@ -26,7 +26,7 @@ module.exports = function(router) {
         res.status(500).json({'error': 'Unable to find a hacker with that qr code'});
       });
     }).catch(err => {
-      res.json({'error': err});
+      res.status(401).json({'error': 'There was an error authenticating your account'});
     });
   });
 
@@ -40,7 +40,7 @@ module.exports = function(router) {
           res.status(500).json({'error': 'Unable to update a hacker with that qr code'});
         });
     }).catch(err => {
-      res.json({'error': err});
+      res.status(401).json({'error': 'There was an error authenticating your account'});
     });
   });
 }

@@ -54,6 +54,10 @@ class HackerPage extends React.Component {
         console.error('Could not retrieve hacker');
         this.setState({error: res.data.error || 'Error retrieving hacker'});
       }
+    }).catch(err => {
+      if (err.response.status === 401) {
+        this.props.history.push('/unauthorized');
+      }
     });
   }
 
@@ -68,6 +72,10 @@ class HackerPage extends React.Component {
       }
     }).then(res => {
       this.getHacker();
+    }).catch(err => {
+      if (err.response.status === 401) {
+        this.props.history.push('/unauthorized');
+      }
     });
   }
 
