@@ -19,6 +19,7 @@ body {
 .row {
     display: flex;
     flex-direction: row;
+    margin: 0px;
 
     &-center {
         justify-content: center;
@@ -36,6 +37,7 @@ body {
 .column {
     display: flex;
     flex-direction: column;
+    margin: 0px;
 
     &-center {
         justify-content: center;

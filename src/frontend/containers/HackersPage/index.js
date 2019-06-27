@@ -90,6 +90,8 @@ class HackersPage extends React.Component {
   render() {
     let search = this.state.search.toLowerCase();
     let hackers = this.state.hackers.filter(hacker => {
+      return hacker.active;
+    }).filter(hacker => {
       return hacker ? hacker.name.toLowerCase().includes(search) : false;
     }).map(hacker => (
       <button className="list-group-item" key={hacker.qr} onClick={() => this.openHackerPage(hacker.qr)}>{hacker.name} ({hacker.email})</button>
@@ -101,8 +103,7 @@ class HackersPage extends React.Component {
     }
 
     return (
-      <div id="hackersPage" className="tall">
-        <div className="sidebar"></div>
+      <div id="hackersPage" className="tall row">
         <div className={`content tall${this.state.showScanner ? ' blur' : ''}`}>
           <div className="row">
             <input className="form-control" type="text" value={this.state.search} onChange={this.onSearchChange} placeholder="Search..."/>

@@ -1,0 +1,58 @@
+$xl: 1200px;
+$lg: 1000px;
+$md: 800px;
+$sm: 600px;
+$xs: 400px;
+
+#adminPage {
+    .content {
+        width: 80%;
+        padding: 20px 15%;
+        background: rgba(0, 0, 0, 0.05);
+
+        p {
+            margin: 0px;
+        }
+
+        @media only screen and (max-width: $lg) {
+            width: 75%;
+            padding: 20px 10%;
+        }
+
+        @media only screen and (max-width: $md) {
+            width: 100%;
+            padding: 20px 5%;
+        }
+
+        @media only screen and (max-width: $sm) {
+            padding: 20px;
+        }
+    }
+}
+
+#sidebar {
+    width: 20%;
+    padding: 0px 20px;
+    background: rgba(0, 0, 0, 0.05);
+
+    .list-group .list-group-item {
+        padding: 10px;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.01);
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    @media only screen and (max-width: $lg) {
+        width: 25%;
+    }
+
+    @media only screen and (max-width: $md) {
+        width: 0%;
+        display: none;
+    }
+}
