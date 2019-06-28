@@ -44,19 +44,23 @@ class HackerPage extends React.Component {
 
     axios.get(`/api/hackers/${qr}`, {
       headers: {
-        Authorization: `token ${this.props.store.token}`
+        authorization: `token ${this.props.store.token}`
       }
     }).then(res => {
-      if (res.data.hacker) {
-        this.setState({hacker: res.data.hacker});
-      }
-      else {
+      if (!res || !res.data || !res.data.hacker) {
         console.error('Could not retrieve hacker');
         this.setState({error: res.data.error || 'Error retrieving hacker'});
       }
+      else if (!res.data.hacker.active) {
+        this.props.history.push('/hackers');
+      }
+
+      this.setState({hacker: res.data.hacker});
     }).catch(err => {
       if (err.response.status === 401) {
         this.props.history.push('/unauthorized');
+      } else {
+        this.setState({error: err.response.data.error});
       }
     });
   }
@@ -68,7 +72,7 @@ class HackerPage extends React.Component {
       fields: fields
     }, {
       headers: {
-        Authorization: `token ${this.props.store.token}`
+        authorization: `token ${this.props.store.token}`
       }
     }).then(res => {
       this.getHacker();

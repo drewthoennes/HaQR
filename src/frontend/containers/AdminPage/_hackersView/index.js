@@ -4,6 +4,7 @@ import axios from 'axios';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {} from '@fortawesome/free-solid-svg-icons';
 import {sortByProperty} from '@/utils';
+import socket from '@/socket';
 import './styles.scss';
 
 class _hackersView extends React.Component {
@@ -18,6 +19,7 @@ class _hackersView extends React.Component {
 
     this.onSearchChange = this.onSearchChange.bind(this);
     this.sortBy = this.sortBy.bind(this);
+    this.toggleActive = this.toggleActive.bind(this);
   }
 
   componentDidMount() {
@@ -34,6 +36,19 @@ class _hackersView extends React.Component {
     }
 
     this.setState({sort: sort, asc: true});
+  }
+
+  toggleActive(qr) {
+    let token = this.props.token;
+
+    axios.post(`/api/hackers/${qr}/active`, {}, {
+      headers: {
+        authorization: `token ${token}`
+      }
+    }).then(res => {
+      socket.emit('updatedHackers', token);
+    }).catch(err => {
+    });
   }
 
   render() {
@@ -55,7 +70,7 @@ class _hackersView extends React.Component {
         <td scope="row">{hacker.name}</td>
         <td scope="row">{hacker.email}</td>
         <td className="row justify-content-around">
-          <button className="btn btn-success">Active</button>
+          <button className={`btn${hacker.active ? ' btn-success' : ' btn-danger'}`} onClick={() => this.toggleActive(hacker.qr)}>{hacker.active ? 'Active' : 'Inactive'}</button>
         </td>
       </tr>
     ));

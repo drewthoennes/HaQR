@@ -9,8 +9,6 @@ module.exports = function(router) {
     }).then(hackers => {
       res.json({'message': 'Successfully retrieved hackers', 'hackers': hackers});
     }).catch(err => {
-      console.log(err);
-
       switch (true) {
         case err instanceof UnauthorizedError:
           res.status(401).json({'error': err.message});
@@ -58,6 +56,28 @@ module.exports = function(router) {
       return res.json({'message': 'Successfully updated hacker'});
     }).catch(err => {
       return res.status(500).json({'error': 'Unable to update a hacker with that qr code'});
+    }).catch(err => {
+      switch (true) {
+        case err instanceof UnauthorizedError:
+          res.status(401).json({'error': err.message});
+          break;
+
+        case err instanceof InsufficientRoleError:
+          res.status(401).json({'error': err.message});
+          break;
+
+        default:
+            res.status(500).json({'error': 'Unable to find a hacker with that qr code'});
+          break;
+      }
+    });
+  });
+
+  router.post('/api/hackers/:hacker_id/active', (req, res) => {
+    authorize(req).then(() => {
+      return hackerController.toggleActive(req.params.hacker_id);
+    }).then(() => {
+      res.json({'message': 'Successfully updated the hacker'})
     }).catch(err => {
       switch (true) {
         case err instanceof UnauthorizedError:

@@ -18,5 +18,9 @@
         tbody tr:nth-child(odd) {
             background: rgba(0, 0, 0, 0.025);
         }
+
+        .btn-success, .btn-danger {
+            min-width: 110px;
+        }
     }
 }

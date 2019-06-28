@@ -34,15 +34,13 @@ class AdminPage extends React.Component {
   }
 
   render() {
-    console.log(this.props.store);
-
     let view;
     switch(this.state.view) {
       case 'hackers':
-        view = (<HackersView hackers={this.props.store.hackers}/>);
+        view = (<HackersView hackers={this.props.store.hackers} token={this.props.store.token}/>);
         break;
       case 'users':
-          view = (<UsersView users={this.props.store.users}/>);
+          view = (<UsersView users={this.props.store.users} token={this.props.store.token}/>);
           break;
       case 'metrics':
           view = (<MetricsView/>);

@@ -18,3 +18,15 @@ exports.updateHacker = (qr, fields) => {
         }
     }).exec()
 };
+
+exports.toggleActive = (qr) => {
+    return Hacker.findOne({qr: qr}).then(hacker => {
+        return Hacker.findOneAndUpdate({
+            qr: qr
+        }, {
+            $set: {
+                active: !hacker.active
+            }
+        });
+    });
+};

@@ -31,7 +31,7 @@ const init = () => {
 const getHackers = (token) => {
     axios.get('/api/hackers', {
         headers: {
-          Authorization: `token ${token}`
+          authorization: `token ${token}`
         }
       }).then(res => {
         if (!res || !res.data || !res.data.hackers) {
@@ -47,7 +47,7 @@ const getHackers = (token) => {
 const getUsers = (token) => {
     axios.get('/api/users', {
         headers: {
-          Authorization: `token ${token}`
+          authorization: `token ${token}`
         }
       }).then(res => {
         if (!res || !res.data || !res.data.users) {
