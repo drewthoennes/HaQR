@@ -22,7 +22,7 @@ export const setHackers = hackers => ({
 
 export const setUsers = users => ({
     type: SET_USERS,
-    hackers
+    users
 });
 
 export const clearAll = () => ({

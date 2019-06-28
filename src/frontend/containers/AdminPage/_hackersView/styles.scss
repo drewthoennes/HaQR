@@ -1,0 +1,22 @@
+#_hackersView {
+    #searchbar {
+        margin-bottom: 20px;
+    }
+
+    .table {
+        background: white;
+        border: 1px solid #dee2e6;
+
+        th {
+            border-bottom-width: 1px;
+        }
+
+        th, td {
+            border-top: 0px;
+        }
+
+        tbody tr:nth-child(odd) {
+            background: rgba(0, 0, 0, 0.025);
+        }
+    }
+}

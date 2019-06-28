@@ -2,8 +2,6 @@ const userController = require('@b/controllers/user');
 const {authorize} = require('@b/utils');
 const {UnauthorizedError, InsufficientRoleError} = require('@b/errors');
 
-console.log(UnauthorizedError.constructor);
-
 module.exports = function(router) {
   router.get('/api/users', (req, res) => {
     authorize(req, {

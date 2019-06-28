@@ -1,5 +1,6 @@
 const hackerController = require('@b/controllers/hacker');
 const {authorize} = require('@b/utils');
+const {UnauthorizedError, InsufficientRoleError} = require('@b/errors');
 
 module.exports = function(router) {
   router.get('/api/hackers', (req, res) => {
@@ -8,6 +9,8 @@ module.exports = function(router) {
     }).then(hackers => {
       res.json({'message': 'Successfully retrieved hackers', 'hackers': hackers});
     }).catch(err => {
+      console.log(err);
+
       switch (true) {
         case err instanceof UnauthorizedError:
           res.status(401).json({'error': err.message});
@@ -18,7 +21,7 @@ module.exports = function(router) {
           break;
 
         default:
-            res.status(500).json({'error': 'Unable to find a hacker with that qr code'});
+            res.status(500).json({'error': 'There was an error retrieving the hackers'});
           break;
       }
     });

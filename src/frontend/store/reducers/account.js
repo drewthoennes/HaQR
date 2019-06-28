@@ -6,6 +6,7 @@ import {
     CLEAR_ALL
  } from '@/const/store';
 
+// Make sure to add these to the map
 let initialState = {
     token: undefined,
     hackers: [],

@@ -17,7 +17,6 @@ class HackersPage extends React.Component {
     super(props);
 
     this.state = {
-      hackers: [],
       search: '',
       loaded: false,
       showScanner: false,
@@ -27,36 +26,12 @@ class HackersPage extends React.Component {
     this.onSearchChange = this.onSearchChange.bind(this);
     this.showScanner = this.showScanner.bind(this);
     this.hideScanner = this.hideScanner.bind(this);
-    this.getHackers = this.getHackers.bind(this);
     this.onQRScan = this.onQRScan.bind(this);
     this.openHackerPage = this.openHackerPage.bind(this);
   }
 
-  componentDidMount() {
-    this.getHackers();
-  }
-
   onSearchChange(event) {
     this.setState({search: event.target.value});
-  }
-
-  getHackers() {
-    axios.get('/api/hackers', {
-      headers: {
-        Authorization: `token ${this.props.store.token}`
-      }
-    }).then(res => {
-      if (res.data.hackers) {
-        this.setState({hackers: res.data.hackers});
-      }
-      else {
-        console.error('Could not retrieve hackers list');
-      }
-    }).catch(err => {
-      if (err.response.status === 401) {
-        this.props.history.push('/unauthorized');
-      }
-    });
   }
 
   showScanner() {
@@ -80,7 +55,7 @@ class HackersPage extends React.Component {
   }
   render() {
     let search = this.state.search.toLowerCase();
-    let hackers = this.state.hackers.filter(hacker => {
+    let hackers = this.props.store.hackers.filter(hacker => {
       return hacker.active;
     }).filter(hacker => {
       return hacker ? hacker.name.toLowerCase().includes(search) : false;

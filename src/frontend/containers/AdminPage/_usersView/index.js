@@ -18,9 +18,17 @@ class _usersView extends React.Component {
   }
 
   render() {
+    let users = this.props.users.map(user => (
+      <div className="list-group-item row" key={user.email}>
+        <p>{user.name}</p>
+      </div>
+    ));
+
     return (
       <div id="_usersView" className="tall">
-        <p>Users</p>
+        <div className="list-group">
+          {users}
+        </div>
       </div>
     );
   }

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import store from '@/store';
+import init from '@/store/init';
 import 'bootstrap/dist/css/bootstrap.css';
 import './styles.scss';
 
@@ -12,3 +13,6 @@ ReactDOM.render((
     <App/>
   </Provider>
 ), document.getElementById('app'));
+
+// Start initialization script to retrieve resources
+init();

@@ -7,14 +7,14 @@ import {
 } from '@/store/actions';
 import socket from '@/socket';
 
-const init = (store) => {
+const init = () => {
     let token = localStorage.getItem('token');
 
     if (token) {
         store.dispatch(setToken(token));
 
         getHackers(token);
-        // getUsers(token);
+        getUsers(token);
     }
 
     socket.emit('join');
@@ -23,9 +23,9 @@ const init = (store) => {
         getHackers(token);
     });
 
-    // socket.on('updateUsers', () => {
-    //     getUsers(token);
-    // });
+    socket.on('updateUsers', () => {
+        getUsers(token);
+    });
 };
 
 const getHackers = (token) => {
@@ -40,6 +40,7 @@ const getHackers = (token) => {
 
         store.dispatch(setHackers(res.data.hackers));
       }).catch(err => {
+        console.error(err);
       });
 };
 
@@ -55,6 +56,7 @@ const getUsers = (token) => {
 
         store.dispatch(setUsers(res.data.users));
       }).catch(err => {
+        console.error(err);
       });
 };
 
