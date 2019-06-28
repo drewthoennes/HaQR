@@ -43,11 +43,9 @@ class HackersPage extends React.Component {
   getHackers() {
     axios.get('/api/hackers', {
       headers: {
-        Authorization: `token ${this.props.account.token}`
+        Authorization: `token ${this.props.store.token}`
       }
     }).then(res => {
-      console.log(res.data.status);
-
       if (res.data.hackers) {
         this.setState({hackers: res.data.hackers});
       }
@@ -81,6 +79,8 @@ class HackersPage extends React.Component {
     this.props.history.push(`/hackers/${qr}`);
   }
   render() {
+    console.log(this.props.store);
+
     let search = this.state.search.toLowerCase();
     let hackers = this.state.hackers.filter(hacker => {
       return hacker.active;

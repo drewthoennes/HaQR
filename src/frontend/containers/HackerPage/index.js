@@ -44,7 +44,7 @@ class HackerPage extends React.Component {
 
     axios.get(`/api/hackers/${qr}`, {
       headers: {
-        Authorization: `token ${this.props.account.token}`
+        Authorization: `token ${this.props.store.token}`
       }
     }).then(res => {
       console.log(res.data);
@@ -70,7 +70,7 @@ class HackerPage extends React.Component {
       fields: fields
     }, {
       headers: {
-        Authorization: `token ${this.props.account.token}`
+        Authorization: `token ${this.props.store.token}`
       }
     }).then(res => {
       this.getHacker();

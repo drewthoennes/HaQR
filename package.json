@@ -5,9 +5,9 @@
   "private": true,
   "main": "server.js",
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config config/webpack.dev.config.js",
-    "build-dev": "webpack --config config/webpack.dev.config.js",
-    "build": "webpack --config config/webpack.prod.config.js",
+    "dev": "webpack-dev-server --inline --progress --color --config config/webpack.dev.config.js",
+    "build-dev": "webpack  --inline --progress --color --config config/webpack.dev.config.js",
+    "build": "webpack  --inline --progress --color --config config/webpack.prod.config.js",
     "start-dev": "npm run build-dev; node server.js",
     "start": "npm run build; node server.js",
     "test": "mocha src/tests"
@@ -64,6 +64,8 @@
     "react-qr-reader": "^2.2.1",
     "react-redux": "^7.1.0",
     "react-router-dom": "^4.3.1",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0"
   }
 }

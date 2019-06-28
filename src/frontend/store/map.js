@@ -1,6 +1,6 @@
 let mapStateToProps = (state) => {
     return {
-        account: {
+        store: {
             token: state.account.token
         }
     }

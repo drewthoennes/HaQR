@@ -1,6 +1,6 @@
-module.exports = () => {
+module.exports = (env) => {
   // Determine configuration
-  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'production') {
+  if (env === 'production' || !process.env.NODE_ENV || process.env.NODE_ENV === 'production') {
     // Production config
     return {
       'port': 8080,

@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const base = require('./webpack.base.config.js');
+const config = require('./index.js')('production');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 /*
@@ -12,13 +13,13 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = merge(base, {
   mode: 'production',
+  plugins: [
+    new webpack.DefinePlugin({
+      __host__: `'${config.host}'`
+    })
+  ],
   optimization: {
     minimizer: [
     ]
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    })
-  ]
+  }
 });

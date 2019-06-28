@@ -35,7 +35,7 @@ class LoginPage extends React.Component {
   }
 
   checkForExistingToken() {
-    if (this.props.account.token || localStorage.getItem('token')) {
+    if (this.props.store.token || localStorage.getItem('token')) {
       this.props.history.push('/hackers');
     }
   }

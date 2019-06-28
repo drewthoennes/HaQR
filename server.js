@@ -3,7 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const chalk = require('chalk');
-let config = require('./config')();
+const config = require('./config')();
+const {authorize} = require('@b/utils');
 
 require('dotenv').config();
 
@@ -19,7 +20,9 @@ else {
 app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
 const server = require('http').Server(app);
+const io = require('socket.io')(server);
 const PORT = process.env.PORT || config.port;
 const DATABASE = process.env.MONGODB_URI || config.database.uri;
 
@@ -54,6 +57,47 @@ app.use('/public', express.static(`${__dirname}/dist`));
 // Catch all for frontend routes
 app.all('/*', function(req, res) {
 	res.sendFile(`${__dirname}/dist/index.html`);
+});
+
+// Server-side Socket.IO
+io.on('connection', socket => {
+	let workspace = 'all';
+
+	socket.on('join', (token) => {
+		let req = {
+			headers: {
+				authorization: `token ${token}`
+			}
+		}
+
+		authorize().then(() => {
+			socket.join(workspace);
+		}).catch(err => {
+			// console.log(err);
+		});
+	});
+
+	socket.on('leave', () => {
+		socket.leave(workspace);
+	});
+
+	socket.on('changedInventory', (token) => {
+		let req = {
+			headers: {
+				authorization: `token ${token}`
+			}
+		}
+
+		authorize(req).then(() => {
+			io.sockets.in(workspace).emit('updateInventory');
+		}).catch(err => {
+			// console.log(err);
+		});
+	});
+
+	socket.on('disconnect', () => {
+		socket.leave(workspace);
+	});
 });
 
 server.listen(PORT);
