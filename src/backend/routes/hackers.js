@@ -4,43 +4,71 @@ const {authorize} = require('@b/utils');
 module.exports = function(router) {
   router.get('/api/hackers', (req, res) => {
     authorize(req).then(() => {
-      hackerController.getAllHackers()
-      .then(hackers => {
-        res.json({'message': 'Successfully retrieved hackers', 'hackers': hackers});
-      })
-      .catch(err => {
-        res.status(500).json({'error': 'Unable to find a hacker with that qr code'});
-      });
+      return hackerController.getAllHackers()
+    }).then(hackers => {
+      res.json({'message': 'Successfully retrieved hackers', 'hackers': hackers});
     }).catch(err => {
-      res.status(401).json({'error': 'There was an error authenticating your account'});
+      switch (true) {
+        case err instanceof UnauthorizedError:
+          res.status(401).json({'error': err.message});
+          break;
+
+        case err instanceof InsufficientRoleError:
+          res.status(401).json({'error': err.message});
+          break;
+
+        default:
+            res.status(500).json({'error': 'Unable to find a hacker with that qr code'});
+          break;
+      }
     });
   });
 
   router.get('/api/hackers/:hacker_id', (req, res) => {
     authorize(req).then(() => {
-      hackerController.getHacker(req.params.hacker_id)
-      .then(hacker => {
-        res.json({'message': 'Successfully retrieved hacker', 'hacker': hacker});
-      })
-      .catch(err => {
-        res.status(500).json({'error': 'Unable to find a hacker with that qr code'});
-      });
+      return hackerController.getHacker(req.params.hacker_id)
+    }).then(hacker => {
+      res.json({'message': 'Successfully retrieved hacker', 'hacker': hacker});
     }).catch(err => {
-      res.status(401).json({'error': 'There was an error authenticating your account'});
+      res.status(500).json({'error': 'Unable to find a hacker with that qr code'});
+    }).catch(err => {
+      switch (true) {
+        case err instanceof UnauthorizedError:
+          res.status(401).json({'error': err.message});
+          break;
+
+        case err instanceof InsufficientRoleError:
+          res.status(401).json({'error': err.message});
+          break;
+
+        default:
+            res.status(500).json({'error': 'Unable to find a hacker with that qr code'});
+          break;
+      }
     });
   });
 
   router.post('/api/hackers/:hacker_id', (req, res) => {
     authorize(req).then(() => {
-      hackerController.updateHacker(req.params.hacker_id, req.body.fields)
-        .then(() => {
-          res.json({'message': 'Successfully updated hacker'});
-        })
-        .catch(err => {
-          res.status(500).json({'error': 'Unable to update a hacker with that qr code'});
-        });
+      return hackerController.updateHacker(req.params.hacker_id, req.body.fields)
+    }).then(() => {
+      return res.json({'message': 'Successfully updated hacker'});
     }).catch(err => {
-      res.status(401).json({'error': 'There was an error authenticating your account'});
+      return res.status(500).json({'error': 'Unable to update a hacker with that qr code'});
+    }).catch(err => {
+      switch (true) {
+        case err instanceof UnauthorizedError:
+          res.status(401).json({'error': err.message});
+          break;
+
+        case err instanceof InsufficientRoleError:
+          res.status(401).json({'error': err.message});
+          break;
+
+        default:
+            res.status(500).json({'error': 'Unable to find a hacker with that qr code'});
+          break;
+      }
     });
   });
 }

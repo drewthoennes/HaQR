@@ -1,7 +1,8 @@
 const axios = require('axios');
 const userController = require('@b/controllers/user');
+const {UnauthorizedError, InsufficientRoleError} = require('@b/errors');
 
-exports.authorize = (req) => {
+exports.authorize = (req, params = {}) => {
     if (!req || !req.headers || !req.headers.authorization) {
         return Promise.reject('Missing authorization');
     }
@@ -14,7 +15,7 @@ exports.authorize = (req) => {
         }
     }).then(res => {
         if (!res || !res.data) {
-            throw new Error('There was an error retrieving credentials');
+            throw new UnauthorizedError('There was an error retrieving credentials');
         }
 
         let account = {
@@ -23,12 +24,20 @@ exports.authorize = (req) => {
             }
         };
 
-        return userController.hasUser(account);
-    }).then(has => {
-        if (!has) {
-            return Promise.reject('You do not have permission to access this service');
+        return userController.findUser(account);
+    }).then(user => {
+        if (!user) {
+            throw new UnauthorizedError('You do not have permission to access this service');
         }
 
-        return Promise.resolve(true);
+        if (params.roles && !params.roles.includes(user.role)) {
+            throw new InsufficientRoleError('You lack a sufficient role to access this service');
+        }
+
+        if (params.account) {
+            return user;
+        }
+
+        return true;
     });
 };

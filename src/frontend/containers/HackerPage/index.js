@@ -47,8 +47,6 @@ class HackerPage extends React.Component {
         Authorization: `token ${this.props.store.token}`
       }
     }).then(res => {
-      console.log(res.data);
-
       if (res.data.hacker) {
         this.setState({hacker: res.data.hacker});
       }

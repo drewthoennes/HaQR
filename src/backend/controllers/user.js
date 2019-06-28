@@ -5,6 +5,10 @@ exports.getUser = (id) => {
     return User.findById(id).select('-_id').exec();
 };
 
+exports.getAllUsers = () => {
+    return User.find().select('-_id -github').exec();
+}
+
 exports.findUser = (accounts) => {
     return User.findOne(accounts).exec();
 }
