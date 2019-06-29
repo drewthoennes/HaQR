@@ -4,9 +4,7 @@ const {UnauthorizedError, InsufficientRoleError} = require('@b/errors');
 
 module.exports = function(router) {
   router.get('/api/users', (req, res) => {
-    authorize(req, {
-      roles: ['coordinator', 'admin']
-    }).then(() => {
+    authorize(req).then(() => {
       return userController.getAllUsers()
     }).then(users => {
         res.json({users: users});

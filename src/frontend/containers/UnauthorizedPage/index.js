@@ -30,7 +30,7 @@ class UnauthorizedPage extends React.Component {
   render() {
     return (
       <div id="unauthorizedPage" className="tall">
-        <Topbar/>
+        <Topbar noButtons/>
         <div className="content tall column justify-content-center">
           <h4>You don't have access to access this service</h4>
           <p>Please contact the BoilerMake team if you should have access.</p>

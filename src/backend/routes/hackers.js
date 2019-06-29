@@ -74,7 +74,9 @@ module.exports = function(router) {
   });
 
   router.post('/api/hackers/:hacker_id/active', (req, res) => {
-    authorize(req).then(() => {
+    authorize(req, {
+      role: ['admin']
+    }).then(() => {
       return hackerController.toggleActive(req.params.hacker_id);
     }).then(() => {
       res.json({'message': 'Successfully updated the hacker'})

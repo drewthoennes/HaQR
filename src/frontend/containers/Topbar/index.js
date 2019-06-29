@@ -30,8 +30,7 @@ class Topbar extends React.Component {
 
   render() {
     let adminButton = '';
-
-    if (this.props.store.account && this.props.store.account.role === 'admin') {
+    if (!this.props.noButtons && this.props.store.account && this.props.store.account.role === 'admin') {
       adminButton = (
         <div className="topbar-item column justify-content-center" onClick={() => this.props.history.push('/admin')}>
           <FontAwesomeIcon icon={faTools}/>
@@ -39,12 +38,19 @@ class Topbar extends React.Component {
       );
     }
 
-    return (
-      <div id="topbar" className="row justify-content-end">
-        {adminButton}
+    let homeButton = '';
+    if (!this.props.noButtons) {
+      homeButton = (
         <div className="topbar-item column justify-content-center" onClick={() => this.props.history.push('/hackers')}>
             <FontAwesomeIcon icon={faHome}/>
         </div>
+      );
+    }
+
+    return (
+      <div id="topbar" className="row justify-content-end">
+        {adminButton}
+        {homeButton}
         <div className="topbar-item column justify-content-center" onClick={this.logout}>
             <FontAwesomeIcon icon={faSignOutAlt}/>
         </div>

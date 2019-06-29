@@ -21,12 +21,25 @@ class AdminPage extends React.Component {
       view: 'hackers'
     };
 
+    this.checkIfAuthorized = this.checkIfAuthorized.bind(this);
     this.changeView = this.changeView.bind(this);
   }
 
   componentDidMount() {
+    this.checkIfAuthorized();
   }
 
+  componentDidUpdate() {
+    this.checkIfAuthorized();
+  }
+
+  checkIfAuthorized() {
+    // Redirect if unauthorized
+    if (this.props.store.account.role && this.props.store.account.role !== 'admin') {
+      this.props.history.push('/hackers');
+    }
+  }
+  
   changeView(view) {
     if (view !== this.state.view) {
       this.setState({view});
