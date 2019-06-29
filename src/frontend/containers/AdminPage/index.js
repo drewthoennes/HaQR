@@ -51,10 +51,10 @@ class AdminPage extends React.Component {
     }
 
     return (
-      <div id="adminPage" className="tall column">
+      <div id="adminPage" className="column">
         <Topbar/>
 
-        <div className="content tall">
+        <div className="content">
           <div id="sidebar" className="justify-content-start">
             <div className="list-group">
               <button className="list-group-item" onClick={() => this.changeView('hackers')}>Hackers</button>

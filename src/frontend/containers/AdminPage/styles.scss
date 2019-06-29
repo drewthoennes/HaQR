@@ -5,8 +5,6 @@ $sm: 600px;
 $xs: 400px;
 
 #adminPage {
-    background: rgba(0, 0, 0, 0.05);
-
     .content {
         display: flex;
         flex-direction: row;
@@ -48,6 +46,7 @@ $xs: 400px;
     padding: 20px;
 
     .list-group .list-group-item {
+        min-height: 50px; /* Needed for Safari on mobile */
         padding: 10px;
 
         &:hover {
@@ -64,7 +63,7 @@ $xs: 400px;
     }
 
     @media only screen and (max-width: $md) {
-        height: fit-content;
+        height: 100%;
         width: 100%;
         padding: 20px 5% 0px 5%;
     }
