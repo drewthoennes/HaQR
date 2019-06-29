@@ -3,12 +3,18 @@ import {
     REMOVE_TOKEN,
     SET_HACKERS,
     SET_USERS,
+    SET_ACCOUNT,
     CLEAR_ALL
  } from '@/const/store';
 
 // Make sure to add these to the map
 let initialState = {
     token: undefined,
+    account: {
+        username: undefined,
+        email: undefined,
+        role: undefined
+    },
     hackers: [],
     users: []
 };
@@ -33,6 +39,15 @@ const account = (state = initialState, action) => {
         case SET_USERS:
             return Object.assign({}, state, {
                 users: action.users
+            });
+
+        case SET_ACCOUNT:
+            return Object.assign({}, state, {
+                account: {
+                    username: action.account.role,
+                    email: action.account.email,
+                    role: action.account.role,
+                }
             });
 
         case CLEAR_ALL:

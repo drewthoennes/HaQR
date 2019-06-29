@@ -7,6 +7,15 @@ $xs: 400px;
 #adminPage {
     background: rgba(0, 0, 0, 0.05);
 
+    .content {
+        display: flex;
+        flex-direction: row;
+
+        @media only screen and (max-width: $md) {
+            flex-direction: column;
+        }
+    }
+
     .view {
         width: 80%;
         padding: 20px;
@@ -17,7 +26,7 @@ $xs: 400px;
 
         @media only screen and (max-width: $lg) {
             width: 75%;
-            padding: 20px 10%;
+            padding: 20px 5%;
         }
 
         @media only screen and (max-width: $md) {
@@ -32,7 +41,10 @@ $xs: 400px;
 }
 
 #sidebar {
+    height: 100%;
     width: 20%;
+    display: flex;
+    flex-direction: column;
     padding: 20px;
 
     .list-group .list-group-item {
@@ -52,7 +64,8 @@ $xs: 400px;
     }
 
     @media only screen and (max-width: $md) {
-        width: 0%;
-        display: none;
+        height: fit-content;
+        width: 100%;
+        padding: 20px 5% 0px 5%;
     }
 }

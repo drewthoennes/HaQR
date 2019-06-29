@@ -2,6 +2,7 @@ import axios from 'axios';
 import store from '@/store';
 import {
     setToken,
+    setAccount,
     setHackers,
     setUsers
 } from '@/store/actions';
@@ -13,8 +14,12 @@ const init = () => {
     if (token) {
         store.dispatch(setToken(token));
 
+        getAccount(token);
         getHackers(token);
         getUsers(token);
+    }
+    else {
+      console.error('No token found to retrieve your account with...');
     }
 
     socket.emit('join');
@@ -26,6 +31,22 @@ const init = () => {
     socket.on('updateUsers', () => {
         getUsers(token);
     });
+};
+
+const getAccount = (token) => {
+  axios.get('/api/account', {
+    headers: {
+      authorization: `token ${token}`
+    }
+  }).then(res => {
+    if (!res || !res.data || !res.data.account) {
+      throw new Error('There was an error retrieving your account');
+    }
+
+    store.dispatch(setAccount(res.data.account));
+  }).catch(err => {
+    console.log(err);
+  });
 };
 
 const getHackers = (token) => {
@@ -55,6 +76,18 @@ const getUsers = (token) => {
         }
 
         store.dispatch(setUsers(res.data.users));
+        let email = store.getState().account.account.email;
+
+        let account = res.data.users.find(user => {
+          return user.email === email;
+        });
+
+        if (!account) {
+          console.error('Your account was not found while updating the users');
+          return;
+        }
+
+        store.dispatch(setAccount(account));
       }).catch(err => {
         console.error(err);
       });

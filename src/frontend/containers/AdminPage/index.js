@@ -54,8 +54,8 @@ class AdminPage extends React.Component {
       <div id="adminPage" className="tall column">
         <Topbar/>
 
-        <div className="content tall row">
-          <div id="sidebar" className="tall column justify-content-start">
+        <div className="content tall">
+          <div id="sidebar" className="justify-content-start">
             <div className="list-group">
               <button className="list-group-item" onClick={() => this.changeView('hackers')}>Hackers</button>
               <button className="list-group-item" onClick={() => this.changeView('users')}>Users</button>

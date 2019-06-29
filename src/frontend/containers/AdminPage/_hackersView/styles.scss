@@ -1,3 +1,9 @@
+$xl: 1200px;
+$lg: 1000px;
+$md: 800px;
+$sm: 600px;
+$xs: 400px;
+
 #_hackersView {
     #searchbar {
         margin-bottom: 20px;
@@ -21,6 +27,20 @@
 
         .btn-success, .btn-danger {
             min-width: 110px;
+        }
+
+        @media only screen and (max-width: $lg) {
+            overflow-x: scroll;
+            display: block;
+            white-space: nowrap;
+        }
+
+        /* We don't add scrolling for $md because the content becomes horizontal and doesn't need scroll until $sm  */
+
+        @media only screen and (max-width: $sm) {
+            overflow-x: scroll;
+            display: block;
+            white-space: nowrap;
         }
     }
 }

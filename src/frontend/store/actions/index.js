@@ -3,6 +3,7 @@ import {
     REMOVE_TOKEN,
     SET_HACKERS,
     SET_USERS,
+    SET_ACCOUNT,
     CLEAR_ALL
  } from '@/const/store';
  
@@ -23,6 +24,11 @@ export const setHackers = hackers => ({
 export const setUsers = users => ({
     type: SET_USERS,
     users
+});
+
+export const setAccount = account => ({
+    type: SET_ACCOUNT,
+    account
 });
 
 export const clearAll = () => ({

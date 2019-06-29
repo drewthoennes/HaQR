@@ -6,7 +6,7 @@ import store from '@/store';
 import {removeToken} from '@/store/actions';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faSignOutAlt} from '@fortawesome/free-solid-svg-icons';
+import {faSignOutAlt, faHome, faTools} from '@fortawesome/free-solid-svg-icons';
 import './styles.scss';
 
 class Topbar extends React.Component {
@@ -29,11 +29,25 @@ class Topbar extends React.Component {
   }
 
   render() {
+    let adminButton = '';
+
+    if (this.props.store.account && this.props.store.account.role === 'admin') {
+      adminButton = (
+        <div className="topbar-item column justify-content-center" onClick={() => this.props.history.push('/admin')}>
+          <FontAwesomeIcon icon={faTools}/>
+        </div>
+      );
+    }
+
     return (
       <div id="topbar" className="row justify-content-end">
-          <div className="topbar-item column justify-content-center" onClick={this.logout}>
-              <FontAwesomeIcon icon={faSignOutAlt}/>
-          </div>
+        {adminButton}
+        <div className="topbar-item column justify-content-center" onClick={() => this.props.history.push('/hackers')}>
+            <FontAwesomeIcon icon={faHome}/>
+        </div>
+        <div className="topbar-item column justify-content-center" onClick={this.logout}>
+            <FontAwesomeIcon icon={faSignOutAlt}/>
+        </div>
       </div>
     );
   }
