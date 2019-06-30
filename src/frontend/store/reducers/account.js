@@ -13,7 +13,8 @@ let initialState = {
     account: {
         username: undefined,
         email: undefined,
-        role: undefined
+        role: undefined,
+        authorized: undefined
     },
     hackers: [],
     users: []
@@ -47,6 +48,7 @@ const account = (state = initialState, action) => {
                     username: action.account.role,
                     email: action.account.email,
                     role: action.account.role,
+                    authorized: action.account.authorized
                 }
             });
 

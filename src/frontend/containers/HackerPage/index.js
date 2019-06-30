@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import map from '@/store/map';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
-import {capitalizeFirst} from '@/utils';
+import {authorize, capitalizeFirst} from '@/utils';
 import './styles.scss';
 
 import Topbar from '@/containers/Topbar';
@@ -33,6 +33,10 @@ class HackerPage extends React.Component {
 
     this.setState({qr : qr});
     this.getHacker(qr);
+  }
+
+  componentDidUpdate() {
+    authorize(this.props.history);
   }
 
   onBackClick() {

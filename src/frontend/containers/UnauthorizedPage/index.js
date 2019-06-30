@@ -1,12 +1,10 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import map from '@/store/map';
-import axios from 'axios';
 import store from '@/store';
 import {removeToken} from '@/store/actions';
 import {withRouter} from 'react-router-dom';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {} from '@fortawesome/free-solid-svg-icons';
+import {authorize} from '@/utils';
 import './styles.scss';
 
 import Topbar from '@/containers/Topbar';
@@ -19,6 +17,12 @@ class UnauthorizedPage extends React.Component {
     };
 
     this.logout = this.logout.bind(this);
+  }
+
+  componentDidUpdate() {
+    if (authorize(this.props.history)) {
+      this.props.history.push('/hackers');
+    }
   }
 
   logout() {

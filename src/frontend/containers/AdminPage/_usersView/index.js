@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import axios from 'axios';
+import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {} from '@fortawesome/free-solid-svg-icons';
 import {sortByProperty} from '@/utils';
@@ -86,7 +87,7 @@ class _usersView extends React.Component {
         <td scope="row">{user.name}</td>
         <td scope="row">{user.email}</td>
         <td className="row justify-content-around">
-          <button id="authorize-button" className={`btn ${user.authorized ? 'btn-success' : 'btn-danger'}`} onClick={() => this.toggleAuthorized(user._id)}>{user.authorized ? 'Authorized' : 'Unauthorized'}</button>
+          <button id="authorize-button" className={`btn ${user.authorized ? 'btn-success' : 'btn-danger'}`} disabled={user.role === 'admin' && admins.length === 1} onClick={() => this.toggleAuthorized(user._id)}>{user.authorized ? 'Authorized' : 'Unauthorized'}</button>
           <button id="admin-button" className={`btn ${user.role === 'admin' ? 'btn-success' : 'btn-blank'}`} disabled={user.role === 'admin' && admins.length === 1} onClick={() => this.toggleAdmin(user._id)}>{user.role === 'admin' ? 'Admin' : 'Member'}</button>
         </td>
       </tr>
@@ -115,4 +116,4 @@ class _usersView extends React.Component {
   }
 };
 
-export default _usersView;
+export default withRouter(_usersView);

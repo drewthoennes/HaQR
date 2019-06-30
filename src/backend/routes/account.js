@@ -9,7 +9,8 @@ module.exports = function(router) {
         res.json({account: {
             name: account.name,
             email: account.email,
-            role: account.role
+            role: account.role,
+            authorized: account.authorized
         }});
       }).catch(err => {
         res.status(401).json({'error': 'There was an error authenticating your request'});

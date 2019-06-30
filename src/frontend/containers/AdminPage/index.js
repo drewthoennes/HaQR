@@ -5,6 +5,7 @@ import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {} from '@fortawesome/free-solid-svg-icons';
+import {authorize} from '@/utils';
 import './styles.scss';
 
 import Topbar from '@/containers/Topbar';
@@ -31,6 +32,7 @@ class AdminPage extends React.Component {
   }
 
   componentDidUpdate() {
+    authorize(this.props.history);
     this.checkIfAuthorized();
   }
 

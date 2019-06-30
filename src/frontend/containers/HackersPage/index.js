@@ -7,6 +7,7 @@ import {removeToken} from '@/store/actions';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCamera, faUser} from '@fortawesome/free-solid-svg-icons';
+import {authorize} from '@/utils';
 import './styles.scss';
 
 import Topbar from '@/containers/Topbar';
@@ -28,6 +29,10 @@ class HackersPage extends React.Component {
     this.hideScanner = this.hideScanner.bind(this);
     this.onQRScan = this.onQRScan.bind(this);
     this.openHackerPage = this.openHackerPage.bind(this);
+  }
+
+  componentDidUpdate() {
+    authorize(this.props.history);
   }
 
   onSearchChange(event) {
@@ -54,6 +59,7 @@ class HackersPage extends React.Component {
     this.props.history.push(`/hackers/${qr}`);
   }
   render() {
+
     let search = this.state.search.toLowerCase();
     let hackers = this.props.store.hackers.filter(hacker => {
       return hacker.active;

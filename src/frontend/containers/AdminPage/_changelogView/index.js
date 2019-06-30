@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import axios from 'axios';
+import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {} from '@fortawesome/free-solid-svg-icons';
 import './styles.scss';
@@ -26,4 +27,4 @@ class _changelogView extends React.Component {
   }
 };
 
-export default _changelogView;
+export default withRouter(_changelogView);

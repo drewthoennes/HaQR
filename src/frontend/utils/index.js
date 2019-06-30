@@ -1,3 +1,16 @@
+import store from '@/store';
+
+function authorize(history) {
+    let account = store.getState().account.account;
+
+    if (account.authorized === false) {
+        history.push('/unauthorized');
+        return false;
+    }
+
+    return true;
+}
+
 function parseQuery(query) {
     if (!query) {
         return '';
@@ -40,6 +53,7 @@ function sortByProperty(property) {
 }
 
 export {
+    authorize,
     parseQuery,
     capitalizeFirst,
     sortByProperty

@@ -82,12 +82,9 @@ const getUsers = (token) => {
           return user.email === email;
         });
 
-        if (!account) {
-          console.error('Your account was not found while updating the users');
-          return;
+        if (account) {
+          store.dispatch(setAccount(account));
         }
-
-        store.dispatch(setAccount(account));
       }).catch(err => {
         console.error(err);
       });

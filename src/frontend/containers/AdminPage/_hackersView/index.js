@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import axios from 'axios';
+import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {} from '@fortawesome/free-solid-svg-icons';
 import {sortByProperty} from '@/utils';
@@ -99,4 +100,4 @@ class _hackersView extends React.Component {
   }
 };
 
-export default _hackersView;
+export default withRouter(_hackersView);
