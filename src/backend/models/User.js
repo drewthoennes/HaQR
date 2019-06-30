@@ -19,9 +19,14 @@ var UserSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ['member', 'organizer', 'admin'],
+    enum: ['member', 'admin'],
     required: true,
     default: 'member'
+  },
+  authorized: {
+    type: Boolean,
+    required: true,
+    default: false
   }
 }, {
   collection: 'users'

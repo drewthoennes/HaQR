@@ -11,6 +11,7 @@ import Topbar from '@/containers/Topbar';
 import HackersView from './_hackersView';
 import UsersView from './_usersView';
 import MetricsView from './_metricsView';
+import ChangelogView from './_changelogView';
 import SettingsView from './_settingsView';
 
 class AdminPage extends React.Component {
@@ -58,6 +59,9 @@ class AdminPage extends React.Component {
       case 'metrics':
           view = (<MetricsView/>);
           break;
+      case 'changelog':
+          view = (<ChangelogView/>);
+          break;
       case 'settings':
           view = (<SettingsView/>);
           break;
@@ -73,6 +77,7 @@ class AdminPage extends React.Component {
               <button className="list-group-item" onClick={() => this.changeView('hackers')}>Hackers</button>
               <button className="list-group-item" onClick={() => this.changeView('users')}>Users</button>
               <button className="list-group-item" onClick={() => this.changeView('metrics')}>Metrics</button>
+              <button className="list-group-item" onClick={() => this.changeView('changelog')}>Changelog</button>
               <button className="list-group-item" onClick={() => this.changeView('settings')}>Settings</button>
             </div>
           </div>

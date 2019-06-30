@@ -40,5 +40,18 @@ module.exports = function(router) {
       res.status(500).json({'error': 'Unable to find a user with that id'});
     });
   });
+
+  router.post('/api/users/:user_id/authorize', (req, res) => {
+    authorize(req, {
+      roles: ['admin']
+    }).then(() => {
+      return userController.authorizeUser(req.params.user_id);
+    }).then(() => {
+      res.json({'message': 'Successfully toggle user authorization'});
+    }).catch(err => {
+      console.log(err);
+      res.status(500).json({'error': 'There was an error authorizing this user'});
+    });
+  });
 }
   
