@@ -71,7 +71,7 @@ class AdminPage extends React.Component {
 
     return (
       <div id="adminPage" className="column">
-        <Topbar/>
+        <Topbar admin/>
 
         <div className="content">
           <div id="sidebar" className="justify-content-start">
