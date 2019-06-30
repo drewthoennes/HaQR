@@ -1,5 +1,55 @@
+$xl: 1200px;
+$lg: 1000px;
+$md: 800px;
+$sm: 600px;
+$xs: 400px;
+
 #_usersView {
     #searchbar {
         margin-bottom: 20px;
+    }
+
+    .table {
+        background: white;
+        border: 1px solid #dee2e6;
+
+        th {
+            width: 25%; /* Needed to fill the table rows completely */
+            border-bottom-width: 1px;
+        }
+
+        th, td {
+            border-top: 0px;
+        }
+
+        td.row.justify-content-around {
+            width: 300px; /* Needed to keep the toggle buttons inline */
+        }
+
+        tbody tr:nth-child(odd) {
+            background: rgba(0, 0, 0, 0.025);
+        }
+
+        #authorize-button {
+            min-width: 120px;
+        }
+
+        #admin-button {
+            min-width: 110px;
+        }
+
+        @media only screen and (max-width: $lg) {
+            overflow-x: scroll;
+            display: block;
+            white-space: nowrap;
+        }
+
+        /* We don't add scrolling for $md because the content becomes horizontal and doesn't need scroll until $sm  */
+
+        @media only screen and (max-width: $sm) {
+            overflow-x: scroll;
+            display: block;
+            white-space: nowrap;
+        }
     }
 }

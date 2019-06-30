@@ -66,11 +66,11 @@ class _hackersView extends React.Component {
 
     hackers = hackers.map(hacker => (
       <tr key={hacker.qr}>
-        <th scope="row">{hacker.qr}</th>
+        <td scope="row">{hacker.qr}</td>
         <td scope="row">{hacker.name}</td>
         <td scope="row">{hacker.email}</td>
         <td className="row justify-content-around">
-          <button className={`btn${hacker.active ? ' btn-success' : ' btn-danger'}`} onClick={() => this.toggleActive(hacker.qr)}>{hacker.active ? 'Active' : 'Inactive'}</button>
+          <button className={`btn ${hacker.active ? 'btn-success' : 'btn-danger'}`} onClick={() => this.toggleActive(hacker.qr)}>{hacker.active ? 'Active' : 'Inactive'}</button>
         </td>
       </tr>
     ));

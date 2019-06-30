@@ -29,3 +29,13 @@ exports.authorizeUser = (id) => {
         });
     });
 };
+
+exports.toggleUserRole = (id) => {
+    return User.findById(id).then(user => {
+        return User.findByIdAndUpdate(id, {
+            $set: {
+                role: user.role === 'admin' ? 'member' : 'admin'
+            }
+        });
+    });
+};

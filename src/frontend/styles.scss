@@ -56,6 +56,12 @@ body {
     }
 }
 
+.btn-blank {
+    cursor: pointer;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
 .horizontal-line {
     width: 100%;
     border-bottom: 1px solid rgba(0, 0, 0, 0.3);
