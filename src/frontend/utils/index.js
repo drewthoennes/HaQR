@@ -1,9 +1,12 @@
 import store from '@/store';
 
 function authorize(history) {
-    let account = store.getState().account.account;
+    let state = store.getState().account;
 
-    if (account.authorized === false) {
+    if (state.loaded && !state.account.name) { // Account doesn't exist in database
+        history.push('/unauthorized');
+    }
+    else if (state.account.authorized === false) {
         history.push('/unauthorized');
         return false;
     }

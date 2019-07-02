@@ -3,15 +3,17 @@ const Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
   name: {
-    type: String
+    type: String,
+    default: ''
   },
   email: {
     type: String,
-    unique: true
+    default: ''
   },
   github: {
     username: {
-      type: String
+      type: String,
+      unique: true
     },
     email: {
       type: String

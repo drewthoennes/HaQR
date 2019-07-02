@@ -9,8 +9,43 @@ exports.getAllUsers = () => {
     return User.find().select('-github').exec();
 };
 
+exports.createUnauthorizedUser = (name, email, github) => {
+    let user = new User({
+        name: name,
+        email: email,
+        github: {
+            username: github
+        },
+        role: 'member',
+        authorized: false
+    });
+
+    return user.save();
+};
+
 exports.findUser = (accounts) => {
     return User.findOne(accounts).exec();
+};
+
+exports.findOrCreateUser = (accounts, name, email, github) => {
+    return User.findOne(accounts).exec()
+        .then(user => {
+            if (!user) {
+                let newUser = new User({
+                    name: name,
+                    email: email,
+                    github: {
+                        username: github
+                    },
+                    role: 'member',
+                    authorized: false
+                });
+
+                return newUser.save();
+            }
+
+            return user;
+        });
 };
 
 exports.hasUser = (accounts) => {

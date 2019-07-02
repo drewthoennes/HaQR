@@ -16,6 +16,10 @@ $xs: 400px;
             text-align: center;
         }
 
+        p {
+            margin-bottom: 0px;
+        }
+
         @media only screen and (max-width: $md) {
             h4 {
                 font-size: 20px;

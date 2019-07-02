@@ -1,5 +1,6 @@
 import React from "react";
-import {Switch, Route, BrowserRouter, Redirect} from 'react-router-dom';
+import {Switch, Route, Router, Redirect} from 'react-router-dom';
+import history from './history';
 
 import LoginPage from '@/containers/LoginPage';
 import HackersPage from '@/containers/HackersPage';
@@ -7,9 +8,9 @@ import HackerPage from '@/containers/HackerPage';
 import AdminPage from '@/containers/AdminPage';
 import UnauthorizedPage from '@/containers/UnauthorizedPage';
 
-const Router = () => {
+const router = () => {
   return (
-    <BrowserRouter>
+    <Router history={history}>
       <Switch>
         <Route path="/login" render={() => <LoginPage/>}/>
         <Route exact path="/hackers" render={() => <HackersPage/>}/>
@@ -18,8 +19,8 @@ const Router = () => {
         <Route path="/unauthorized" render={() => <UnauthorizedPage/>}/>
         <Route path="*" render={() => <Redirect to='/login'/>}/>
       </Switch>
-    </BrowserRouter>
+    </Router>
   );
 };
 
-export default Router;
+export default router;

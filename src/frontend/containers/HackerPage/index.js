@@ -81,9 +81,7 @@ class HackerPage extends React.Component {
     }).then(res => {
       this.getHacker();
     }).catch(err => {
-      if (err.response.status === 401) {
-        this.props.history.push('/unauthorized');
-      }
+      authorize(this.props.history);
     });
   }
 

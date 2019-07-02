@@ -4,6 +4,7 @@ import {
     SET_HACKERS,
     SET_USERS,
     SET_ACCOUNT,
+    SET_LOADED,
     CLEAR_ALL
  } from '@/const/store';
 
@@ -17,7 +18,8 @@ let initialState = {
         authorized: undefined
     },
     hackers: [],
-    users: []
+    users: [],
+    loaded: false
 };
   
 const account = (state = initialState, action) => {
@@ -45,11 +47,15 @@ const account = (state = initialState, action) => {
         case SET_ACCOUNT:
             return Object.assign({}, state, {
                 account: {
-                    username: action.account.role,
+                    name: action.account.name,
                     email: action.account.email,
                     role: action.account.role,
                     authorized: action.account.authorized
                 }
+            });
+        case SET_LOADED:
+            return Object.assign({}, state, {
+                loaded: true
             });
 
         case CLEAR_ALL:

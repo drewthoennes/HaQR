@@ -4,5 +4,6 @@ module.exports = {
     SET_HACKERS: 'set_hackers',
     SET_USERS: 'set_users',
     SET_ACCOUNT: 'set_account',
+    SET_LOADED: 'set_loaded',
     CLEAR_ALL: 'clear_all'
 }

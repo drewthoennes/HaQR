@@ -73,7 +73,7 @@ class _usersView extends React.Component {
     });
 
     let users = this.props.users.filter(user => {
-      return user.name.toLowerCase().includes(search);
+      return user && user.name && user.name.toLowerCase().includes(search);
     });
     
     users.sort(sortByProperty(this.state.sort));

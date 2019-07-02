@@ -4,6 +4,7 @@ import {
     SET_HACKERS,
     SET_USERS,
     SET_ACCOUNT,
+    SET_LOADED,
     CLEAR_ALL
  } from '@/const/store';
  
@@ -29,6 +30,10 @@ export const setUsers = users => ({
 export const setAccount = account => ({
     type: SET_ACCOUNT,
     account
+});
+
+export const setLoaded = () => ({
+    type: SET_LOADED
 });
 
 export const clearAll = () => ({

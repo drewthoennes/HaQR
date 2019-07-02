@@ -8,6 +8,7 @@ exports.authorize = (req, params = {}) => {
     }
 
     let url = 'https://api.github.com/user';
+    let githubData;
 
     return axios.get(url, {
         headers: {
@@ -18,15 +19,17 @@ exports.authorize = (req, params = {}) => {
             throw new UnauthorizedError('There was an error retrieving credentials');
         }
 
+        githubData = res.data;
+
         let account = {
             github: {
                 username: res.data.login // , email: res.data.email // Add email checking
             }
         };
 
-        return userController.findUser(account);
+        return userController.findOrCreateUser(account, res.data.name, res.data.email, res.data.login);
     }).then(user => {
-        if (!user) {
+        if (!user || !user.authorized) {
             throw new UnauthorizedError('You do not have permission to access this service');
         }
 

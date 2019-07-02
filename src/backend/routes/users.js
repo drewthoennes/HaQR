@@ -49,7 +49,6 @@ module.exports = function(router) {
     }).then(() => {
       res.json({'message': 'Successfully toggled user authorization'});
     }).catch(err => {
-      console.log(err);
       res.status(500).json({'error': 'There was an error authorizing this user'});
     });
   });
@@ -63,7 +62,6 @@ module.exports = function(router) {
     }).then(() => {
       res.json({'message': 'Successfully toggled user role'});
     }).catch(err => {
-      console.log(err);
       res.status(500).json({'error': 'There was an error authorizing this user'});
     });
   });
