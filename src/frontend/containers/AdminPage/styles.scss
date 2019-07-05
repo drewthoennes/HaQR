@@ -46,12 +46,12 @@ $xs: 400px;
     padding: 20px;
 
     .list-group .list-group-item {
+        &.selected {
+            background: rgba(0, 0, 0, 0.025);
+        }
+
         min-height: 50px; /* Needed for Safari on mobile */
         padding: 10px;
-
-        &:hover {
-            background: rgba(0, 0, 0, 0.01);
-        }
 
         &:focus {
             outline: none;

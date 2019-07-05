@@ -76,11 +76,11 @@ class AdminPage extends React.Component {
         <div className="content">
           <div id="sidebar" className="justify-content-start">
             <div className="list-group">
-              <button className="list-group-item" onClick={() => this.changeView('hackers')}>Hackers</button>
-              <button className="list-group-item" onClick={() => this.changeView('users')}>Users</button>
-              <button className="list-group-item" onClick={() => this.changeView('metrics')}>Metrics</button>
-              <button className="list-group-item" onClick={() => this.changeView('changelog')}>Changelog</button>
-              <button className="list-group-item" onClick={() => this.changeView('settings')}>Settings</button>
+              <button className={`list-group-item${this.state.view === 'hackers' ? ' selected' : ''}`} onClick={() => this.changeView('hackers')}>Hackers</button>
+              <button className={`list-group-item${this.state.view === 'users' ? ' selected' : ''}`} onClick={() => this.changeView('users')}>Users</button>
+              <button className={`list-group-item${this.state.view === 'metrics' ? ' selected' : ''}`} onClick={() => this.changeView('metrics')}>Metrics</button>
+              <button className={`list-group-item${this.state.view === 'changelog' ? ' selected' : ''}`} onClick={() => this.changeView('changelog')}>Changelog</button>
+              <button className={`list-group-item${this.state.view === 'settings' ? ' selected' : ''}`} onClick={() => this.changeView('settings')}>Settings</button>
             </div>
           </div>
 
