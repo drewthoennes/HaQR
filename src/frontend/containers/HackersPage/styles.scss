@@ -72,7 +72,24 @@ $xs: 400px;
         margin-left: -160px;
     }
 
-    .blur {
+    &.blur {
         background: rgba(0, 0, 0, 0.6);
+
+        .content {
+            .row {
+                input {
+                    background: rgba(0, 0, 0, 0);
+                    border-color: rgba(0, 0, 0, 0.1);
+                }
+
+                .btn {
+                    background: rgba(0, 0, 0, 0);
+                }
+            }
+
+            .list-group-item {
+                background: rgba(0, 0, 0, 0);
+            }
+        }
     }
 }

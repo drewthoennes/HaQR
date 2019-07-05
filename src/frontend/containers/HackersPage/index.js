@@ -40,11 +40,15 @@ class HackersPage extends React.Component {
   }
 
   showScanner() {
-    this.setState({showScanner: true});
+    this.setState({showScanner: true}, () => {
+      document.addEventListener('click', this.hideScanner);
+    });
   }
 
   hideScanner() {
-    this.setState({showScanner: false});
+    this.setState({showScanner: false}, () => {
+      document.removeEventListener('click', this.hideScanner);
+    });
   }
 
   onQRScan(data) {
@@ -56,7 +60,9 @@ class HackersPage extends React.Component {
   }
   
   openHackerPage(qr) {
-    this.props.history.push(`/hackers/${qr}`);
+    if (!this.state.showScanner) {
+      this.props.history.push(`/hackers/${qr}`);
+    }
   }
   render() {
 
@@ -75,9 +81,9 @@ class HackersPage extends React.Component {
     }
 
     return (
-      <div id="hackersPage" className="tall column">
+      <div id="hackersPage" className={`content tall${this.state.showScanner ? ' blur' : ''}`}>
         <Topbar home/>
-        <div className={`content tall${this.state.showScanner ? ' blur' : ''}`}>
+        <div className="content tall">
           <div className="row">
             <input className="form-control" type="text" value={this.state.search} onChange={this.onSearchChange} placeholder="Search..."/>
             <button className="btn" onClick={this.showScanner}>
