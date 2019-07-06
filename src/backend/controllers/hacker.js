@@ -1,5 +1,4 @@
 const {Hacker} = require('@b/models');
-const bluebird = require('bluebird');
 
 exports.getAllHackers = (qr) => {
     return Hacker.find().select('-_id -fields').exec();

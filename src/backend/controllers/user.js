@@ -1,5 +1,4 @@
 const {User} = require('@b/models');
-const bluebird = require('bluebird');
 
 exports.getUser = (id) => {
     return User.findById(id).select('-_id -github').exec();

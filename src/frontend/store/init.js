@@ -1,5 +1,4 @@
 import axios from 'axios';
-import bluebird from 'bluebird';
 import store from '@/store';
 import {
     setToken,
@@ -24,7 +23,7 @@ const init = () => {
         promises.push(getUsers(token));
     }
 
-    return bluebird.all(promises).then(() => {
+    return Promise.all(promises).then(() => {
       store.dispatch(setLoaded());
 
       socket.emit('join', token);

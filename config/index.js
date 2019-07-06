@@ -3,11 +3,11 @@ module.exports = (env) => {
   if (env === 'production' || !process.env.NODE_ENV || process.env.NODE_ENV === 'production') {
     // Production config
     return {
-      'port': 8080,
-      'host': 'https://boilermakeqr.herokuapp.com',
-      'name': 'BoilerMakeQR',
+      'port': process.env.PORT,
+      'host': `https://${process.env.HEROKU_NAME}.herokuapp.com`,
+      'name': process.env.APPLICATION_NAME,
       'database': {
-        'uri': 'mongodb://localhost:27017/boilermakeqr',
+        'uri': process.env.MONGODB_URI,
         'reconnectInterval': 10000
       }
     }
@@ -17,9 +17,9 @@ module.exports = (env) => {
   return {
     'port': 8080,
     'host': 'http://localhost:8080',
-    'name': 'BoilerMakeQR',
+    'name': 'HaQR',
     'database': {
-      'uri': 'mongodb://localhost:27017/boilermakeqr',
+      'uri': 'mongodb://localhost:27017/haqr',
       'reconnectInterval': 10000
     }
   }
