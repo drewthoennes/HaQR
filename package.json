@@ -1,7 +1,7 @@
 {
-  "name": "boilermakeqr",
-  "version": "0.0.0",
-  "description": "A QR system for the Boilermake hackathon",
+  "name": "haqr",
+  "version": "1.0.0",
+  "description": "A modular QR system for event management",
   "private": true,
   "main": "server.js",
   "scripts": {

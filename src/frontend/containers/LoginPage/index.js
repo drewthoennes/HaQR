@@ -67,7 +67,7 @@ class LoginPage extends React.Component {
         <div className="content tall column column-center">
           <div id="loginPanel" className="column column-around">
             <h1>Login</h1>
-            <p>You've found BoilerMakeQR, the QR system for the BoilerMake hackathon! Login with your Github account to get started.</p>
+            <p>Login with your GitHub account to get started.</p>
             <button className="row row-around" onClick={this.authenticate}>
               <FontAwesomeIcon icon={faGithub}/>
               <p>Login with Github</p>
