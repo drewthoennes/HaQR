@@ -4,7 +4,8 @@ const {authorize} = require('@b/utils');
 module.exports = function(router) {
     router.get('/api/account', (req, res) => {
       authorize(req, {
-        account: true
+        account: true,
+        force: true
       }).then(account => {
         res.json({account: {
             name: account.name,

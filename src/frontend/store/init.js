@@ -27,7 +27,7 @@ const init = () => {
     return bluebird.all(promises).then(() => {
       store.dispatch(setLoaded());
 
-      socket.emit('join');
+      socket.emit('join', token);
 
       socket.on('updateHackers', () => {
           getHackers(token);
@@ -36,7 +36,7 @@ const init = () => {
       socket.on('updateUsers', () => {
           getUsers(token);
       });
-    });
+    }).catch();
 };
 
 const getAccount = (token) => {
@@ -67,7 +67,9 @@ const getHackers = (token) => {
 
     store.dispatch(setHackers(res.data.hackers));
   }).catch(err => {
-    authorize(history);
+    getAccount(token).then(() => {
+      authorize(history);
+    });
   });
 };
 
@@ -92,7 +94,9 @@ const getUsers = (token) => {
       store.dispatch(setAccount(account));
     }
   }).catch(err => {
-    authorize(history);
+    getAccount(token).then(() => {
+      authorize(history);
+    });
   });
 };
 

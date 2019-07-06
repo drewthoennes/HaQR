@@ -70,19 +70,17 @@ io.on('connection', socket => {
 			}
 		}
 
-		authorize().then(() => {
-			// socket.join(workspace);
+		authorize(req).then(() => {
+			socket.join(workspace);
 		}).catch(err => {
-			// console.log(err);
 		});
 	});
 
 	socket.on('leave', () => {
-		// socket.leave(workspace);
+		socket.leave(workspace);
 	});
 
 	socket.on('updatedHackers', (token) => {
-
 		let req = {
 			headers: {
 				authorization: `token ${token}`
@@ -90,8 +88,7 @@ io.on('connection', socket => {
 		}
 
 		authorize(req).then(() => {
-			// io.sockets.in(workspace).emit('updateHackers');
-			socket.emit('updateHackers');
+			io.sockets.in(workspace).emit('updateHackers');
 		}).catch(err => {
 		});
 	});
@@ -104,8 +101,7 @@ io.on('connection', socket => {
 		}
 
 		authorize(req).then(() => {
-			// io.sockets.in(workspace).emit('updateUsers');
-			socket.emit('updateUsers');
+			io.sockets.in(workspace).emit('updateUsers');
 		}).catch(err => {
 		});
 	});

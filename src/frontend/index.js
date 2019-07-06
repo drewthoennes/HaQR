@@ -15,4 +15,4 @@ ReactDOM.render((
 ), document.getElementById('app'));
 
 // Start initialization script to retrieve resources
-init().catch();
+init();
