@@ -1,5 +1,9 @@
 const {User} = require('@b/models');
 
+exports.countAuthorizedUsers = () => {
+    return User.countDocuments({authorized: true}).exec();
+};
+
 exports.getUser = (id) => {
     return User.findById(id).select('-_id -github').exec();
 };
@@ -27,24 +31,34 @@ exports.findUser = (accounts) => {
 };
 
 exports.findOrCreateUser = (accounts, name, email, github) => {
-    return User.findOne(accounts).exec()
-        .then(user => {
-            if (!user) {
-                let newUser = new User({
-                    name: name,
-                    email: email,
-                    github: {
-                        username: github
-                    },
-                    role: 'member',
-                    authorized: false
-                });
+    let totalUsers;
 
-                return newUser.save();
+    return exports.countAuthorizedUsers().then(count => {
+        totalUsers = count;
+
+        return User.findOne(accounts).exec()
+    }).then(user => {
+        if (!user) {
+            let newUser = new User({
+                name: name,
+                email: email,
+                github: {
+                    username: github
+                },
+                role: 'member',
+                authorized: false
+            });
+
+            if (totalUsers === 0) {
+                newUser.role = 'admin';
+                newUser.authorized = true;
             }
 
-            return user;
-        });
+            return newUser.save();
+        }
+
+        return user;
+    });
 };
 
 exports.hasUser = (accounts) => {
