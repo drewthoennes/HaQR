@@ -14,18 +14,12 @@ var HackerSchema = new Schema({
     unique: true,
     required: true
   },
-  fields: {
-    meals: [{
-      name: {
-        type: String,
-        required: true
-      },
-      had: {
-        type: Boolean,
-        default: false
-      }
-    }],
-    swag: [{
+  fields: [{
+    name: {
+      type: String,
+      required: true
+    },
+    attributes: [{
       name: {
         type: String,
         required: true
@@ -35,7 +29,7 @@ var HackerSchema = new Schema({
         default: false
       }
     }]
-  },
+  }],
   active: {
     type: Boolean,
     default: true

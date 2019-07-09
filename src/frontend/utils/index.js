@@ -55,9 +55,34 @@ function sortByProperty(property) {
     }
 }
 
+function parseCSV(csv, width) {
+    return new Promise((resolve, reject) => {
+        if (csv === '') {
+            throw new Error('CSV must not be empty')
+        }
+
+        let map = csv.split('\n').map((row, index) => {
+            let columns = row.split(',').filter(cell => {
+                return cell != '';
+            });
+
+            if (columns.length != width) {
+                throw new Error(`Row ${index} has ${columns.length} values, expected ${width}`);
+            }
+
+            return columns.map(cell => {
+                return cell.trim();
+            });
+        });
+    
+        resolve(map);
+    });
+}
+
 export {
     authorize,
     parseQuery,
     capitalizeFirst,
-    sortByProperty
+    sortByProperty,
+    parseCSV
 };

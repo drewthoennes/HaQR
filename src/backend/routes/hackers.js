@@ -25,6 +25,30 @@ module.exports = function(router) {
     });
   });
 
+  router.post('/api/hackers', (req, res) => {
+    authorize(req, {
+      role: ['admin']
+    }).then(() => {
+      return hackerController.createHacker(req.body.name, req.body.email, req.body.qr, req.body.fields);
+    }).then(() => {
+      res.json({'message': 'Successfully created hacker'});
+    }).catch(err => {
+      switch (true) {
+        case err instanceof UnauthorizedError:
+          res.status(401).json({'error': err.message});
+          break;
+
+        case err instanceof InsufficientRoleError:
+          res.status(401).json({'error': err.message});
+          break;
+
+        default:
+            res.status(500).json({'error': 'Unable to create hacker'});
+          break;
+      }
+    });
+  });
+
   router.get('/api/hackers/:hacker_id', (req, res) => {
     authorize(req).then(() => {
       return hackerController.getHacker(req.params.hacker_id)

@@ -69,8 +69,8 @@ class HackerPage extends React.Component {
     });
   }
 
-  updateHacker(property, index) {
-    let fields = this.constructFields(property, index);
+  updateHacker(name, index) {
+    let fields = this.constructFields(name, index);
 
     axios.post(`/api/hackers/${this.state.qr}`, {
       fields: fields
@@ -85,13 +85,18 @@ class HackerPage extends React.Component {
     });
   }
 
-  constructFields(property, index) {
+  constructFields(name, index) {
     if (!this.state.hacker || !this.state.hacker.fields) {
       return undefined;
     }
 
     let fields = JSON.parse(JSON.stringify(this.state.hacker.fields));
-    fields[property][index].had = !fields[property][index].had;
+
+    for (let field in fields) {
+      if (fields[field].name === name) {
+        fields[field].attributes[index].had = !fields[field].attributes[index].had;
+      }
+    }
 
     return fields;
   }
@@ -102,22 +107,22 @@ class HackerPage extends React.Component {
     if (this.state.hacker) {
       for (let field in this.state.hacker.fields) {
         fields.push(
-          <div className="hackerField" key={`${this.state.hacker.qr}-${field}`}>
+          <div className="hackerField" key={`${this.state.hacker.qr}-${this.state.hacker.fields[field].name}`}>
             <div className="d-flex">
-              <h5>{capitalizeFirst(field)}</h5>
+              <h5>{capitalizeFirst(this.state.hacker.fields[field].name)}</h5>
               <h2 className="horizontal-line"></h2>
             </div>
             <div className="list-group">
               {
-                this.state.hacker.fields[field].map((property, index) => (
-                  <div className="list-group-item row justify-content-between" key={`${this.state.hacker.qr}-${field}-${index}`}>
+                this.state.hacker.fields[field].attributes.map((property, index) => (
+                  <div className="list-group-item row justify-content-between" key={`${this.state.hacker.qr}-${this.state.hacker.fields[field].name}-${index}`}>
                     <div className="column justify-content-center">
                       <p>{property.name}</p>
                     </div>
                     {
                       property.had
-                      ? <button className="btn btn-success" onClick={() => this.updateHacker(field, index)}>Complete</button>
-                      : <button className="btn btn-danger" onClick={() => this.updateHacker(field, index)}>Incomplete</button>
+                      ? <button className="btn btn-success" onClick={() => this.updateHacker(this.state.hacker.fields[field].name, index)}>Complete</button>
+                      : <button className="btn btn-danger" onClick={() => this.updateHacker(this.state.hacker.fields[field].name, index)}>Incomplete</button>
                     }
                   </div>
                 ))

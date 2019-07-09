@@ -10,6 +10,7 @@ import './styles.scss';
 
 import Topbar from '@/containers/Topbar';
 import HackersView from './_hackersView';
+import AddHackersView from './_addHackersView';
 import UsersView from './_usersView';
 import MetricsView from './_metricsView';
 import ChangelogView from './_changelogView';
@@ -55,6 +56,9 @@ class AdminPage extends React.Component {
       case 'hackers':
         view = (<HackersView hackers={this.props.store.hackers} token={this.props.store.token}/>);
         break;
+      case 'addHackers':
+        view = (<AddHackersView token={this.props.store.token}/>);
+        break;
       case 'users':
           view = (<UsersView users={this.props.store.users} token={this.props.store.token}/>);
           break;
@@ -70,13 +74,14 @@ class AdminPage extends React.Component {
     }
 
     return (
-      <div id="adminPage" className="column">
+      <div id="adminPage" className="tall column">
         <Topbar admin/>
 
-        <div className="content">
+        <div className="content tall">
           <div id="sidebar" className="justify-content-start">
             <div className="list-group">
               <button className={`list-group-item${this.state.view === 'hackers' ? ' selected' : ''}`} onClick={() => this.changeView('hackers')}>Hackers</button>
+              <button className={`list-group-item${this.state.view === 'addHackers' ? ' selected' : ''}`} onClick={() => this.changeView('addHackers')}>Add Hackers</button>
               <button className={`list-group-item${this.state.view === 'users' ? ' selected' : ''}`} onClick={() => this.changeView('users')}>Users</button>
               <button className={`list-group-item${this.state.view === 'metrics' ? ' selected' : ''}`} onClick={() => this.changeView('metrics')}>Metrics</button>
               <button className={`list-group-item${this.state.view === 'changelog' ? ' selected' : ''}`} onClick={() => this.changeView('changelog')}>Changelog</button>

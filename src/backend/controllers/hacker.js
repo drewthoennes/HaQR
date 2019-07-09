@@ -8,6 +8,17 @@ exports.getHacker = (qr) => {
     return Hacker.findOne({qr: qr}).select('-_id').exec();
 };
 
+exports.createHacker = (name, email, qr, fields) => {
+    let hacker = new Hacker({
+        name: name,
+        email: email,
+        qr: qr,
+        fields: fields
+    });
+
+    return hacker.save();
+};
+
 exports.updateHacker = (qr, fields) => {
     return Hacker.findOneAndUpdate({
         qr: qr
