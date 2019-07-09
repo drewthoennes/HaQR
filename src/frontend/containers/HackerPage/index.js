@@ -45,10 +45,11 @@ class HackerPage extends React.Component {
 
   getHacker(defaultQr) {
     let qr = defaultQr || this.state.qr;
+    let token = this.props.store.token || localStorage.getItem('token');
 
     axios.get(`/api/hackers/${qr}`, {
       headers: {
-        authorization: `token ${this.props.store.token}`
+        authorization: `token ${token}`
       }
     }).then(res => {
       if (!res || !res.data || !res.data.hacker) {
