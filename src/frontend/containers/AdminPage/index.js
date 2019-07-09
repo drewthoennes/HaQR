@@ -74,7 +74,7 @@ class AdminPage extends React.Component {
     }
 
     return (
-      <div id="adminPage" className="tall column">
+      <div id="adminPage" className="column">
         <Topbar admin/>
 
         <div className="content tall">
