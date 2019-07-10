@@ -1,9 +1,13 @@
 import React from 'react';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faCamera} from '@fortawesome/free-solid-svg-icons';
 import socket from '@/socket';
 import {parseCSV} from '@/utils';
 import './styles.scss';
+
+import QRReader from '@/components/QRReader';
 
 class _addHackersView extends React.Component {
   constructor(props) {
@@ -14,6 +18,7 @@ class _addHackersView extends React.Component {
       fieldsCSVError: undefined,
       hackersCSV: '',
       hackersCSVError: undefined,
+      showScanner: false
     };
 
     this.onFieldsChange = this.onFieldsChange.bind(this);
@@ -21,6 +26,9 @@ class _addHackersView extends React.Component {
     this.checkFieldsFormatting = this.checkFieldsFormatting.bind(this);
     this.checkHackersFormatting = this.checkHackersFormatting.bind(this);
     this.saveHackers = this.saveHackers.bind(this);
+    this.showScanner = this.showScanner.bind(this);
+    this.hideScanner = this.hideScanner.bind(this);
+    this.onQRScan = this.onQRScan.bind(this);
   }
 
   onFieldsChange(event) {
@@ -120,9 +128,33 @@ class _addHackersView extends React.Component {
     });
   }
 
+  showScanner() {
+    this.props.blur();
+    this.setState({showScanner: true}, () => {
+      document.addEventListener('click', this.hideScanner);
+    });
+  }
+
+  hideScanner() {
+    this.props.unblur();
+    this.setState({showScanner: false}, () => {
+      document.removeEventListener('click', this.hideScanner);
+    });
+  }
+
+  onQRScan(data) {
+    this.setState({hackersCSV: `${this.state.hackersCSV}${data}`});
+    this.hideScanner();
+  }
+
+  onQRError(error) {
+    console.error(error);
+  }
+
   render() {
     let fieldsError;
     let hackersError;
+    let scanner;
 
     if (this.state.fieldsCSVError) {
       fieldsError = (
@@ -136,8 +168,12 @@ class _addHackersView extends React.Component {
       );
     }
 
+    if (this.state.showScanner) {
+      scanner = (<QRReader onScan={this.onQRScan} onError={this.onQRError}/>);
+    }
+
     return (
-      <div id="_addHackersView" className="tall">
+      <div id="_addHackersView" className={`tall${this.props.isBlurred ? ' blur' : ''}`}>
         <div className="cards">
           <div className="card">
             <h5 className="card-header">CSV Hacker Upload</h5>
@@ -152,7 +188,16 @@ class _addHackersView extends React.Component {
           </div>
 
           <div className="card">
-            <h5 className="card-header">CSV Hackers Upload</h5>
+            <div className="card-header row justify-content-between">
+              <div className="column justify-content-center">
+                <h5>CSV Hackers Upload</h5>
+              </div>
+              <button className="btn btn-blank" onClick={this.showScanner}>
+                <div className="column justify-content-center">
+                  <FontAwesomeIcon icon={faCamera}/>
+                </div>
+              </button>
+            </div>
             <div className="card-body">
               <p className="card-text">CSV Format: Name, Email, QR (required)</p>
               <textarea value={this.state.hackersCSV} placeholder="John Purdue, john@purdue.edu, 834263229619" onChange={this.onHackersChange}></textarea>
@@ -164,6 +209,8 @@ class _addHackersView extends React.Component {
             </div>
           </div>
         </div>
+
+        {scanner}
       </div>
     );
   }

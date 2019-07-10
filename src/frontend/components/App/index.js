@@ -4,9 +4,7 @@ import './styles.scss';
 
 const App = () => {
   return (
-    <div className="tall">
-      <Router/>
-    </div>
+    <><Router/></>
   );
 };
 

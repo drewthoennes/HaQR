@@ -5,7 +5,7 @@ import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {} from '@fortawesome/free-solid-svg-icons';
-import {authorize} from '@/utils';
+import {authorize, browserIsChrome} from '@/utils';
 import './styles.scss';
 
 import Topbar from '@/containers/Topbar';
@@ -21,11 +21,14 @@ class AdminPage extends React.Component {
     super(props);
 
     this.state = {
-      view: 'hackers'
+      view: 'hackers',
+      isBlurred: false
     };
 
     this.checkIfAuthorized = this.checkIfAuthorized.bind(this);
     this.changeView = this.changeView.bind(this);
+    this.blur = this.blur.bind(this);
+    this.unblur = this.unblur.bind(this);
   }
 
   componentDidMount() {
@@ -50,6 +53,14 @@ class AdminPage extends React.Component {
     }
   }
 
+  blur() {
+    this.setState({isBlurred: true});
+  }
+
+  unblur() {
+    this.setState({isBlurred: false});
+  }
+
   render() {
     let view;
     switch(this.state.view) {
@@ -57,7 +68,7 @@ class AdminPage extends React.Component {
         view = (<HackersView hackers={this.props.store.hackers} token={this.props.store.token}/>);
         break;
       case 'addHackers':
-        view = (<AddHackersView token={this.props.store.token}/>);
+        view = (<AddHackersView token={this.props.store.token} isBlurred={this.state.isBlurred} blur={this.blur} unblur={this.unblur}/>);
         break;
       case 'users':
           view = (<UsersView users={this.props.store.users} token={this.props.store.token}/>);
@@ -74,7 +85,7 @@ class AdminPage extends React.Component {
     }
 
     return (
-      <div id="adminPage" className="column">
+      <div id="adminPage" className={`column${this.state.isBlurred ? ' blur' : ''}`} style={{minHeight: browserIsChrome() ? '100%' : ''}}>
         <Topbar admin/>
 
         <div className="content tall">

@@ -29,6 +29,16 @@ $xs: 400px;
         }
     }
 
+    .card-header {
+        h5 {
+            margin: 0px;
+        }
+
+        .btn-blank {
+            cursor: pointer;
+        }
+    }
+
     .card-body {
         display: flex;
         flex-direction: column;
@@ -73,6 +83,43 @@ $xs: 400px;
 
         .alert {
             margin: 1rem 0px 0px 0px;
+        }
+    }
+
+    .qrReader {
+        width: 320px;
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        margin-left: -160px;
+    }
+
+    &.blur {
+        .card {
+            background: rgba(0, 0, 0, 0);
+
+            .btn-blank {
+                background: rgba(0, 0, 0, 0);
+            }
+
+            .card-body {
+                textarea {
+                    background: rgba(0, 0, 0, 0);
+
+                    &::placeholder {
+                        color: rgba(0, 0, 0, 0.6);
+                    }
+                }
+
+                button {
+                    background: rgba(0, 0, 0, 0);
+                }
+
+                .btn-success {
+                    border-color: rgba(0, 0, 0, 0.2);
+                    color: rgba(0, 0, 0, 0.6);
+                }
+            }
         }
     }
 }

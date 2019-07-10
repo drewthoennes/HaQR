@@ -15,7 +15,6 @@ $xs: 400px;
     }
 
     .view {
-        height: 100%;
         width: 80%;
         padding: 20px;
 
@@ -37,10 +36,17 @@ $xs: 400px;
             padding: 20px;
         }
     }
+
+    &.blur {
+        background: rgba(0, 0, 0, 0.6);
+
+        .list-group-item {
+            background: rgba(0, 0, 0, 0);
+        }
+    }
 }
 
 #sidebar {
-    height: 100%;
     width: 20%;
     display: flex;
     flex-direction: column;
@@ -64,7 +70,6 @@ $xs: 400px;
     }
 
     @media only screen and (max-width: $md) {
-        height: 100%;
         width: 100%;
         padding: 20px 5% 0px 5%;
     }

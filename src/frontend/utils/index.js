@@ -79,10 +79,15 @@ function parseCSV(csv, width) {
     });
 }
 
+function browserIsChrome() {
+    return window.chrome ? true : false;
+}
+
 export {
     authorize,
     parseQuery,
     capitalizeFirst,
     sortByProperty,
-    parseCSV
+    parseCSV,
+    browserIsChrome
 };
