@@ -2,6 +2,7 @@ import axios from 'axios';
 import store from '@/store';
 import {
     setToken,
+    setConfig,
     setAccount,
     setHackers,
     setUsers,
@@ -19,6 +20,7 @@ const init = () => {
         store.dispatch(setToken(token));
 
         promises.push(getAccount(token));
+        promises.push(getConfig(token));
         promises.push(getHackers(token));
         promises.push(getUsers(token));
     }
@@ -27,6 +29,10 @@ const init = () => {
       store.dispatch(setLoaded());
 
       socket.emit('join', token);
+
+      socket.on('updateConfig', () => {
+        getConfig(token);
+      });
 
       socket.on('updateHackers', () => {
           getHackers(token);
@@ -51,6 +57,21 @@ const getAccount = (token) => {
     store.dispatch(setAccount(res.data.account));
   }).catch(err => {
     authorize(history);
+  });
+};
+
+const getConfig = (token) => {
+  return axios.get('/api/config', {
+    headers: {
+      authorization: `token ${token}`
+    }
+  }).then(res => {
+    if (!res || !res.data || !res.data.config) {
+        throw new Error('There was an error retrieving the config');
+    }
+
+    store.dispatch(setConfig(res.data.config));
+  }).catch(err => {
   });
 };
 

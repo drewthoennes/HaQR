@@ -30,7 +30,7 @@ exports.findUser = (accounts) => {
     return User.findOne(accounts).exec();
 };
 
-exports.findOrCreateUser = (accounts, name, email, github) => {
+exports.findOrCreateUser = (accounts, name, email, github, authorized = false, promoted = false) => {
     let totalUsers;
 
     return exports.countAuthorizedUsers().then(count => {
@@ -45,8 +45,8 @@ exports.findOrCreateUser = (accounts, name, email, github) => {
                 github: {
                     username: github
                 },
-                role: 'member',
-                authorized: false
+                role: promoted ? 'admin' : 'member',
+                authorized: authorized
             });
 
             if (totalUsers === 0) {

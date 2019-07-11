@@ -80,7 +80,7 @@ class AdminPage extends React.Component {
           view = (<ChangelogView/>);
           break;
       case 'settings':
-          view = (<SettingsView/>);
+          view = (<SettingsView token={this.props.store.token} config={this.props.store.config}/>);
           break;
     }
 

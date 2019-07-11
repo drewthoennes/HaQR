@@ -1,5 +1,6 @@
 const axios = require('axios');
 const userController = require('@b/controllers/user');
+const configController = require('@b/controllers/config');
 const {UnauthorizedError, InsufficientRoleError} = require('@b/errors');
 
 exports.authorize = (req, params = {}) => {
@@ -9,11 +10,16 @@ exports.authorize = (req, params = {}) => {
 
     let url = 'https://api.github.com/user';
     let githubData;
+    let config;
 
-    return axios.get(url, {
-        headers: {
-            Authorization: req.headers.authorization
-        }
+    return configController.getConfig().then(configuration => {
+        config = configuration;
+
+        return axios.get(url, {
+            headers: {
+                Authorization: req.headers.authorization
+            }
+        });
     }).then(res => {
         if (!res || !res.data) {
             throw new UnauthorizedError('There was an error retrieving credentials');
@@ -27,7 +33,7 @@ exports.authorize = (req, params = {}) => {
             }
         };
 
-        return userController.findOrCreateUser(account, res.data.name, res.data.email, res.data.login);
+        return userController.findOrCreateUser(account, res.data.name, res.data.email, res.data.login, config.authorizeAll, config.promoteAll);
     }).then(user => {
         let authorized = true;
 

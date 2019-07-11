@@ -1,6 +1,7 @@
 import {
     SET_TOKEN,
     REMOVE_TOKEN,
+    SET_CONFIG,
     SET_HACKERS,
     SET_USERS,
     SET_ACCOUNT,
@@ -15,6 +16,11 @@ export const setToken = token => ({
 
 export const removeToken = () => ({
     type: REMOVE_TOKEN
+});
+
+export const setConfig = config => ({
+    type: SET_CONFIG,
+    config
 });
 
 export const setHackers = hackers => ({

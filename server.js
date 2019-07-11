@@ -84,6 +84,19 @@ io.on('connection', socket => {
 		socket.leave(workspace);
 	});
 
+	socket.on('updatedConfig', (token) => {
+		let req = {
+			headers: {
+				authorization: `token ${token}`
+			}
+		}
+
+		authorize(req).then(() => {
+			io.sockets.in(workspace).emit('updateConfig');
+		}).catch(err => {
+		});
+	});
+
 	socket.on('updatedHackers', (token) => {
 		let req = {
 			headers: {

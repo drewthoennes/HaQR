@@ -12,6 +12,7 @@ module.exports = function() {
   require('./hackers')(router);
   require('./users')(router);
   require('./account')(router);
+  require('./config')(router);
   require('./health')(router);
   require('./error')(router);
 

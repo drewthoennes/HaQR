@@ -1,5 +1,23 @@
 #_settingsView {
-    #searchbar {
-        margin-bottom: 20px;
+    .card-body {
+        .row {
+            margin-bottom: 20px;
+
+            h5 {
+                margin: 0px;
+            }
+
+            &:last-child {
+                margin-bottom: 0px;
+            }
+        }
+
+        button {
+            min-width: 100px;
+        }
+
+        .horizontal-line {
+            margin-bottom: 20px;
+        }
     }
 }

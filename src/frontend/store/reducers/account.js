@@ -1,6 +1,7 @@
 import {
     SET_TOKEN,
     REMOVE_TOKEN,
+    SET_CONFIG,
     SET_HACKERS,
     SET_USERS,
     SET_ACCOUNT,
@@ -11,6 +12,7 @@ import {
 // Make sure to add these to the map
 let initialState = {
     token: undefined,
+    config: undefined,
     account: {
         username: undefined,
         email: undefined,
@@ -32,6 +34,11 @@ const account = (state = initialState, action) => {
         case REMOVE_TOKEN:
             return Object.assign({}, state, {
                 token: undefined
+            });
+
+        case SET_CONFIG:
+            return Object.assign({}, state, {
+                config: action.config
             });
 
         case SET_HACKERS:
