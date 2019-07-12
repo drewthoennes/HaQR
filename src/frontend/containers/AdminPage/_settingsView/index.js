@@ -71,13 +71,13 @@ class _settingsView extends React.Component {
         <div className="card">
           <div className="card-header"><h5>Application Settings</h5></div>
           <div className="card-body">
-            <div className="row justify-content-between">
-              <div className="column justify-content-center"><h5>Authorize all new users</h5></div>
+            <div className="setting">
+              <div className="column justify-content-center"><h6>Authorize all new users</h6></div>
               <button className={`btn ${this.props.config.authorizeAll ? 'btn-success' : 'btn-danger'}`} onClick={this.toggleAuthorizeAll}>{this.props.config.authorizeAll ? 'Enabled' : 'Disabled'}</button>
             </div>
             <h2 className="horizontal-line"></h2>
-            <div className="row justify-content-between">
-              <div className="column justify-content-center"><h5>Promote all new users</h5></div>
+            <div className="setting">
+              <div className="column justify-content-center"><h6>Promote all new users</h6></div>
               <button className={`btn ${this.props.config.promoteAll ? 'btn-success' : 'btn-danger'}`} onClick={this.togglePromoteAll}>{this.props.config.promoteAll ? 'Enabled' : 'Disabled'}</button>
             </div>
           </div>
