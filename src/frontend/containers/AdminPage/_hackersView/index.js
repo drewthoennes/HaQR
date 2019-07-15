@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {} from '@fortawesome/free-solid-svg-icons';
+import {faMinus, faChevronUp, faChevronDown} from '@fortawesome/free-solid-svg-icons';
 import {sortByProperty} from '@/utils';
 import socket from '@/socket';
 import './styles.scss';
@@ -85,9 +85,30 @@ class _hackersView extends React.Component {
         <table className="table table-striped">
           <thead>
             <tr>
-              <th scope="col" onClick={() => this.sortBy('qr')}>QR</th>
-              <th scope="col" onClick={() => this.sortBy('name')}>Name</th>
-              <th scope="col" onClick={() => this.sortBy('email')}>Email</th>
+              <th scope="col" onClick={() => this.sortBy('qr')}>
+                <div className="row">
+                  <p>QR</p>
+                  <div className="column justify-content-center">
+                    <FontAwesomeIcon icon={this.state.sort === 'qr' ? this.state.asc ? faChevronUp : faChevronDown : faMinus}/>
+                  </div>
+                </div>
+              </th>
+              <th scope="col" onClick={() => this.sortBy('name')}>
+                <div className="row">
+                  <p>Name</p>
+                  <div className="column justify-content-center">
+                    <FontAwesomeIcon icon={this.state.sort === 'name' ? this.state.asc ? faChevronUp : faChevronDown : faMinus}/>
+                  </div>
+                </div>
+              </th>
+              <th scope="col" onClick={() => this.sortBy('email')}>
+                <div className="row">
+                  <p>Email</p>
+                  <div className="column justify-content-center">
+                    <FontAwesomeIcon icon={this.state.sort === 'email' ? this.state.asc ? faChevronUp : faChevronDown : faMinus}/>
+                  </div>
+                </div>
+              </th>
               <th></th>
             </tr>
           </thead>

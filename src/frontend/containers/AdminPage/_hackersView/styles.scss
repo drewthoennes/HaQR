@@ -16,6 +16,14 @@ $xs: 400px;
         th {
             width: 25%; /* Needed to fill the table rows completely */
             border-bottom-width: 1px;
+
+            .row .column {
+                margin-left: 10px;
+
+                svg {
+                    font-size: 12px;
+                }
+            }
         }
 
         th, td {
