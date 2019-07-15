@@ -85,8 +85,8 @@ class HackersPage extends React.Component {
         <Topbar home/>
         <div className="content tall">
           <div className="row">
-            <input className="form-control" type="text" value={this.state.search} onChange={this.onSearchChange} placeholder="Search..."/>
-            <button className="btn" onClick={this.showScanner}>
+            <input className="form-control" type="text" value={this.state.search} aria-label="search" onChange={this.onSearchChange} placeholder="Search..."/>
+            <button className="btn" onClick={this.showScanner} aria-label="Scan qr code">
               <div className="column justify-contents-center">
                 <FontAwesomeIcon icon={faCamera}/>
               </div>

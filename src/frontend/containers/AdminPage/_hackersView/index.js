@@ -79,7 +79,7 @@ class _hackersView extends React.Component {
     return (
       <div id="_hackersView" className="tall">
         <div id="searchbar" className="row">
-          <input className="form-control" type="text" value={this.state.search} onChange={this.onSearchChange} placeholder="Search"/>
+          <input className="form-control" type="text" value={this.state.search} aria-label="search" onChange={this.onSearchChange} placeholder="Search"/>
         </div>
 
         <table className="table table-striped">

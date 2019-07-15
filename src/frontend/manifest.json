@@ -1,0 +1,15 @@
+{
+  "short_name": "HaQR",
+  "name": "HaQR",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/hackers",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000"
+}

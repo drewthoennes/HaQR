@@ -192,7 +192,7 @@ class _addHackersView extends React.Component {
               <div className="column justify-content-center">
                 <h5>CSV Hackers Upload</h5>
               </div>
-              <button className="btn btn-blank" onClick={this.showScanner}>
+              <button className="btn btn-blank" onClick={this.showScanner} aria-label="Scan qr code">
                 <div className="column justify-content-center">
                   <FontAwesomeIcon icon={faCamera}/>
                 </div>

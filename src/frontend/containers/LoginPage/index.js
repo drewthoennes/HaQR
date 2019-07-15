@@ -68,7 +68,7 @@ class LoginPage extends React.Component {
           <div id="loginPanel" className="column column-around">
             <h1>Login</h1>
             <p>Login with your GitHub account to get started.</p>
-            <button className="row row-around" onClick={this.authenticate}>
+            <button className="row row-around" onClick={this.authenticate} aria-label="Login">
               <FontAwesomeIcon icon={faGithub}/>
               <p>Login with Github</p>
             </button>

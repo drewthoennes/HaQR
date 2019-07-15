@@ -26,8 +26,12 @@ const io = require('socket.io')(server);
 const PORT = process.env.PORT || config.port;
 const DATABASE = process.env.MONGODB_URI || config.database.uri;
 
-app.get('/favicon.ico', (req, res) => {
-	res.sendFile(`${__dirname}/src/frontend/favicon.ico`);
+app.get('/favicon.(ico|png)', (req, res) => {
+	res.sendFile(`${__dirname}/src/frontend/favicon.png`);
+});
+
+app.get('/public/manifest.json', (req, res) => {
+	res.sendFile(`${__dirname}/src/frontend/manifest.json`);
 });
 
 // CORS
