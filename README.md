@@ -34,7 +34,7 @@ Through the admin page, users can toggle hackers active or inactive, add new hac
 ## Quickstart
 
 #### Heroku
-Deploy the application to production in minutes with Heroku
+Deploy the application to production in minutes with Heroku!
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/drewthoennes/HaQR/tree/master)
 
@@ -45,5 +45,5 @@ To run the application locally, install and start MongoDB and then run:
 
 ```bash
 npm install
-npm start
+npm start-dev
 ```
