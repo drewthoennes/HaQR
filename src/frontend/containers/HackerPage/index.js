@@ -120,11 +120,13 @@ class HackerPage extends React.Component {
                     <div className="column justify-content-center">
                       <p>{property.name}</p>
                     </div>
+                    <div className="column justify-content-center">
                     {
                       property.had
                       ? <button className="btn btn-success" onClick={() => this.updateHacker(this.state.hacker.fields[field].name, index)}>Complete</button>
                       : <button className="btn btn-danger" onClick={() => this.updateHacker(this.state.hacker.fields[field].name, index)}>Incomplete</button>
                     }
+                    </div>
                   </div>
                 ))
               }
@@ -132,6 +134,17 @@ class HackerPage extends React.Component {
           </div>
         );
       }
+    }
+    else {
+      fields = (
+        <div id="spinner" className="d-flex flex-column justify-content-center">
+          <div className="d-flex justify-content-center">
+            <div className="spinner-border" role="status">
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
+        </div>
+      );
     }
 
     let name = '';

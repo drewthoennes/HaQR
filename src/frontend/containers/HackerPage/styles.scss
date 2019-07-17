@@ -13,6 +13,7 @@ $xs: 400px;
         }
 
         .btn-success, .btn-danger {
+            height: 38px;
             min-width: 110px;
         }
 
@@ -39,6 +40,11 @@ $xs: 400px;
 
             .list-group-item.row {
                 margin: 0px 0px 5px 0px;
+
+                /* Limit the width of the text */
+                .column:first-child {
+                    width: calc(100% - 110px);
+                }
             }
         }
 
@@ -52,6 +58,16 @@ $xs: 400px;
 
         @media only screen and (max-width: $sm) {
             padding: 20px;
+        }
+    }
+
+    #spinner {
+        height: 75%;
+
+        .spinner-border {
+            height: 4rem;
+            width: 4rem;
+            color: rgba(0, 0, 0, 0.1);
         }
     }
 
