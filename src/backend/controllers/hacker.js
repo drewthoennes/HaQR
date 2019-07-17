@@ -1,6 +1,6 @@
 const {Hacker} = require('@b/models');
 
-exports.getAllHackers = (qr) => {
+exports.getAllHackers = () => {
     return Hacker.find().select('-_id -fields').exec();
 };
 
