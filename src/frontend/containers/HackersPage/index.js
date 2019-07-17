@@ -7,7 +7,7 @@ import {removeToken} from '@/store/actions';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCamera, faUser} from '@fortawesome/free-solid-svg-icons';
-import {authorize} from '@/utils';
+import {authorize, sortByProperty} from '@/utils';
 import './styles.scss';
 
 import Topbar from '@/containers/Topbar';
@@ -70,8 +70,11 @@ class HackersPage extends React.Component {
     let hackers = this.props.store.hackers.filter(hacker => {
       return hacker.active;
     }).filter(hacker => {
-      return hacker ? hacker.name.toLowerCase().includes(search) : false;
-    }).map(hacker => (
+      let matchName = hacker ? hacker.name.toLowerCase().includes(search) : false;
+      let matchEmail = hacker ? hacker.email.toLowerCase().includes(search) : false
+
+      return hacker ? matchName || matchEmail : false;
+    }).sort(sortByProperty('name')).map(hacker => (
       <button className="list-group-item" key={hacker.qr} onClick={() => this.openHackerPage(hacker.qr)}>{hacker.name} ({hacker.email})</button>
     ));
 
