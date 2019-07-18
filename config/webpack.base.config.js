@@ -9,7 +9,7 @@ function resolve(dir) {
 module.exports = {
   entry: './src/frontend/index.js',
   output: {
-    filename: 'main.js',
+    filename: '[contenthash].js',
     path: resolve('dist'),
     publicPath: '/public/'
   },
@@ -25,6 +25,21 @@ module.exports = {
     }
   },
   devtool: 'source-map',
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+      cacheGroups: {
+        default: false,
+        vendors: false,
+        lodash: {
+          test: /[\\/]node_modules[\\/]/,
+          minSize: 100,
+          reuseExistingChunk: true,
+          name: 'vendor',
+        },
+      }
+    }
+  },
   module: {
     rules: [
         {
@@ -33,14 +48,18 @@ module.exports = {
           use: {
             loader: "babel-loader",
             options: {
-              presets: ['@babel/preset-env'],
+              babelrc: false,
+              presets: [
+                '@babel/preset-env',
+                '@babel/preset-react'
+              ],
               cacheDirectory: true
             }
           }
         },
         {
           test:/\.(s*)css$/,
-          use:['style-loader','css-loader', 'sass-loader']
+          use: ['style-loader', 'css-loader', 'sass-loader']
         },
         {
           test: /\.(jpe?g|png|gif|woff|woff2|eot|ttf|svg)(\?[a-z0-9=.]+)?$/,
