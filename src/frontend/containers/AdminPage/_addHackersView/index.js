@@ -43,7 +43,7 @@ class _addHackersView extends React.Component {
     parseCSV(this.state.fieldsCSV, 2).then(map => {
       this.setState({fieldsCSVError: undefined});
     }).catch(err => {
-      this.setState({fieldsCSVError: err});
+      this.setState({fieldsCSVError: err.message});
     });
   }
 
@@ -51,7 +51,7 @@ class _addHackersView extends React.Component {
     parseCSV(this.state.hackersCSV, 3).then(map => {
       this.setState({hackersCSVError: undefined});
     }).catch(err => {
-      this.setState({hackersCSVError: err});
+      this.setState({hackersCSVError: err.message});
     });
   }
 
