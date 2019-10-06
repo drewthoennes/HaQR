@@ -6,7 +6,7 @@ import store from '@/store';
 import {removeToken} from '@/store/actions';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faSignOutAlt, faHome, faTools} from '@fortawesome/free-solid-svg-icons';
+import {faSignOutAlt, faHome, faTools, faUser, faUserCircle} from '@fortawesome/free-solid-svg-icons';
 import './styles.scss';
 
 class Topbar extends React.Component {
@@ -14,12 +14,27 @@ class Topbar extends React.Component {
     super(props);
 
     this.state = {
+      showAccountDropdown: false
     };
 
+    this.showAccountDropdown = this.showAccountDropdown.bind(this);
+    this.closeAccountDropdown = this.closeAccountDropdown.bind(this);
     this.logout = this.logout.bind(this);
   }
 
   componentDidMount() {
+  }
+
+  showAccountDropdown() {
+    this.setState({showAccountDropdown: true}, () => {
+      document.addEventListener('click', this.closeAccountDropdown);
+    });
+  }
+
+  closeAccountDropdown() {
+    this.setState({showAccountDropdown: false}, () => {
+      document.removeEventListener('click', this.closeAccountDropdown);
+    });
   }
 
   logout() {
@@ -47,12 +62,46 @@ class Topbar extends React.Component {
       );
     }
 
+    let accountDropdown = '';
+    if (this.props.store.account && this.state.showAccountDropdown) {
+      accountDropdown = (
+        <div className="dropdown">
+          <div id="grey-arrow-up"></div>
+          <div id="white-arrow-up"></div>
+          <ul>
+            <div id="account-row" className="row">
+              <div className="column justify-content-center">
+                <FontAwesomeIcon icon={faUserCircle}/>
+              </div>
+              <div className="column justify-content-between">
+                <li>{this.props.store.account.name}</li>
+                <li>{this.props.store.account.email}</li>
+              </div>
+            </div>
+            <div id="buttons-row">
+              <div className="row">
+                <li className="row" onClick={this.logout}>
+                  <div className="column justify-content-center row-icon">
+                    <FontAwesomeIcon icon={faSignOutAlt}/>
+                  </div>
+                  <div className="column justify-content-center">
+                    <p>Log out</p>
+                  </div>
+                </li>
+              </div>
+            </div>
+          </ul>
+        </div>
+      );
+    }
+
     return (
       <div id="topbar" className="row justify-content-end">
         {adminButton}
         {homeButton}
-        <div className="topbar-item column justify-content-center" onClick={this.logout}>
-            <FontAwesomeIcon icon={faSignOutAlt}/>
+        <div className="topbar-item column justify-content-center" onClick={this.showAccountDropdown}>
+            <FontAwesomeIcon icon={faUser}/>
+            {accountDropdown}
         </div>
       </div>
     );

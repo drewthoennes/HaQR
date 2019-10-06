@@ -22,4 +22,93 @@ $xs: 400px;
             font-size: 20px;
         }
     }
+
+    .dropdown {
+        z-index: 1;
+
+        .horizontal-line {
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        #account-row {
+            padding: 5px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            cursor: default;
+
+            svg {
+                font-size: 36px;
+            }
+
+            .column:first-child {
+                padding-right: 10px;
+            }
+
+            li {
+                margin: 0px;
+
+                &:first-child {
+                    padding-bottom: 0px;
+                }
+
+                &:last-child {
+                    padding-top: 0px;
+                    font-size: 12px;
+                }
+            }
+        }
+
+        #grey-arrow-up {
+            width: 0;
+            height: 0;
+            position: absolute;
+            top: 10px;
+            right: 0px;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 15px solid rgba(0, 0, 0, 0.1);
+        }
+
+        #white-arrow-up {
+            width: 0;
+            height: 0;
+            position: absolute;
+            top: 11px;
+            right: 0px;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 15px solid white;
+            z-index: 1;
+        }
+
+        p {
+            margin: 0px;
+        }
+
+        ul {
+            width: 250px;
+            position: absolute;
+            top: 25px;
+            right: -10px;
+            margin: 0px;
+            padding: 0px;
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            list-style-type: none;
+
+            li {
+                margin: 5px;
+                padding: 5px;
+            }
+
+            hr {
+                margin: 0px 5px 0px 5px;
+                border-color: rgba(0, 0, 0, 0.1);
+                border-width: 0.5px;
+            }
+        }
+
+        .row-icon {
+            padding-right: 10px;
+        }
+    }
 }
