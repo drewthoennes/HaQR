@@ -1,20 +1,12 @@
-const hackerController = require('@b/controllers/hacker');
-const {authorize} = require('@b/utils');
+const authController = require('@b/controllers/auth');
 
 module.exports = function(router) {
-    router.get('/api/account', (req, res) => {
-      authorize(req, {
-        account: true,
-        force: true
-      }).then(account => {
-        res.json({account: {
-            name: account.name,
-            email: account.email,
-            role: account.role,
-            authorized: account.authorized
-        }});
-      }).catch(err => {
-        res.status(401).json({'error': 'There was an error authenticating your request'});
-      });
+    router.get('/api/account', authController.authorize({account: true, force: true}), (req, res) => {
+      res.json({account: {
+          name: req.auth.account.name,
+          email: req.auth.account.email,
+          role: req.auth.account.role,
+          authorized: req.auth.account.authorized
+      }});
     });
 }

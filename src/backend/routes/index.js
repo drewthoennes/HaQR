@@ -11,6 +11,7 @@ module.exports = function() {
   require('./auth')(router);
   require('./hackers')(router);
   require('./users')(router);
+  require('./roles')(router);
   require('./account')(router);
   require('./config')(router);
   require('./health')(router);

@@ -9,7 +9,6 @@ exports.authorize = (req, params = {}) => {
     }
 
     let url = 'https://api.github.com/user';
-    let githubData;
     let config;
 
     return configController.getConfig().then(configuration => {
@@ -24,8 +23,6 @@ exports.authorize = (req, params = {}) => {
         if (!res || !res.data) {
             throw new UnauthorizedError('There was an error retrieving credentials');
         }
-
-        githubData = res.data;
 
         let account = {
             github: {
@@ -46,17 +43,23 @@ exports.authorize = (req, params = {}) => {
         }
 
         if (params.roles && !params.roles.includes(user.role)) {
+
             if (!params.force) {
-                throw new InsufficientRoleError('You lack a sufficient role to access this service');
+                throw new InsufficientRoleError('You lack the sufficient role to access this service');
             }
 
             authorized = false;
         }
 
         if (params.account) {
-            return user;
+            return {
+                authorized: authorized,
+                account: user
+            };
         }
 
-        return authorized;
+        return {
+            authorized: authorized
+        };
     });
 };
