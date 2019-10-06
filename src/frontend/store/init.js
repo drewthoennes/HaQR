@@ -6,6 +6,7 @@ import {
     setAccount,
     setHackers,
     setUsers,
+    setRoles,
     setLoaded
 } from '@/store/actions';
 import socket from '@/socket';
@@ -23,6 +24,7 @@ const init = () => {
         promises.push(getConfig(token));
         promises.push(getHackers(token));
         promises.push(getUsers(token));
+        promises.push(getRoles(token));
     }
 
     return Promise.all(promises).then(() => {
@@ -113,6 +115,24 @@ const getUsers = (token) => {
     if (account) {
       store.dispatch(setAccount(account));
     }
+  }).catch(err => {
+    getAccount(token).then(() => {
+      authorize(history);
+    });
+  });
+};
+
+const getRoles = (token) => {
+  return axios.get('/api/roles', {
+    headers: {
+      authorization: `token ${token}`
+    }
+  }).then(res => {
+    if (!res || !res.data || !res.data.roles) {
+        throw new Error('There was an error retrieving roles');
+    }
+
+    store.dispatch(setRoles(res.data.roles));
   }).catch(err => {
     getAccount(token).then(() => {
       authorize(history);

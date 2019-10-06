@@ -3,12 +3,13 @@ import {
     REMOVE_TOKEN,
     SET_CONFIG,
     SET_HACKERS,
+    SET_ROLES,
     SET_USERS,
     SET_ACCOUNT,
     SET_LOADED,
     CLEAR_ALL
  } from '@/const/store';
- 
+
 export const setToken = token => ({
     type: SET_TOKEN,
     token
@@ -31,6 +32,11 @@ export const setHackers = hackers => ({
 export const setUsers = users => ({
     type: SET_USERS,
     users
+});
+
+export const setRoles = roles => ({
+    type: SET_ROLES,
+    roles
 });
 
 export const setAccount = account => ({

@@ -1,0 +1,55 @@
+$xl: 1200px;
+$lg: 1000px;
+$md: 800px;
+$sm: 600px;
+$xs: 400px;
+
+#_rolesView {
+    .table {
+        background: white;
+        border: 1px solid #dee2e6;
+
+        th {
+            width: 25%; /* Needed to fill the table rows completely */
+            border-bottom-width: 1px;
+
+            .row .column {
+                margin-left: 10px;
+
+                svg {
+                    font-size: 12px;
+                }
+            }
+        }
+
+        th, td {
+            border-top: 0px;
+        }
+
+        ul {
+            margin: 0px;
+        }
+
+        tbody tr:nth-child(odd) {
+            background: rgba(0, 0, 0, 0.025);
+        }
+
+        .btn-success, .btn-danger {
+            min-width: 110px;
+        }
+
+        @media only screen and (max-width: $lg) {
+            overflow-x: scroll;
+            display: block;
+            white-space: nowrap;
+        }
+
+        /* We don't add scrolling for $md because the content becomes horizontal and doesn't need scroll until $sm  */
+
+        @media only screen and (max-width: $sm) {
+            overflow-x: scroll;
+            display: block;
+            white-space: nowrap;
+        }
+    }
+}

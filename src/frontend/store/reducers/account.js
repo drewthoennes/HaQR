@@ -4,6 +4,7 @@ import {
     SET_CONFIG,
     SET_HACKERS,
     SET_USERS,
+    SET_ROLES,
     SET_ACCOUNT,
     SET_LOADED,
     CLEAR_ALL
@@ -21,9 +22,10 @@ let initialState = {
     },
     hackers: [],
     users: [],
+    roles: [],
     loaded: false
 };
-  
+
 const account = (state = initialState, action) => {
     switch (action.type) {
         case SET_TOKEN:
@@ -49,6 +51,11 @@ const account = (state = initialState, action) => {
         case SET_USERS:
             return Object.assign({}, state, {
                 users: action.users
+            });
+
+        case SET_ROLES:
+            return Object.assign({}, state, {
+                roles: action.roles
             });
 
         case SET_ACCOUNT:
