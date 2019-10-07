@@ -8,23 +8,27 @@ import './styles.scss';
 
 import GenericModal from '@/components/GenericModal';
 import AddRoleModal from './AddRoleModal';
+import DeleteRoleModal from './DeleteRoleModal';
 
 class _rolesView extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      deleting: '',
       sort: '',
       asc: false
     };
 
     this.addRoleModal = React.createRef();
+    this.deleteRoleModal = React.createRef();
 
     this.sortBy = this.sortBy.bind(this);
     this.openAddRoleModal = this.openAddRoleModal.bind(this);
     this.addRoleModalConfirm = this.addRoleModalConfirm.bind(this);
     this.addRoleModalCancel = this.addRoleModalCancel.bind(this);
-    this.deleteRole = this.deleteRole.bind(this);
+    this.deleteRoleModalConfirm = this.deleteRoleModalConfirm.bind(this);
+    this.deleteRoleModalCancel = this.deleteRoleModalCancel.bind(this);
   }
 
   sortBy(sort) {
@@ -61,6 +65,31 @@ class _rolesView extends React.Component {
     this.addRoleModal.current.closeModal();
   }
 
+  openDeleteRoleModal(id) {
+    this.setState({deleting: id});
+    this.deleteRoleModal.current.openModal();
+  }
+
+  deleteRoleModalConfirm() {
+    let token = this.props.token;
+
+    axios.delete(`/api/roles/${this.state.deleting}`, {
+      headers: {
+        authorization: `token ${token}`
+      }
+    }).then(res => {
+      if (res && res.data && !res.data.error) {
+        socket.emit('updatedRoles', token);
+      }
+
+      this.deleteRoleModal.current.closeModal();
+    });
+  }
+
+  deleteRoleModalCancel() {
+    this.deleteRoleModal.current.closeModal();
+  }
+
   render() {
     let roles = this.props.roles.map(role => (
       <tr key={role._id}>
@@ -82,12 +111,13 @@ class _rolesView extends React.Component {
           }
         </td>
         <td className="row justify-content-around">
-          <button className="btn btn-danger">Delete</button>
+          <button className="btn btn-danger" onClick={() => this.openDeleteRoleModal(role._id)}>Delete</button>
         </td>
       </tr>
     ));
 
     let addRoleModal = (<AddRoleModal confirm={this.addRoleModalConfirm} cancel={this.addRoleModalCancel}/>);
+    let deleteRoleModal = (<DeleteRoleModal confirm={this.deleteRoleModalConfirm} cancel={this.deleteRoleModalCancel}/>);
 
     return (
       <div id="_rolesView" className="tall">
@@ -120,6 +150,7 @@ class _rolesView extends React.Component {
         </table>
 
         <GenericModal ref={this.addRoleModal} large title="Add Role" content={addRoleModal}/>
+        <GenericModal ref={this.deleteRoleModal} small title="Delete Role" content={deleteRoleModal}/>
       </div>
     );
   }
