@@ -74,7 +74,7 @@ function parseCSV(csv, width) {
                 return cell.trim();
             });
         });
-    
+
         resolve(map);
     });
 }

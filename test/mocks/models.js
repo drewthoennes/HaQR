@@ -7,7 +7,6 @@ exports.genericModal = class GenericModal {
     }
 
     save() {
-        console.log('Saving');
         return promise.resolve();
     }
 };

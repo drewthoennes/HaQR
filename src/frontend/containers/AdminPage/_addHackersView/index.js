@@ -14,37 +14,23 @@ class _addHackersView extends React.Component {
     super(props);
 
     this.state = {
-      fieldsCSV: '',
-      fieldsCSVError: undefined,
+      role: '',
       hackersCSV: '',
       hackersCSVError: undefined,
       showScanner: false
     };
 
-    this.onFieldsChange = this.onFieldsChange.bind(this);
     this.onHackersChange = this.onHackersChange.bind(this);
-    this.checkFieldsFormatting = this.checkFieldsFormatting.bind(this);
     this.checkHackersFormatting = this.checkHackersFormatting.bind(this);
     this.saveHackers = this.saveHackers.bind(this);
     this.showScanner = this.showScanner.bind(this);
     this.hideScanner = this.hideScanner.bind(this);
     this.onQRScan = this.onQRScan.bind(this);
-  }
-
-  onFieldsChange(event) {
-    this.setState({fieldsCSV: event.target.value});
+    this.setRole = this.setRole.bind(this);
   }
 
   onHackersChange(event) {
     this.setState({hackersCSV: event.target.value});
-  }
-
-  checkFieldsFormatting() {
-    parseCSV(this.state.fieldsCSV, 2).then(map => {
-      this.setState({fieldsCSVError: undefined});
-    }).catch(err => {
-      this.setState({fieldsCSVError: err.message});
-    });
   }
 
   checkHackersFormatting() {
@@ -55,47 +41,11 @@ class _addHackersView extends React.Component {
     });
   }
 
-  formatFieldsMap(map) {
-    let fields = {};
-
-    for (let el in map) {
-      let category = map[el][0];
-      let field = map[el][1];
-
-      if (!fields[category]) {
-        fields[category] = [];
-      }
-
-      fields[category].push({
-        had: false,
-        name: field
-      });
-    }
-
-    let formatted = [];
-
-    for (let field in fields) {
-      let category = {
-        name: field,
-        attributes: fields[field]
-      };
-
-      formatted.push(category);
-    }
-
-    return formatted;
-  }
-
   saveHackers() {
     let token = this.props.token;
-    let fields;
     let hackers;
 
-    parseCSV(this.state.fieldsCSV, 2).then(map => {
-      fields = this.formatFieldsMap(map);
-
-      return parseCSV(this.state.hackersCSV, 3);
-    }).then(map => {
+    parseCSV(this.state.hackersCSV, 3).then(map => {
       hackers = map;
 
       let promises = [];
@@ -110,7 +60,7 @@ class _addHackersView extends React.Component {
             name: name,
             email: email,
             qr: qr,
-            fields: fields
+            role: this.state.role._id
           }, {
             headers: {
               authorization: `token ${token}`
@@ -122,7 +72,7 @@ class _addHackersView extends React.Component {
       return Promise.all(promises);
     }).then(() => {
       socket.emit('updatedHackers', token);
-      this.setState({fieldsCSV: '', fieldsCSVError: undefined, hackersCSV: '', hackersCSVError: undefined});
+      this.setState({role: '', hackersCSV: '', hackersCSVError: undefined, showScanner: false});
     }).catch(err => {
       console.error(err);
     });
@@ -151,16 +101,14 @@ class _addHackersView extends React.Component {
     console.error(error);
   }
 
+  setRole(role) {
+    this.setState({role: role});
+  }
+
   render() {
-    let fieldsError;
     let hackersError;
     let scanner;
-
-    if (this.state.fieldsCSVError) {
-      fieldsError = (
-        <div className="alert alert-danger" role="alert">{this.state.fieldsCSVError}</div>
-      );
-    }
+    let roles;
 
     if (this.state.hackersCSVError) {
       hackersError = (
@@ -172,21 +120,15 @@ class _addHackersView extends React.Component {
       scanner = (<QRReader onScan={this.onQRScan} onError={this.onQRError}/>);
     }
 
+    if (this.props.roles) {
+      roles = this.props.roles.map(role => (
+        <p key={role._id} className="dropdown-item" onClick={() => this.setRole(role)}>{role.name}</p>
+      ));
+    }
+
     return (
       <div id="_addHackersView" className={`tall${this.props.isBlurred ? ' blur' : ''}`}>
         <div className="cards">
-          <div className="card">
-            <h5 className="card-header">CSV Hacker Upload</h5>
-            <div className="card-body">
-              <p className="card-text">CSV Format: Category, Field</p>
-              <textarea value={this.state.fieldsCSV} placeholder={"Swag, Backpacks\nSwag, Dad hats\nMeals, Breakfast"} onChange={this.onFieldsChange}></textarea>
-              <div className="buttons">
-                <button className="btn btn-blank" onClick={this.checkFieldsFormatting}>Check Formatting</button>
-              </div>
-              {fieldsError}
-            </div>
-          </div>
-
           <div className="card">
             <div className="card-header row justify-content-between">
               <div className="column justify-content-center">
@@ -199,12 +141,21 @@ class _addHackersView extends React.Component {
               </button>
             </div>
             <div className="card-body">
+              <div className="dropdown">
+                <button className="btn btn-blank dropdown-toggle" type="button" id="rolesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{this.state.role ? this.state.role.name : 'Select role...'}</button>
+                <div className="dropdown-menu" aria-labelledby="rolesDropdown">
+                  {roles}
+                </div>
+              </div>
+
               <p className="card-text">CSV Format: Name, Email, QR (required)</p>
+
               <textarea value={this.state.hackersCSV} placeholder="John Purdue, john@purdue.edu, 834263229619" onChange={this.onHackersChange}></textarea>
               <div id="hackers-buttons" className="buttons">
                 <button className="btn btn-blank" onClick={this.checkHackersFormatting}>Check Formatting</button>
                 <button className="btn btn-success" onClick={this.saveHackers}>Submit</button>
               </div>
+
               {hackersError}
             </div>
           </div>

@@ -1,4 +1,4 @@
-const {Hacker} = require('@b/models');
+const {Hacker, Role} = require('@b/models');
 
 exports.getAllHackers = () => {
     return Hacker.find().select('-_id -fields').exec();
@@ -8,15 +8,35 @@ exports.getHacker = (qr) => {
     return Hacker.findOne({qr: qr}).select('-_id').exec();
 };
 
-exports.createHacker = (name, email, qr, fields) => {
-    let hacker = new Hacker({
-        name: name,
-        email: email,
-        qr: qr,
-        fields: fields
-    });
+exports.createHacker = (name, email, qr, role) => {
+    return Role.findById(role).lean().then(role => {
+        if (!role) {
+            throw new Error('Invalid role');
+        }
 
-    return hacker.save();
+        let fields = role.fields.map(field => {
+            let attributes = field.attributes.map(attribute => {
+                return {
+                    'name': attribute,
+                    'had': false
+                }
+            });
+
+            return {
+                ...field,
+                attributes: attributes
+            }
+        });
+
+        let hacker = new Hacker({
+            name: name,
+            email: email,
+            qr: qr,
+            fields: fields
+        });
+
+        return hacker.save();
+    });
 };
 
 exports.updateHacker = (qr, fields) => {

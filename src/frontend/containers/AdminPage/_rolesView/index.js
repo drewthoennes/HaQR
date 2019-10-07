@@ -3,6 +3,7 @@ import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faMinus, faChevronUp, faChevronDown, faPlus} from '@fortawesome/free-solid-svg-icons';
+import {sortByProperty} from '@/utils';
 import socket from '@/socket';
 import './styles.scss';
 
@@ -91,7 +92,15 @@ class _rolesView extends React.Component {
   }
 
   render() {
-    let roles = this.props.roles.map(role => (
+    let roles = this.props.roles;
+
+    roles.sort(sortByProperty(this.state.sort));
+
+    if (!this.state.asc) {
+      roles.reverse();
+    }
+
+    roles = roles.map(role => (
       <tr key={role._id}>
         <td scope="row">{role.name}</td>
         <td scope="row">
@@ -121,7 +130,7 @@ class _rolesView extends React.Component {
 
     return (
       <div id="_rolesView" className="tall">
-        <button className="btn btn-blank" onClick={this.openAddRoleModal}>
+        <button title="Add role" className="btn btn-blank" onClick={this.openAddRoleModal}>
           <FontAwesomeIcon icon={faPlus}/>
         </button>
 

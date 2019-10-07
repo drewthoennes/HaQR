@@ -24,7 +24,7 @@ module.exports = function(router) {
   });
 
   router.post('/api/hackers', authController.authorize({role: ['admin']}), (req, res) => {
-    return hackerController.createHacker(req.body.name, req.body.email, req.body.qr, req.body.fields).then(() => {
+    return hackerController.createHacker(req.body.name, req.body.email, req.body.qr, req.body.role).then(() => {
       res.json({'message': 'Successfully created hacker'});
     }).catch(err => {
       switch (true) {
@@ -37,7 +37,7 @@ module.exports = function(router) {
           break;
 
         default:
-            res.status(500).json({'error': 'Unable to create hacker'});
+          res.status(500).json({'error': 'Unable to create hacker'});
           break;
       }
     });
