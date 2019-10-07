@@ -5,6 +5,9 @@ import store from '@/store';
 import init from '@/store/init';
 import 'bootstrap/dist/css/bootstrap.css';
 import './styles.scss';
+import Modal from 'react-modal';
+
+Modal.setAppElement('#app');
 
 import App from '@/components/App'
 

@@ -71,7 +71,7 @@ class AdminPage extends React.Component {
           view = (<UsersView users={this.props.store.users} token={this.props.store.token}/>);
           break;
       case 'roles':
-        view = (<RolesView roles={this.props.store.roles}/>);
+        view = (<RolesView roles={this.props.store.roles} token={this.props.store.token}/>);
         break;
       case 'settings':
           view = (<SettingsView token={this.props.store.token} config={this.props.store.config}/>);

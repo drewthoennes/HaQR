@@ -127,6 +127,19 @@ io.on('connection', socket => {
 		});
 	});
 
+	socket.on('updatedRoles', (token) => {
+		let req = {
+			headers: {
+				authorization: `token ${token}`
+			}
+		}
+
+		authorize(req).then(() => {
+			io.sockets.in(workspace).emit('updateRoles');
+		}).catch(err => {
+		});
+	});
+
 	socket.on('disconnect', () => {
 		socket.leave(workspace);
 	});
@@ -147,7 +160,7 @@ const conn = () => {
 };
 
 conn();
-  
+
 const db = mongoose.connection;
 
 db.on('error', err => {

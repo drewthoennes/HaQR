@@ -1,0 +1,117 @@
+$xl: 1200px;
+$lg: 1000px;
+$md: 800px;
+$sm: 600px;
+$xs: 400px;
+
+#add-role-modal {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    > button {
+        padding: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        background: rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 3px 3px 3px 3px;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        margin: 10px 0px;
+
+        > input {
+            margin-bottom: 20px;
+        }
+
+        .card {
+            width: 100%;
+        }
+
+        .card-header {
+            h5 {
+                margin: 0px;
+            }
+
+            .btn-blank {
+                cursor: pointer;
+            }
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+
+            p {
+                margin-bottom: 1rem;
+            }
+
+            textarea {
+                min-height: 100px;
+                width: 100%;
+                margin-bottom: 1rem;
+                padding: 10px;
+                border: 1px solid rgba(0, 0, 0, 0.2);
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            .buttons {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                cursor: pointer;
+
+                button {
+                    width: 100%;
+                }
+            }
+
+            #hackers-buttons {
+                button:first-child {
+                    margin-right: 10px;
+                }
+
+                button:last-child {
+                    margin-left: 10px;
+                }
+            }
+
+            .alert {
+                margin: 1rem 0rem 0rem 0rem;
+            }
+        }
+    }
+
+    .modal-buttons {
+        button {
+            width: calc(50% - 10px);
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 0px;
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 3px 3px 3px 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        button:first-child {
+            margin-right: 10px;
+        }
+
+        button:last-child {
+            margin-left: 10px;
+        }
+    }
+}

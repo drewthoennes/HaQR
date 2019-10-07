@@ -43,6 +43,10 @@ const init = () => {
       socket.on('updateUsers', () => {
           getUsers(token);
       });
+
+      socket.on('updateRoles', () => {
+        getRoles(token);
+    });
     }).catch();
 };
 

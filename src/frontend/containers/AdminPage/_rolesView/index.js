@@ -2,10 +2,12 @@ import React from 'react';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faMinus, faChevronUp, faChevronDown} from '@fortawesome/free-solid-svg-icons';
-import {sortByProperty} from '@/utils';
+import {faMinus, faChevronUp, faChevronDown, faPlus} from '@fortawesome/free-solid-svg-icons';
 import socket from '@/socket';
 import './styles.scss';
+
+import GenericModal from '@/components/GenericModal';
+import AddRoleModal from './AddRoleModal';
 
 class _rolesView extends React.Component {
   constructor(props) {
@@ -15,9 +17,14 @@ class _rolesView extends React.Component {
       sort: '',
       asc: false
     };
-  }
 
-  componentDidMount() {
+    this.addRoleModal = React.createRef();
+
+    this.sortBy = this.sortBy.bind(this);
+    this.openAddRoleModal = this.openAddRoleModal.bind(this);
+    this.addRoleModalConfirm = this.addRoleModalConfirm.bind(this);
+    this.addRoleModalCancel = this.addRoleModalCancel.bind(this);
+    this.deleteRole = this.deleteRole.bind(this);
   }
 
   sortBy(sort) {
@@ -27,6 +34,31 @@ class _rolesView extends React.Component {
     }
 
     this.setState({sort: sort, asc: true});
+  }
+
+  openAddRoleModal() {
+    this.addRoleModal.current.openModal();
+  }
+
+  addRoleModalConfirm(role) {
+    let token = this.props.token;
+
+    axios.post('/api/roles', role, {
+      headers: {
+        authorization: `token ${token}`
+      }
+    }).then(res => {
+      if (res && res.data && !res.data.error) {
+        socket.emit('updatedRoles', token);
+      }
+
+      this.addRoleModal.current.closeModal();
+    });
+
+  }
+
+  addRoleModalCancel() {
+    this.addRoleModal.current.closeModal();
   }
 
   render() {
@@ -55,8 +87,14 @@ class _rolesView extends React.Component {
       </tr>
     ));
 
+    let addRoleModal = (<AddRoleModal confirm={this.addRoleModalConfirm} cancel={this.addRoleModalCancel}/>);
+
     return (
       <div id="_rolesView" className="tall">
+        <button className="btn btn-blank" onClick={this.openAddRoleModal}>
+          <FontAwesomeIcon icon={faPlus}/>
+        </button>
+
         <table className="table table-striped">
           <thead>
             <tr>
@@ -80,6 +118,8 @@ class _rolesView extends React.Component {
             {roles}
           </tbody>
         </table>
+
+        <GenericModal ref={this.addRoleModal} large title="Add Role" content={addRoleModal}/>
       </div>
     );
   }
