@@ -20,7 +20,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.json', '.scss'],
     alias: {
-        '@': resolve('src/frontend'),
+        '@f': resolve('src/frontend'),
         '@theme': resolve('src/frontend/assets/scss/_theme.scss')
     }
   },

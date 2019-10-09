@@ -1,9 +1,9 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import map from '@/store/map';
+import map from '@f/store/map';
 import axios from 'axios';
-import store from '@/store';
-import {removeToken} from '@/store/actions';
+import store from '@f/store';
+import {removeToken} from '@f/store/actions';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faSignOutAlt, faHome, faTools, faUser, faUserCircle} from '@fortawesome/free-solid-svg-icons';

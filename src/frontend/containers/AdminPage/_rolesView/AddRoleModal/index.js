@@ -1,6 +1,6 @@
 import React from "react";
 import './styles.scss';
-import {parseCSV} from '@/utils';
+import {parseCSV} from '@f/utils';
 
 class AddRoleModal extends React.Component {
   constructor(props) {

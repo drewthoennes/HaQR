@@ -4,8 +4,8 @@ import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faMinus, faChevronUp, faChevronDown} from '@fortawesome/free-solid-svg-icons';
-import {sortByProperty} from '@/utils';
-import socket from '@/socket';
+import {sortByProperty} from '@f/utils';
+import socket from '@f/socket';
 import './styles.scss';
 
 class _hackersView extends React.Component {

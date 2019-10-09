@@ -8,25 +8,7 @@ exports.jwt = () => ({
 
 exports.error = Error('Generic mock error');
 
-exports.objectId = mongoose.Types.ObjectId();
-
-exports.hacker = () => ({
-    name: faker.name.findName(),
-    email: faker.internet.email(),
-    qr: faker.random.number(),
-    fields: [
-        {
-            name: faker.random.word(),
-            attributes: [
-                {
-                    name: faker.random.words(),
-                    had: faker.random.boolean()
-                }
-            ]    
-        }
-    ],
-    active: faker.random.boolean()
-});
+exports.objectId = () => { return mongoose.Types.ObjectId(); };
 
 exports.mongooseStub = (sandbox, calls = [], resolution) => {
     calls = calls.reverse();
@@ -34,7 +16,13 @@ exports.mongooseStub = (sandbox, calls = [], resolution) => {
     let stub;
 
     // Start with exec command
-    if (calls[0] === 'exec') {
+    if (calls[0] === 'then') {
+        stub = {
+            then: sandbox.stub().returns(resolution)
+        }
+        calls = calls.slice(1, calls.length);
+    }
+    else if (calls[0] === 'exec') {
         stub = {
             exec: sandbox.stub().returns(resolution)
         }
@@ -42,8 +30,9 @@ exports.mongooseStub = (sandbox, calls = [], resolution) => {
     }
     else {
         stub = {
-            exec: sandbox.stub().returns(resolution)
+            [calls[0]]: sandbox.stub().returns(resolution)
         }
+        calls = calls.slice(1, calls.length);
     }
 
     // Wrap each subsequent calls in new call
@@ -58,3 +47,4 @@ exports.mongooseStub = (sandbox, calls = [], resolution) => {
 
 exports.models = require('./models');
 exports.promise = require('./promise');
+exports.stubs = require('./stubs');

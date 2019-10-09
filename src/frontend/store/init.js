@@ -1,5 +1,5 @@
 import axios from 'axios';
-import store from '@/store';
+import store from '@f/store';
 import {
     setToken,
     setConfig,
@@ -8,10 +8,10 @@ import {
     setUsers,
     setRoles,
     setLoaded
-} from '@/store/actions';
-import socket from '@/socket';
-import {authorize} from '@/utils';
-import history from '@/router/history';
+} from '@f/store/actions';
+import socket from '@f/socket';
+import {authorize} from '@f/utils';
+import history from '@f/router/history';
 
 const init = () => {
     let token = localStorage.getItem('token');

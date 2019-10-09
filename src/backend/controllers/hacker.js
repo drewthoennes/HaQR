@@ -8,8 +8,8 @@ exports.getHacker = (qr) => {
     return Hacker.findOne({qr: qr}).select('-_id').exec();
 };
 
-exports.createHacker = (name, email, qr, role) => {
-    return Role.findById(role).lean().then(role => {
+exports.createHacker = (name, email, qr, role_id) => {
+    return Role.findById(role_id).lean().then(role => {
         if (!role) {
             throw new Error('Invalid role');
         }

@@ -3,11 +3,11 @@ import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCamera} from '@fortawesome/free-solid-svg-icons';
-import socket from '@/socket';
-import {parseCSV} from '@/utils';
+import socket from '@f/socket';
+import {parseCSV} from '@f/utils';
 import './styles.scss';
 
-import QRReader from '@/components/QRReader';
+import QRReader from '@f/components/QRReader';
 
 class _addHackersView extends React.Component {
   constructor(props) {

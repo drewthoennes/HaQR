@@ -1,5 +1,3 @@
-const mongoose = require('mongoose');
-const faker = require('faker');
 const promise = require('./promise');
 
 exports.genericModal = class GenericModal {
@@ -22,8 +20,10 @@ Object.assign(exports.genericModal, {
     populate: () => { return promise.resolve(); }
 });
 
+exports.config = class Config extends exports.genericModal {};
+
 exports.hacker = class Hacker extends exports.genericModal {};
 
-exports.user = class User extends exports.genericModal {};
+exports.role = class Role extends exports.genericModal {};
 
-exports.config = class Config extends exports.genericModal {};
+exports.user = class User extends exports.genericModal {};

@@ -1,4 +1,4 @@
-import c from '@/const';
+import c from '@f/const';
 import openSocket from 'socket.io-client';
 
 const socket = openSocket(c.host);

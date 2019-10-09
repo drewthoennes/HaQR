@@ -1,4 +1,4 @@
-import store from '@/store';
+import store from '@f/store';
 
 function authorize(history) {
     let state = store.getState().account;

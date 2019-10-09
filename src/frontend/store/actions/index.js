@@ -8,7 +8,7 @@ import {
     SET_ACCOUNT,
     SET_LOADED,
     CLEAR_ALL
- } from '@/const/store';
+ } from '@f/const/store';
 
 export const setToken = token => ({
     type: SET_TOKEN,

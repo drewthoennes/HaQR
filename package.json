@@ -10,13 +10,17 @@
     "build": "webpack  --inline --progress --color --config config/webpack.prod.config.js",
     "start-dev": "npm run build-dev; node server.js",
     "start": "npm run build; node server.js",
-    "test": "mocha src/tests"
+    "test-b": "mocha test/backend/unit",
+    "test-i": "mocha test/backend/integration",
+    "test-f": "mocha test/frontend",
+    "test": "npm run test-b; npm run test-i; npm run test-f;"
   },
   "license": "MIT",
   "_moduleAliases": {
     "@": "./",
     "@b": "./src/backend",
-    "@f": "./src/frontend"
+    "@f": "./src/frontend",
+    "@t": "./test"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

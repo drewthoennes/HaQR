@@ -2,11 +2,11 @@ import React from "react";
 import {Switch, Route, Router, Redirect} from 'react-router-dom';
 import history from './history';
 
-import LoginPage from '@/containers/LoginPage';
-import HackersPage from '@/containers/HackersPage';
-import HackerPage from '@/containers/HackerPage';
-import AdminPage from '@/containers/AdminPage';
-import UnauthorizedPage from '@/containers/UnauthorizedPage';
+import LoginPage from '@f/containers/LoginPage';
+import HackersPage from '@f/containers/HackersPage';
+import HackerPage from '@f/containers/HackerPage';
+import AdminPage from '@f/containers/AdminPage';
+import UnauthorizedPage from '@f/containers/UnauthorizedPage';
 
 const router = () => {
   return (

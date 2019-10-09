@@ -1,12 +1,12 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import map from '@/store/map';
+import map from '@f/store/map';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
-import {authorize, browserIsChrome} from '@/utils';
+import {authorize, browserIsChrome} from '@f/utils';
 import './styles.scss';
 
-import Topbar from '@/containers/Topbar';
+import Topbar from '@f/containers/Topbar';
 import HackersView from './_hackersView';
 import AddHackersView from './_addHackersView';
 import UsersView from './_usersView';

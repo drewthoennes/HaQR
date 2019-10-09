@@ -8,7 +8,7 @@ import {
     SET_ACCOUNT,
     SET_LOADED,
     CLEAR_ALL
- } from '@/const/store';
+ } from '@f/const/store';
 
 // Make sure to add these to the map
 let initialState = {

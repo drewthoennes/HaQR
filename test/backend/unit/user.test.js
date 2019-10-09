@@ -1,5 +1,5 @@
 require('module-alias/register');
-const mocks = require('@/test/mocks');
+const mocks = require('@t/mocks');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const expect = chai.expect;

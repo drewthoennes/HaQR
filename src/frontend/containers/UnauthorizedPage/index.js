@@ -1,13 +1,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import map from '@/store/map';
-import store from '@/store';
-import {removeToken} from '@/store/actions';
+import map from '@f/store/map';
+import store from '@f/store';
+import {removeToken} from '@f/store/actions';
 import {withRouter} from 'react-router-dom';
-import {authorize} from '@/utils';
+import {authorize} from '@f/utils';
 import './styles.scss';
 
-import Topbar from '@/containers/Topbar';
+import Topbar from '@f/containers/Topbar';
 
 class UnauthorizedPage extends React.Component {
   constructor(props) {
