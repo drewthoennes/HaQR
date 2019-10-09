@@ -13,7 +13,6 @@ exports.authorize = (req, params = {}) => {
 
     return configController.getConfig().then(configuration => {
         config = configuration;
-
         return axios.get(url, {
             headers: {
                 Authorization: req.headers.authorization

@@ -1,6 +1,17 @@
 const mongoose = require('mongoose');
 const faker = require('faker');
 
+exports.account = () => ({
+    _id: mongoose.Types.ObjectId(),
+    github: {
+        username: faker.internet.userName()
+    },
+    name: faker.name.findName(),
+    email: faker.internet.email(),
+    role: 'member',
+    authorized: true,
+});
+
 exports.hacker = () => ({
     _id: mongoose.Types.ObjectId(),
     name: faker.name.findName(),
