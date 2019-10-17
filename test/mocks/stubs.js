@@ -45,3 +45,19 @@ exports.role = () => ({
         }
     ],
 });
+
+exports.authMiddleware = (account, authorized) => {
+    return (req, res, next) => {
+        if (!req) {
+            next();
+            return;
+        }
+
+        req.auth = {
+            account: account,
+            authorized: authorized
+        }
+
+        next();
+    }
+};

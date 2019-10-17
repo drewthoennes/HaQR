@@ -155,7 +155,9 @@ mongoose.set('useFindAndModify', false); // Allows findOneAndUpdate()
 const conn = () => {
 	mongoose.connect(DATABASE, {
 		useCreateIndex: true,
-		useNewUrlParser: true
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+		useFindAndModify: false
 	});
 };
 

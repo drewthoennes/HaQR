@@ -20,7 +20,7 @@ const stubAuthAndStart = (account, authorized) => {
     app = server.getNewApp();
 }
 
-describe('Account routes should work as expected', () => {
+describe('Config routes should work as expected', () => {
     beforeEach(done => {
         mongo.beforeEach().then(() => done());
     });
@@ -33,18 +33,34 @@ describe('Account routes should work as expected', () => {
 
     after(() => server.killSession());
 
-    it('/api/account GET should return account information', done => {
+    it.only('/api/config GET should return config', done => {
         let account = mocks.stubs.account();
         stubAuthAndStart(account, true);
 
         chai.request(app)
-            .get('/api/account')
+            .get('/api/config')
         .then(res => {
-            expect(res.body).to.have.property('account');
-            expect(res.body.account).to.have.property('name');
-            expect(res.body.account).to.have.property('email');
-            expect(res.body.account).to.have.property('role');
-            expect(res.body.account).to.have.property('authorized');
+            expect(res.body).to.have.property('config');
+            expect(res.body.config).to.be.null;
+
+            done();
+        }).catch(err => done(err));
+    });
+
+    it.only('/api/config POST should update config', done => {
+        let account = mocks.stubs.account();
+        stubAuthAndStart(account, true);
+
+        chai.request(app)
+            .post('/api/config')
+            .send({
+                config: {
+                    authorizeAll: true,
+                    promoteAll: true
+                }
+            })
+        .then(res => {
+            expect(res.body).to.have.property('message');
 
             done();
         }).catch(err => done(err));

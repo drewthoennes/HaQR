@@ -20,7 +20,7 @@ const stubAuthAndStart = (account, authorized) => {
     app = server.getNewApp();
 }
 
-describe('Account routes should work as expected', () => {
+describe('Auth routes should work as expected', () => {
     beforeEach(done => {
         mongo.beforeEach().then(() => done());
     });
@@ -33,18 +33,30 @@ describe('Account routes should work as expected', () => {
 
     after(() => server.killSession());
 
-    it('/api/account GET should return account information', done => {
+    it('/api/auth/github GET should try to redirect', done => {
         let account = mocks.stubs.account();
-        stubAuthAndStart(account, true);
+        stubAuthAndStart(account, false);
+        // Replace environment variables
 
         chai.request(app)
-            .get('/api/account')
+            .get('/api/auth/github')
         .then(res => {
-            expect(res.body).to.have.property('account');
-            expect(res.body.account).to.have.property('name');
-            expect(res.body.account).to.have.property('email');
-            expect(res.body.account).to.have.property('role');
-            expect(res.body.account).to.have.property('authorized');
+            expect(res).to.redirect;
+
+            done();
+        }).catch(err => done(err));
+    });
+
+    it('/api/auth/github GET should return redirect URL', done => {
+        let account = mocks.stubs.account();
+        stubAuthAndStart(account, false);
+        // Replace environment variables
+
+        chai.request(app)
+            .get('/api/auth/github?return=true')
+        .then(res => {
+            console.log(res.body);
+            expect(res.body).to.have.property('url');
 
             done();
         }).catch(err => done(err));

@@ -20,7 +20,7 @@ const stubAuthAndStart = (account, authorized) => {
     app = server.getNewApp();
 }
 
-describe('Account routes should work as expected', () => {
+describe('Role routes should work as expected', () => {
     beforeEach(done => {
         mongo.beforeEach().then(() => done());
     });
@@ -33,20 +33,10 @@ describe('Account routes should work as expected', () => {
 
     after(() => server.killSession());
 
-    it('/api/account GET should return account information', done => {
+    it('', done => {
         let account = mocks.stubs.account();
         stubAuthAndStart(account, true);
 
-        chai.request(app)
-            .get('/api/account')
-        .then(res => {
-            expect(res.body).to.have.property('account');
-            expect(res.body.account).to.have.property('name');
-            expect(res.body.account).to.have.property('email');
-            expect(res.body.account).to.have.property('role');
-            expect(res.body.account).to.have.property('authorized');
-
-            done();
-        }).catch(err => done(err));
+        done();
     });
 });

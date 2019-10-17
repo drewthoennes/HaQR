@@ -1,8 +1,8 @@
-const authController = require('@b/controllers/auth');
 const rolesController = require('@b/controllers/role');
+const middleware = require('@b/middleware');
 
 module.exports = function(router) {
-  router.get('/api/roles', authController.authorize({roles: ['admin']}), (req, res) => {
+  router.get('/api/roles', middleware.authorize({roles: ['admin']}), (req, res) => {
     rolesController.getRoles().then(roles => {
       res.json({'roles': roles});
     }).catch(err => {
@@ -10,7 +10,7 @@ module.exports = function(router) {
     });
   });
 
-  router.post('/api/roles', authController.authorize({roles: ['admin']}), (req, res) => {
+  router.post('/api/roles', middleware.authorize({roles: ['admin']}), (req, res) => {
     rolesController.createRole(req.body.name, req.body.fields).then(() => {
       res.json({'message': 'Successfully created role'});
     }).catch(err => {
@@ -18,7 +18,7 @@ module.exports = function(router) {
     });
   });
 
-  router.post('/api/roles/:role_id', authController.authorize({roles: ['admin']}), (req, res) => {
+  router.post('/api/roles/:role_id', middleware.authorize({roles: ['admin']}), (req, res) => {
     rolesController.updateRole(req.params.role_id, req.body.name, req.body.fields).then(() => {
       res.json({'message': 'Successfully updated role'});
     }).catch(err => {
@@ -26,7 +26,7 @@ module.exports = function(router) {
     });
   });
 
-  router.delete('/api/roles/:role_id', authController.authorize({roles: ['admin']}), (req, res) => {
+  router.delete('/api/roles/:role_id', middleware.authorize({roles: ['admin']}), (req, res) => {
     rolesController.deleteRole(req.params.role_id).then(() => {
       res.json({'message': 'Successfully deleted role'});
     }).catch(err => {

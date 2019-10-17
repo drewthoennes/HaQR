@@ -1,8 +1,8 @@
 const configController = require('@b/controllers/config');
-const authController = require('@b/controllers/auth');
+const middleware = require('@b/middleware');
 
 module.exports = function(router) {
-    router.get('/api/config', authController.authorize(), (req, res) => {
+    router.get('/api/config', middleware.authorize(), (req, res) => {
 
       return configController.getConfig().then(config => {
         res.json({'config': config});
@@ -11,7 +11,7 @@ module.exports = function(router) {
       });
     });
 
-    router.post('/api/config', authController.authorize({role: ['admin']}), (req, res) => {
+    router.post('/api/config', middleware.authorize({role: ['admin']}), (req, res) => {
       return configController.updateConfig(req.body.config).then(() => {
         res.json({'message': 'Successfully updated the configuration'});
       }).catch(err => {

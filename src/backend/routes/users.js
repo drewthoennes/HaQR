@@ -1,9 +1,9 @@
 const userController = require('@b/controllers/user');
-const authController = require('@b/controllers/auth');
+const middleware = require('@b/middleware');
 const {UnauthorizedError, InsufficientRoleError} = require('@b/errors');
 
 module.exports = function(router) {
-  router.get('/api/users', authController.authorize(), (req, res) => {
+  router.get('/api/users', middleware.authorize(), (req, res) => {
     return userController.getAllUsers().then(users => {
         res.json({users: users});
     }).catch(err => {
@@ -39,7 +39,7 @@ module.exports = function(router) {
     });
   });
 
-  router.post('/api/users/:user_id/authorize', authController.authorize({roles: ['admin']}), (req, res) => {
+  router.post('/api/users/:user_id/authorize', middleware.authorize({roles: ['admin']}), (req, res) => {
     return userController.authorizeUser(req.params.user_id).then(() => {
       res.json({'message': 'Successfully toggled user authorization'});
     }).catch(err => {
@@ -48,7 +48,7 @@ module.exports = function(router) {
   });
 
 
-  router.post('/api/users/:user_id/role', authController.authorize({roles: ['admin']}), (req, res) => {
+  router.post('/api/users/:user_id/role', middleware.authorize({roles: ['admin']}), (req, res) => {
     return userController.toggleUserRole(req.params.user_id).then(() => {
       res.json({'message': 'Successfully toggled user role'});
     }).catch(err => {

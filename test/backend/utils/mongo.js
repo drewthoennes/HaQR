@@ -9,7 +9,8 @@ exports.beforeEach = () => {
         return mongoose.connect(uri, {
             useCreateIndex: true,
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useFindAndModify: false
         });
     });
 };
