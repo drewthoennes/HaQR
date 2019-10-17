@@ -1,5 +1,4 @@
 const utils = require('@b/utils');
-const joi = require('@hapi/joi');
 
 exports.authorize = (config) => {
     return (req, res, next) => {
@@ -14,7 +13,7 @@ exports.authorize = (config) => {
 
 exports.validate = (schema) => {
         return (req, res, next) => {
-            let err = joi.validate(req.body, schema).error;
+            let err = schema.validate(req.body).error;
             if (err != null) {
                 res.send({'error': 'Invalid fields: ' + err});
                 return;

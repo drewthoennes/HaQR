@@ -55,7 +55,6 @@ describe('Auth routes should work as expected', () => {
         chai.request(app)
             .get('/api/auth/github?return=true')
         .then(res => {
-            console.log(res.body);
             expect(res.body).to.have.property('url');
 
             done();

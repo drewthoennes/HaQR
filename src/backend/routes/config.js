@@ -1,6 +1,15 @@
 const configController = require('@b/controllers/config');
 const middleware = require('@b/middleware');
 
+const joi = require('@hapi/joi');
+
+const configSchema = joi.object().keys({
+  config: joi.object().keys({
+    authorizeAll: joi.boolean().required(),
+    promoteAll: joi.boolean().required()
+  }).required()
+});
+
 module.exports = function(router) {
     router.get('/api/config', middleware.authorize(), (req, res) => {
 
@@ -11,7 +20,7 @@ module.exports = function(router) {
       });
     });
 
-    router.post('/api/config', middleware.authorize({role: ['admin']}), (req, res) => {
+    router.post('/api/config', middleware.validate(configSchema), middleware.authorize({role: ['admin']}), (req, res) => {
       return configController.updateConfig(req.body.config).then(() => {
         res.json({'message': 'Successfully updated the configuration'});
       }).catch(err => {

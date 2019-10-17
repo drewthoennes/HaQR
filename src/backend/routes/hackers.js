@@ -1,6 +1,18 @@
 const hackerController = require('@b/controllers/hacker');
 const middleware = require('@b/middleware');
 const {UnauthorizedError, InsufficientRoleError} = require('@b/errors');
+const joi = require('@hapi/joi');
+
+const hackerSchema = joi.object().keys({
+  name: joi.string().required(),
+  email: joi.string().email().required(),
+  qr: joi.number().positive().required(),
+  role: joi.string().alphanum().length(24)
+});
+
+const updateHackerSchema = joi.object().keys({
+  fields: joi.object().required()
+});
 
 module.exports = function(router) {
   router.get('/api/hackers', middleware.authorize(), (req, res) => {
@@ -23,9 +35,9 @@ module.exports = function(router) {
     });
   });
 
-  router.post('/api/hackers', middleware.authorize({role: ['admin']}), (req, res) => {
-    return hackerController.createHacker(req.body.name, req.body.email, req.body.qr, req.body.role).then(() => {
-      res.json({'message': 'Successfully created hacker'});
+  router.post('/api/hackers', middleware.validate(hackerSchema), middleware.authorize({role: ['admin']}), (req, res) => {
+    return hackerController.createHacker(req.body.name, req.body.email, req.body.qr, req.body.role).then(hacker => {
+      res.json({'message': 'Successfully created hacker', 'hacker_id': hacker._id});
     }).catch(err => {
       switch (true) {
         case err instanceof UnauthorizedError:
@@ -63,7 +75,7 @@ module.exports = function(router) {
     });
   });
 
-  router.post('/api/hackers/:hacker_id', middleware.authorize(), (req, res) => {
+  router.post('/api/hackers/:hacker_id', middleware.validate(updateHackerSchema), middleware.authorize(), (req, res) => {
     return hackerController.updateHacker(req.params.hacker_id, req.body.fields).then(() => {
       return res.json({'message': 'Successfully updated hacker'});
     }).catch(err => {

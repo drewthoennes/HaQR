@@ -33,7 +33,7 @@ describe('Config routes should work as expected', () => {
 
     after(() => server.killSession());
 
-    it.only('/api/config GET should return config', done => {
+    it('/api/config GET should create a config if one does not exist', done => {
         let account = mocks.stubs.account();
         stubAuthAndStart(account, true);
 
@@ -41,13 +41,14 @@ describe('Config routes should work as expected', () => {
             .get('/api/config')
         .then(res => {
             expect(res.body).to.have.property('config');
-            expect(res.body.config).to.be.null;
+            expect(res.body.config).to.have.property('authorizeAll');
+            expect(res.body.config).to.have.property('promoteAll');
 
             done();
         }).catch(err => done(err));
     });
 
-    it.only('/api/config POST should update config', done => {
+    it('/api/config POST should fail if given invalid config', done => {
         let account = mocks.stubs.account();
         stubAuthAndStart(account, true);
 
@@ -55,14 +56,48 @@ describe('Config routes should work as expected', () => {
             .post('/api/config')
             .send({
                 config: {
-                    authorizeAll: true,
-                    promoteAll: true
+                    authorizeAll: true
+                    // Missing part of config
                 }
             })
         .then(res => {
-            expect(res.body).to.have.property('message');
+            expect(res.body).to.have.property('error');
 
             done();
         }).catch(err => done(err));
+    });
+
+    it('/api/config POST should update config', done => {
+        let account = mocks.stubs.account();
+        stubAuthAndStart(account, true);
+
+        let requester = chai.request(app).keepOpen();
+        let config = {
+            authorizeAll: true,
+            promoteAll: false
+        }
+
+        requester
+            .post('/api/config')
+            .send({
+                config: config
+            })
+        .then(res => {
+            expect(res.body).to.have.property('message');
+        }).then(() => {
+            return requester.get('/api/config');
+        }).then(res => {
+            expect(res.body).to.have.property('config');
+            expect(res.body.config).to.have.property('authorizeAll');
+            expect(res.body.config.authorizeAll).to.equal(config.authorizeAll);
+            expect(res.body.config).to.have.property('promoteAll');
+            expect(res.body.config.promoteAll).to.equal(config.promoteAll);
+
+            requester.close();
+            done();
+        }).catch(err => {
+            requester.close();
+            done(err)
+        });
     });
 });

@@ -11,8 +11,8 @@ module.exports = function(router) {
   });
 
   router.post('/api/roles', middleware.authorize({roles: ['admin']}), (req, res) => {
-    rolesController.createRole(req.body.name, req.body.fields).then(() => {
-      res.json({'message': 'Successfully created role'});
+    rolesController.createRole(req.body.name, req.body.fields).then(role => {
+      res.json({'message': 'Successfully created role', 'role_id': role._id});
     }).catch(err => {
       res.json({'error': 'There was an error creating this role: ' + err});
     });

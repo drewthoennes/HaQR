@@ -12,6 +12,7 @@ var ConfigSchema = new Schema({
     }
 }, {
   collection: 'config',
+  versionKey: false,
   capped: true,
   size: 100000,
   max: 1
