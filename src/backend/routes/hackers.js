@@ -41,7 +41,7 @@ module.exports = function(router) {
     });
   });
 
-  router.post('/api/hackers', middleware.validate(hackerSchema), middleware.authorize({role: ['admin']}), (req, res) => {
+  router.post('/api/hackers', middleware.validate(hackerSchema), middleware.authorize({roles: ['admin']}), (req, res) => {
     return hackerController.createHacker(req.body.name, req.body.email, req.body.qr, req.body.role).then(hacker => {
       res.json({'message': 'Successfully created hacker', 'hacker_qr': hacker.qr});
     }).catch(err => {
@@ -101,7 +101,7 @@ module.exports = function(router) {
     });
   });
 
-  router.post('/api/hackers/:hacker_qr/active', middleware.authorize({role: ['admin']}), (req, res) => {
+  router.post('/api/hackers/:hacker_qr/active', middleware.authorize({roles: ['admin']}), (req, res) => {
     return hackerController.toggleActive(req.params.hacker_qr).then(() => {
       res.json({'message': 'Successfully updated the hacker'})
     }).catch(err => {

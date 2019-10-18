@@ -9,7 +9,7 @@ exports.getHacker = (qr) => {
 };
 
 exports.createHacker = (name, email, qr, role_id) => {
-    return Hacker.findOne({qr: qr}).then(hacker => {
+    return Hacker.findOne({qr: qr}).lean().then(hacker => {
         if (hacker) {
             throw new Error('A hacker with this qr code already exists');
         }

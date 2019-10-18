@@ -13,7 +13,7 @@
     "test-b": "mocha test/backend/unit",
     "test-i": "mocha test/backend/integration --timeout 60000",
     "test-f": "mocha test/frontend",
-    "test": "npm run test-b; npm run test-i; npm run test-f;"
+    "test": "npm run test-b; npm run test-i;"
   },
   "license": "MIT",
   "_moduleAliases": {

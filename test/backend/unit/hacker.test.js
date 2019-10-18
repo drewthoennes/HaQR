@@ -44,32 +44,55 @@ describe('The hacker controller should work as expected', () => {
         });
     });
 
-    it('createHacker should reject if no matching role is found', () => {
+    it('createHacker should reject if a hacker with the same qr code already exists', () => {
         let hacker = mocks.stubs.hacker();
+        let role = mocks.stubs.role();
+
+        let hackerStub = sinon
+            .stub(mocks.models.hacker, 'findOne')
+            .returns(mocks.mongooseStub(sinon, ['lean'], mocks.promise.resolve(hacker)));
+
+        return expect(hackerController.createHacker(hacker.name, hacker.email, hacker.qr, mocks.objectId())).to.eventually.be.rejected.then(() => {
+            sinon.assert.calledOnce(hackerStub);
+        });
+    });
+
+    it('createHacker should reject if the provided role does not exist', () => {
+        let hacker = mocks.stubs.hacker();
+        let role = mocks.stubs.role();
+
+        let hackerStub = sinon
+            .stub(mocks.models.hacker, 'findOne')
+            .returns(mocks.mongooseStub(sinon, ['lean'], mocks.promise.resolve()));
 
         let roleStub = sinon
             .stub(mocks.models.role, 'findById')
-            .returns(mocks.mongooseStub(sinon, ['lean'], mocks.promise.resolve(undefined)));
+            .returns(mocks.mongooseStub(sinon, ['lean', 'exec']), mocks.promise.resolve());
 
-        return expect(hackerController.createHacker(hacker.name, hacker.email, hacker.qr, mocks.objectId())).to.eventually.be.rejected.then(() => {
+        return expect(hackerController.createHacker(hacker.name, hacker.email, hacker.qr, mocks.objectId())).to.eventually.be.rejected.then(result => {
+            sinon.assert.calledOnce(hackerStub);
             sinon.assert.calledOnce(roleStub);
         });
     });
 
     it('createHacker should work as expected', () => {
-        let role = mocks.stubs.role();
         let hacker = mocks.stubs.hacker();
+        let role = mocks.stubs.role();
+
+        let hackerStub = sinon
+            .stub(mocks.models.hacker, 'findOne')
+            .returns(mocks.mongooseStub(sinon, ['lean'], mocks.promise.resolve()));
 
         let roleStub = sinon
             .stub(mocks.models.role, 'findById')
-            .returns(mocks.mongooseStub(sinon, ['lean'], mocks.promise.resolve(role)));
+            .returns(mocks.mongooseStub(sinon, ['lean', 'exec'], mocks.promise.resolve(role)));
 
         let saveStub = sinon
             .stub(mocks.models.hacker.prototype, 'save')
             .returns(mocks.promise.resolve());
 
         return expect(hackerController.createHacker(hacker.name, hacker.email, hacker.qr, mocks.objectId())).to.eventually.be.fulfilled.then(result => {
-            expect(result).to.be.undefined;
+            sinon.assert.calledOnce(hackerStub);
             sinon.assert.calledOnce(roleStub);
             sinon.assert.calledOnce(saveStub);
         });

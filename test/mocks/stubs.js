@@ -32,9 +32,16 @@ exports.hacker = () => ({
 });
 
 exports.role = () => ({
-    _id: mongoose.Types.ObjectId(),
     name: faker.name.findName(),
     fields: [
+        {
+            name: faker.random.word(),
+            attributes: [
+                faker.random.words(),
+                faker.random.words(),
+                faker.random.words()
+            ]
+        },
         {
             name: faker.random.word(),
             attributes: [
@@ -46,10 +53,10 @@ exports.role = () => ({
     ],
 });
 
-exports.authMiddleware = (account, authorized) => {
+exports.authMiddleware = (account, authorized, config) => {
     return (req, res, next) => {
-        if (!req) {
-            next();
+        if (config && !config.roles.includes(account.role)) {
+            res.send({'error': 'You lack the sufficient role to access this service'});
             return;
         }
 

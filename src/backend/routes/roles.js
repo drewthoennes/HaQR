@@ -1,5 +1,14 @@
 const rolesController = require('@b/controllers/role');
 const middleware = require('@b/middleware');
+const joi = require('@hapi/joi');
+
+const createRoleSchema = joi.object().keys({
+  name: joi.string().required(),
+  fields: joi.array().items(joi.object().keys({
+    name: joi.string().required(),
+    attributes: joi.array().items(joi.string()).required()
+  })).required()
+});
 
 module.exports = function(router) {
   router.get('/api/roles', middleware.authorize({roles: ['admin']}), (req, res) => {
@@ -10,7 +19,7 @@ module.exports = function(router) {
     });
   });
 
-  router.post('/api/roles', middleware.authorize({roles: ['admin']}), (req, res) => {
+  router.post('/api/roles', middleware.validate(createRoleSchema), middleware.authorize({roles: ['admin']}), (req, res) => {
     rolesController.createRole(req.body.name, req.body.fields).then(role => {
       res.json({'message': 'Successfully created role', 'role_id': role._id});
     }).catch(err => {
