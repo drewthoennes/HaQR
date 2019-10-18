@@ -17,7 +17,7 @@ module.exports = (env) => {
   return {
     'port': 8080,
     'host': 'http://localhost:8080',
-    'name': 'HaQR',
+    'name': process.env.APPLICATION_NAME,
     'database': {
       'uri': 'mongodb://localhost:27017/haqr',
       'reconnectInterval': 10000

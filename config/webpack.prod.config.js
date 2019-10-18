@@ -8,7 +8,8 @@ module.exports = merge(base, {
   mode: 'production',
   plugins: [
     new webpack.DefinePlugin({
-      __host__: `'${config.host}'`
+      __host__: `'${config.host}'`,
+      __name__: `'${config.name}'`
     })
   ],
   optimization: {

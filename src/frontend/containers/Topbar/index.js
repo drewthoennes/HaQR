@@ -10,6 +10,8 @@ import {faSignOutAlt, faHome, faTools, faUser, faUserCircle} from '@fortawesome/
 import './styles.scss';
 
 class Topbar extends React.Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
 
@@ -23,15 +25,24 @@ class Topbar extends React.Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
   }
 
   showAccountDropdown() {
+    if (!this._isMounted) return;
+
     this.setState({showAccountDropdown: true}, () => {
       document.addEventListener('click', this.closeAccountDropdown);
     });
   }
 
   closeAccountDropdown() {
+    if (!this._isMounted) return;
+
     this.setState({showAccountDropdown: false}, () => {
       document.removeEventListener('click', this.closeAccountDropdown);
     });

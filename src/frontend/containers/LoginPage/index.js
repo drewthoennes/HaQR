@@ -8,6 +8,7 @@ import {setToken} from '@f/store/actions';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faGithub} from '@fortawesome/free-brands-svg-icons';
+import c from '@f/const';
 import './styles.scss';
 
 class LoginPage extends React.Component {
@@ -66,7 +67,10 @@ class LoginPage extends React.Component {
       <div id="loginPage" className="tall">
         <div className="content tall column column-center">
           <div id="loginPanel" className="column column-around">
-            <h1>Login</h1>
+            <div>
+              <h1>Login</h1>
+              <h4>{c.name}</h4>
+            </div>
             <p>Login with your GitHub account to get started.</p>
             <button className="row row-around" onClick={this.authenticate} aria-label="Login">
               <FontAwesomeIcon icon={faGithub}/>

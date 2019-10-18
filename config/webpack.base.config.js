@@ -2,6 +2,8 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const config = require('./index.js')();
 
+require('dotenv').config({path: path.resolve(__dirname, '../.env')});
+
 function resolve(dir) {
   return path.join(__dirname, '../', dir);
 }
@@ -46,12 +48,15 @@ module.exports = {
           test: /\.js$/,
           exclude: /node_modules/,
           use: {
-            loader: "babel-loader",
+            loader: 'babel-loader',
             options: {
               babelrc: false,
               presets: [
                 '@babel/preset-env',
                 '@babel/preset-react'
+              ],
+              plugins: [
+                '@babel/plugin-proposal-class-properties'
               ],
               cacheDirectory: true
             }

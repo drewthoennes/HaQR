@@ -20,7 +20,12 @@ $xs: 400px;
                 font-size: 36px;
             }
 
+            h4 {
+                text-align: center;
+            }
+
             p {
+                text-align: center;
                 margin: 0px 40px 20px 40px;
                 line-height: 25px;
             }
@@ -54,9 +59,17 @@ $xs: 400px;
                 margin-left: 20%;
             }
 
+            @media only screen and (max-height: $sm) {
+                height: 70%;
+            }
+
             @media only screen and (max-width: $sm) {
                 width: 70%;
                 margin-left: 15%;
+            }
+
+            @media only screen and (max-height: $xs) {
+                height: 90%;
             }
 
             @media only screen and (max-width: $xs) {
