@@ -15,11 +15,13 @@ var HackerSchema = new Schema({
     required: true
   },
   fields: [{
+    _id: false,
     name: {
       type: String,
       required: true
     },
     attributes: [{
+      _id: false,
       name: {
         type: String,
         required: true

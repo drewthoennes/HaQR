@@ -11,7 +11,13 @@ const hackerSchema = joi.object().keys({
 });
 
 const updateHackerSchema = joi.object().keys({
-  fields: joi.object().required()
+  fields: joi.array().items(joi.object().keys({
+    name: joi.string().required(),
+    attributes: joi.array().items(joi.object().keys({
+      had: joi.boolean().required(),
+      name: joi.string().required()
+    })).required()
+  })).required()
 });
 
 module.exports = function(router) {
@@ -37,7 +43,7 @@ module.exports = function(router) {
 
   router.post('/api/hackers', middleware.validate(hackerSchema), middleware.authorize({role: ['admin']}), (req, res) => {
     return hackerController.createHacker(req.body.name, req.body.email, req.body.qr, req.body.role).then(hacker => {
-      res.json({'message': 'Successfully created hacker', 'hacker_id': hacker._id});
+      res.json({'message': 'Successfully created hacker', 'hacker_qr': hacker.qr});
     }).catch(err => {
       switch (true) {
         case err instanceof UnauthorizedError:
@@ -55,8 +61,8 @@ module.exports = function(router) {
     });
   });
 
-  router.get('/api/hackers/:hacker_id', middleware.authorize(), (req, res) => {
-    return hackerController.getHacker(req.params.hacker_id).then(hacker => {
+  router.get('/api/hackers/:hacker_qr', middleware.authorize(), (req, res) => {
+    return hackerController.getHacker(req.params.hacker_qr).then(hacker => {
       res.json({'message': 'Successfully retrieved hacker', 'hacker': hacker});
     }).catch(err => {
       switch (true) {
@@ -75,8 +81,8 @@ module.exports = function(router) {
     });
   });
 
-  router.post('/api/hackers/:hacker_id', middleware.validate(updateHackerSchema), middleware.authorize(), (req, res) => {
-    return hackerController.updateHacker(req.params.hacker_id, req.body.fields).then(() => {
+  router.post('/api/hackers/:hacker_qr', middleware.validate(updateHackerSchema), middleware.authorize(), (req, res) => {
+    return hackerController.updateHacker(req.params.hacker_qr, req.body.fields).then((hacker) => {
       return res.json({'message': 'Successfully updated hacker'});
     }).catch(err => {
       switch (true) {
@@ -95,8 +101,8 @@ module.exports = function(router) {
     });
   });
 
-  router.post('/api/hackers/:hacker_id/active', middleware.authorize({role: ['admin']}), (req, res) => {
-    return hackerController.toggleActive(req.params.hacker_id).then(() => {
+  router.post('/api/hackers/:hacker_qr/active', middleware.authorize({role: ['admin']}), (req, res) => {
+    return hackerController.toggleActive(req.params.hacker_qr).then(() => {
       res.json({'message': 'Successfully updated the hacker'})
     }).catch(err => {
       switch (true) {

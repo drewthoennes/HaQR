@@ -9,7 +9,13 @@ exports.getHacker = (qr) => {
 };
 
 exports.createHacker = (name, email, qr, role_id) => {
-    return Role.findById(role_id).lean().then(role => {
+    return Hacker.findOne({qr: qr}).then(hacker => {
+        if (hacker) {
+            throw new Error('A hacker with this qr code already exists');
+        }
+
+        return Role.findById(role_id).lean().exec();
+    }).then(role => {
         if (!role) {
             throw new Error('Invalid role');
         }
@@ -46,7 +52,7 @@ exports.updateHacker = (qr, fields) => {
         $set: {
             fields: fields
         }
-    }).exec()
+    }).exec();
 };
 
 exports.toggleActive = (qr) => {
