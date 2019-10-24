@@ -33,7 +33,7 @@ describe('Config routes should work as expected', () => {
 
     after(() => server.killSession());
 
-    it('/api/config GET should reject if not admin', done => {
+    it('/api/config GET should fail if user is not an admin', done => {
         let account = mocks.stubs.account();
         stubAuthAndStart(account, true);
 
@@ -55,13 +55,14 @@ describe('Config routes should work as expected', () => {
         .then(res => {
             expect(res.body).to.have.property('config');
             expect(res.body.config).to.have.property('authorizeAll');
-            expect(res.body.config).to.have.property('promoteAll');
+            expect(res.body.config.authorizeAll).to.be.false;
+            expect(res.body.config.promoteAll).to.be.false;
 
             done();
         }).catch(err => done(err));
     });
 
-    it('/api/config POST should reject if not admin', done => {
+    it('/api/config POST should fail if user is not an admin', done => {
         let account = mocks.stubs.account();
         stubAuthAndStart(account, true);
 
@@ -73,9 +74,7 @@ describe('Config routes should work as expected', () => {
 
         requester
             .post('/api/config')
-            .send({
-                config: config
-            })
+            .send({config: config})
         .then(res => {
             expect(res.body).to.have.property('error');
 
