@@ -16,7 +16,7 @@ chai.use(chaiHttp);
 const middlware = require('@b/middleware');
 
 const stubAuthAndStart = (account, authorized) => {
-    sinon.stub(middlware, 'authorize').callsFake(() => mocks.stubs.authMiddleware(account, authorized));
+    sinon.stub(middlware, 'authorize').callsFake(config => mocks.stubs.authMiddleware(account, authorized, config));
     app = server.getNewApp();
 }
 

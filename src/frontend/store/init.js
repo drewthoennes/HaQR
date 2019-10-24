@@ -10,44 +10,54 @@ import {
     setLoaded
 } from '@f/store/actions';
 import socket from '@f/socket';
-import {authorize} from '@f/utils';
 import history from '@f/router/history';
 
 const init = () => {
-    let token = localStorage.getItem('token');
-    let promises = [];
+  let token = localStorage.getItem('token');
 
-    if (token) {
-        store.dispatch(setToken(token));
+  if (!token) {
+    history.push('/unauthorized');
+    return;
+  }
 
-        promises.push(getAccount(token));
-        promises.push(getConfig(token));
-        promises.push(getHackers(token));
-        promises.push(getUsers(token));
-        promises.push(getRoles(token));
-    }
+  store.dispatch(setToken(token));
 
-    return Promise.all(promises).then(() => {
-      store.dispatch(setLoaded());
+  let promises = [];
 
-      socket.emit('join', token);
+  promises.push(getConfig(token).catch(err => {}));
+  promises.push(getHackers(token).catch(err => history.push('/unauthorized')));
+  promises.push(getUsers(token).catch(err => history.push('/unauthorized')));
+  promises.push(getRoles(token).catch(err => {}));
 
-      socket.on('updateConfig', () => {
-        getConfig(token);
-      });
+  getAccount(token).then(() => {
+    return Promise.all(promises);
+  }).then(() => {
+    store.dispatch(setLoaded());
 
-      socket.on('updateHackers', () => {
-          getHackers(token);
-      });
+    socket.emit('join', token);
 
-      socket.on('updateUsers', () => {
-          getUsers(token);
-      });
-
-      socket.on('updateRoles', () => {
-        getRoles(token);
+    socket.on('updateConfig', () => {
+      getConfig(token).catch();
     });
-    }).catch();
+
+    socket.on('updateHackers', () => {
+        getHackers(token).catch(err => {
+          history.push('/unauthorized')
+        });
+    });
+
+    socket.on('updateUsers', () => {
+        getUsers(token).catch(err => {
+          history.push('/unauthorized')
+        });
+    });
+
+    socket.on('updateRoles', () => {
+      getRoles(token).catch();
+    });
+  }).catch(err => {
+    history.push('/unauthorized');
+  });
 };
 
 const getAccount = (token) => {
@@ -61,8 +71,6 @@ const getAccount = (token) => {
     }
 
     store.dispatch(setAccount(res.data.account));
-  }).catch(err => {
-    authorize(history);
   });
 };
 
@@ -73,11 +81,10 @@ const getConfig = (token) => {
     }
   }).then(res => {
     if (!res || !res.data || !res.data.config) {
-        throw new Error('There was an error retrieving the config');
+      throw new Error('There was an error retrieving the config');
     }
 
     store.dispatch(setConfig(res.data.config));
-  }).catch(err => {
   });
 };
 
@@ -88,14 +95,10 @@ const getHackers = (token) => {
     }
   }).then(res => {
     if (!res || !res.data || !res.data.hackers) {
-        throw new Error('There was an error retrieving the hackers');
+      throw new Error('There was an error retrieving the hackers');
     }
 
     store.dispatch(setHackers(res.data.hackers));
-  }).catch(err => {
-    getAccount(token).then(() => {
-      authorize(history);
-    });
   });
 };
 
@@ -106,7 +109,7 @@ const getUsers = (token) => {
     }
   }).then(res => {
     if (!res || !res.data || !res.data.users) {
-        throw new Error('There was an error retrieving the users');
+      throw new Error('There was an error retrieving the users');
     }
 
     store.dispatch(setUsers(res.data.users));
@@ -119,10 +122,6 @@ const getUsers = (token) => {
     if (account) {
       store.dispatch(setAccount(account));
     }
-  }).catch(err => {
-    getAccount(token).then(() => {
-      authorize(history);
-    });
   });
 };
 
@@ -133,14 +132,10 @@ const getRoles = (token) => {
     }
   }).then(res => {
     if (!res || !res.data || !res.data.roles) {
-        throw new Error('There was an error retrieving roles');
+      throw new Error('There was an error retrieving roles');
     }
 
     store.dispatch(setRoles(res.data.roles));
-  }).catch(err => {
-    getAccount(token).then(() => {
-      authorize(history);
-    });
   });
 };
 

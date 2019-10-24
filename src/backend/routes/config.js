@@ -11,7 +11,7 @@ const configSchema = joi.object().keys({
 });
 
 module.exports = function(router) {
-    router.get('/api/config', middleware.authorize(), (req, res) => {
+    router.get('/api/config', middleware.authorize(), middleware.authorize({roles: ['admin']}), (req, res) => {
 
       return configController.getConfig().then(config => {
         res.json({'config': config});

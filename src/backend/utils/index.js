@@ -42,7 +42,6 @@ exports.authorize = (req, params = {}) => {
         }
 
         if (params.roles && !params.roles.includes(user.role)) {
-
             if (!params.force) {
                 throw new InsufficientRoleError('You lack the sufficient role to access this service');
             }

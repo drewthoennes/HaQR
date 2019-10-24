@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 const faker = require('faker');
 
-exports.account = () => ({
+exports.account = (isAdmin) => ({
     _id: mongoose.Types.ObjectId(),
     github: {
         username: faker.internet.userName()
     },
     name: faker.name.findName(),
     email: faker.internet.email(),
-    role: 'member',
+    role: isAdmin ? 'admin' : 'member',
     authorized: true,
 });
 
@@ -55,7 +55,7 @@ exports.role = () => ({
 
 exports.authMiddleware = (account, authorized, config) => {
     return (req, res, next) => {
-        if (config && !config.roles.includes(account.role)) {
+        if (config && config.roles && !config.roles.includes(account.role)) {
             res.send({'error': 'You lack the sufficient role to access this service'});
             return;
         }

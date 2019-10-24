@@ -16,7 +16,7 @@ chai.use(chaiHttp);
 const middlware = require('@b/middleware');
 
 const stubAuthAndStart = (account, authorized) => {
-    sinon.stub(middlware, 'authorize').callsFake(() => mocks.stubs.authMiddleware(account, authorized));
+    sinon.stub(middlware, 'authorize').callsFake(config => mocks.stubs.authMiddleware(account, authorized, config));
     app = server.getNewApp();
 }
 
@@ -33,8 +33,21 @@ describe('Config routes should work as expected', () => {
 
     after(() => server.killSession());
 
-    it('/api/config GET should create a config if one does not exist', done => {
+    it('/api/config GET should reject if not admin', done => {
         let account = mocks.stubs.account();
+        stubAuthAndStart(account, true);
+
+        chai.request(app)
+            .get('/api/config')
+        .then(res => {
+            expect(res.body).to.have.property('error');
+
+            done();
+        }).catch(err => done(err));
+    });
+
+    it('/api/config GET should create a config if one does not exist', done => {
+        let account = mocks.stubs.account(true);
         stubAuthAndStart(account, true);
 
         chai.request(app)
@@ -48,8 +61,34 @@ describe('Config routes should work as expected', () => {
         }).catch(err => done(err));
     });
 
-    it('/api/config POST should fail if given invalid config', done => {
+    it('/api/config POST should reject if not admin', done => {
         let account = mocks.stubs.account();
+        stubAuthAndStart(account, true);
+
+        let requester = chai.request(app).keepOpen();
+        let config = {
+            authorizeAll: true,
+            promoteAll: false
+        }
+
+        requester
+            .post('/api/config')
+            .send({
+                config: config
+            })
+        .then(res => {
+            expect(res.body).to.have.property('error');
+
+            requester.close();
+            done();
+        }).catch(err => {
+            requester.close();
+            done(err)
+        });
+    });
+
+    it('/api/config POST should fail if given invalid config', done => {
+        let account = mocks.stubs.account(true);
         stubAuthAndStart(account, true);
 
         chai.request(app)
@@ -68,7 +107,7 @@ describe('Config routes should work as expected', () => {
     });
 
     it('/api/config POST should update config', done => {
-        let account = mocks.stubs.account();
+        let account = mocks.stubs.account(true);
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();

@@ -18,7 +18,7 @@ chai.use(chaiHttp);
 const middlware = require('@b/middleware');
 
 const stubAuthAndStart = (account, authorized) => {
-    sinon.stub(middlware, 'authorize').callsFake(() => mocks.stubs.authMiddleware(account, authorized));
+    sinon.stub(middlware, 'authorize').callsFake(config => mocks.stubs.authMiddleware(account, authorized, config));
     app = server.getNewApp();
 }
 
@@ -34,6 +34,27 @@ describe('Hacker routes should work as expected', () => {
     });
 
     after(() => server.killSession());
+
+    it('/api/hackers/:hacker_qr GET should resolve if member', done => {
+        let account = mocks.stubs.account();
+        stubAuthAndStart(account, true);
+
+        let hacker = {
+            name: faker.name.findName(),
+            email: faker.internet.email(),
+            qr: faker.random.number(),
+            role: mocks.objectId()
+        };
+
+        chai.request(app).get('/api/hackers').send(hacker)
+        .then(res => {
+            expect(res.body).to.have.property('hackers');
+
+            done();
+        }).catch(err => {
+            done(err)
+        });
+    });
 
     it('/api/hackers/:hacker_qr GET should fail if the given qr is invalid', done => {
         let account = mocks.stubs.account();
@@ -62,7 +83,7 @@ describe('Hacker routes should work as expected', () => {
     });
 
     it('/api/hackers/:hacker_qr GET should work as expected', done => {
-        let account = mocks.stubs.account();
+        let account = mocks.stubs.account(true);
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();
@@ -128,8 +149,29 @@ describe('Hacker routes should work as expected', () => {
         });
     });
 
-    it('/api/hackers POST should fail if missing required fields', done => {
+    it('/api/hackers/:hacker_qr POST should fail if not admin', done => {
         let account = mocks.stubs.account();
+        stubAuthAndStart(account, true);
+
+        let hacker = {
+            name: faker.name.findName(),
+            email: faker.internet.email(),
+            qr: faker.random.number(),
+            role: mocks.objectId()
+        };
+
+        chai.request(app).post('/api/hackers').send(hacker)
+        .then(res => {
+            expect(res.body).to.have.property('error');
+
+            done();
+        }).catch(err => {
+            done(err)
+        });
+    });
+
+    it('/api/hackers POST should fail if missing required fields', done => {
+        let account = mocks.stubs.account(true);
         stubAuthAndStart(account, true);
 
         chai.request(app)
@@ -146,7 +188,7 @@ describe('Hacker routes should work as expected', () => {
     });
 
     it('/api/hackers POST should fail if trying to create a hacker with an already-used qr', done => {
-        let account = mocks.stubs.account();
+        let account = mocks.stubs.account(true);
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();
@@ -195,7 +237,7 @@ describe('Hacker routes should work as expected', () => {
     });
 
     it('/api/hackers GET POST should work as expected', done => {
-        let account = mocks.stubs.account();
+        let account = mocks.stubs.account(true);
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();
@@ -251,7 +293,7 @@ describe('Hacker routes should work as expected', () => {
     });
 
     it('/api/hackers/:hacker_qr POST should fail if sent fields are invalid', done => {
-        let account = mocks.stubs.account();
+        let account = mocks.stubs.account(true);
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();
@@ -318,8 +360,73 @@ describe('Hacker routes should work as expected', () => {
         });
     });
 
+    it('/api/hackers/:hacker_qr POST should fail if qr is invalid', done => {
+        let account = mocks.stubs.account(true);
+        stubAuthAndStart(account, true);
+
+        let requester = chai.request(app).keepOpen();
+        let role = {
+            name: faker.random.word(),
+            fields: [
+                {
+                    name: faker.random.word(),
+                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
+                }, {
+                    name: faker.random.word(),
+                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
+                }
+            ]
+        }
+        let hacker = {
+            name: faker.name.findName(),
+            email: faker.internet.email(),
+            qr: faker.random.number()
+        };
+        let fields = [
+            {
+                name: faker.random.word(),
+                attributes: [
+                    {name: faker.random.word()}, // Missing `had` field
+                    {had: false, name: faker.random.word()}
+                ]
+            },
+            {
+                // Missing `name` field
+                attributes: [
+                    {had: false, name: faker.random.word()},
+                    {had: false, name: faker.random.word()}
+                ]
+            }
+        ];
+
+        requester
+            .post('/api/roles')
+            .send(role)
+        .then(res => {
+            expect(res.body).to.have.property('message');
+            expect(res.body).to.have.property('role_id');
+
+            hacker = Object.assign(hacker, {role: res.body.role_id});
+
+            return requester.post('/api/hackers').send(hacker);
+        }).then(res => {
+            expect(res.body).to.have.property('message');
+            expect(res.body).to.have.property('hacker_qr');
+
+            return requester.post(`/api/hackers/${faker.random.number()}`).send({fields: fields});
+        }).then(res => {
+            expect(res.body).to.have.property('error');
+
+            requester.close();
+            done();
+        }).catch(err => {
+            requester.close();
+            done(err)
+        });
+    });
+
     it('/api/hackers/:hacker_qr POST should work as expected', done => {
-        let account = mocks.stubs.account();
+        let account = mocks.stubs.account(true);
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();
