@@ -80,7 +80,8 @@ describe('Hacker routes should work as expected', () => {
                 active: true,
                 name: hacker.name,
                 email: hacker.email,
-                qr: hacker.qr
+                qr: hacker.qr,
+                role: hacker.role
             });
 
             requester.close();
@@ -281,7 +282,8 @@ describe('Hacker routes should work as expected', () => {
                             }
                         })
                     }
-                })
+                }),
+                role: hacker.role
             });
 
             requester.close();
@@ -493,7 +495,8 @@ describe('Hacker routes should work as expected', () => {
                 name: hacker.name,
                 email: hacker.email,
                 qr: hacker.qr,
-                fields: fields
+                fields: fields,
+                role: hacker.role
             });
 
             requester.close();

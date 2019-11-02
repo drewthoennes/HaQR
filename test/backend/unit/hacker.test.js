@@ -32,11 +32,22 @@ describe('The hacker controller should work as expected', () => {
         });
     });
 
+    it('getHacker should reject if no hacker with given qr is found', () => {
+        let hacker = mocks.stubs.hacker();
+        let hackerStub = sinon
+            .stub(mocks.models.hacker, 'findOne')
+            .returns(mocks.mongooseStub(sinon, ['select'], mocks.promise.resolve(undefined)));
+
+        return expect(hackerController.getHacker(hacker.qr)).to.eventually.be.rejected.then(() => {
+            sinon.assert.calledOnce(hackerStub);
+        });
+    });
+
     it('getHacker should work as expected', () => {
         let hacker = mocks.stubs.hacker();
         let hackerStub = sinon
             .stub(mocks.models.hacker, 'findOne')
-            .returns(mocks.mongooseStub(sinon, ['select', 'exec'], mocks.promise.resolve(hacker)));
+            .returns(mocks.mongooseStub(sinon, ['select'], mocks.promise.resolve(hacker)));
 
         return expect(hackerController.getHacker(hacker.qr)).to.eventually.be.fulfilled.then(result => {
             expect(result).to.eql(hacker);
