@@ -36,7 +36,7 @@ module.exports = function(router) {
   });
 
   router.delete('/api/roles/:role_id', middleware.authorize({roles: ['admin']}), (req, res) => {
-    rolesController.deleteRole(req.params.role_id).then(() => {
+    rolesController.deleteRoleAndHackers(req.params.role_id).then(() => {
       res.json({'message': 'Successfully deleted role'});
     }).catch(err => {
       res.json({'error': 'There was an error deleting role: ' + err});

@@ -40,6 +40,14 @@ body {
     &-between {
         justify-content: space-between;
     }
+
+    &-start {
+        justify-content: flex-start;
+    }
+
+    &-end {
+        justify-content: flex-end;
+    }
 }
 
 .column {
@@ -58,11 +66,25 @@ body {
     &-between {
         justify-content: space-between;
     }
+
+    &-start {
+        justify-content: flex-start;
+    }
+
+    &-end {
+        justify-content: flex-end;
+    }
 }
 
 .btn-blank {
     cursor: pointer;
     background: white;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.btn-gray {
+    cursor: pointer;
+    background: rgba(0,0,0,0.05);
     border: 1px solid rgba(0, 0, 0, 0.15);
 }
 

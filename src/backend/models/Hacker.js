@@ -32,6 +32,10 @@ var HackerSchema = new Schema({
       }
     }]
   }],
+  role: {
+    type: Schema.Types.ObjectId,
+    ref: 'Role'
+  },
   active: {
     type: Boolean,
     default: true

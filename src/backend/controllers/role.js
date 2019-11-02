@@ -1,4 +1,4 @@
-const {Role} = require('@b/models');
+const {Hacker, Role} = require('@b/models');
 
 exports.getRoles = () => {
     return Role.find().exec();
@@ -23,6 +23,8 @@ exports.updateRole = (id, name, fields) => {
     return Role.findOneAndUpdate({_id: id}, {name: name, fields: fields}).exec();
 }
 
-exports.deleteRole = (id) => {
-    return Role.deleteOne({_id: id}).exec();
+exports.deleteRoleAndHackers = (id) => {
+    return Role.deleteOne({_id: id}).then(() => {
+        return Hacker.deleteMany({role: id}).exec();
+    });
 }

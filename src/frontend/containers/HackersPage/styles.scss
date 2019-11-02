@@ -13,10 +13,12 @@ $xs: 400px;
             margin: 0px;
         }
 
-        .btn {
-            background: white;
-            border: 1px solid rgba(0, 0, 0, 0.15);
+        #filterButton {
             margin-left: 5px;
+
+            @media only screen and (max-width: $xs) {
+                margin-left: 0px;;
+            }
         }
 
         .fa-user {
@@ -27,7 +29,9 @@ $xs: 400px;
             font-size: 20px;
         }
 
-        & > .row {
+        #pageBar {
+            display: flex;
+            flex-direction: row;
             justify-content: space-between;
             margin: 0px 0px 20px 0px;
 
@@ -35,9 +39,42 @@ $xs: 400px;
                 padding: 5px;
                 width: 30%;
 
+                @media only screen and (max-width: $md) {
+                    width: 50%;
+                }
                 @media only screen and (max-width: $sm) {
                     width: 70%;
                 }
+                @media only screen and (max-width: $xs) {
+                    width: 100%;
+                    margin-bottom: 5px;
+                }
+            }
+
+            & > div {
+                width: 30%;
+                justify-content: flex-end;
+
+                @media only screen and (max-width: $xs) {
+                    width: 100%;
+                    justify-content: space-between;
+
+                    #filterButton {
+                        width: calc(50% - 5px);
+
+                        .btn {
+                            width: 100%;
+                        }
+                    }
+
+                    #scanQRButton {
+                        width: calc(50% - 5px);
+                    }
+                }
+            }
+
+            @media only screen and (max-width: $xs) {
+                flex-direction: column;
             }
         }
 
@@ -84,6 +121,7 @@ $xs: 400px;
 
                 .btn {
                     background: rgba(0, 0, 0, 0);
+                    border: 1px solid rgba(0, 0, 0, 0.15);
                 }
             }
 

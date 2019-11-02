@@ -81,6 +81,7 @@ class _rolesView extends React.Component {
     }).then(res => {
       if (res && res.data && !res.data.error) {
         socket.emit('updatedRoles', token);
+        socket.emit('updatedHackers', token);
       }
 
       this.deleteRoleModal.current.closeModal();
@@ -106,7 +107,7 @@ class _rolesView extends React.Component {
         <td scope="row">
           {
             role.fields.map(field => (
-              <div key={field._id}>
+              <div key={field.name}>
                 <p><b>{field.name}:</b></p>
                 <ul>
                   {

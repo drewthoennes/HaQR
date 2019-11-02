@@ -13,12 +13,12 @@ class DeleteRoleModal extends React.Component {
     return (
         <div id="delete-role-modal">
             <div className="content">
-              <p>Are you sure you want to delete this role?</p>
+              <p>Are you sure you want to delete this role? Doing so will <b>permanently delete all</b> hackers with this role.</p>
             </div>
 
             <div className="modal-buttons">
-                <button className="btn" onClick={this.props.cancel}>Cancel</button>
-                <button className="btn" onClick={this.props.confirm}>Delete</button>
+                <button className="btn btn-gray" onClick={this.props.cancel}>Cancel</button>
+                <button className="btn btn-danger" onClick={this.props.confirm}>Delete</button>
             </div>
       </div>
     );

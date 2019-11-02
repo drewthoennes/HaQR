@@ -16,7 +16,7 @@ const init = () => {
   let token = localStorage.getItem('token');
 
   if (!token) {
-    history.push('/unauthorized');
+    history.push('/login');
     return;
   }
 

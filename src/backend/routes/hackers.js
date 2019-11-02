@@ -20,6 +20,11 @@ const updateHackerSchema = joi.object().keys({
   })).required()
 });
 
+const toggleSchema = joi.object().keys({
+  name: joi.string().required(),
+  attribute: joi.string().required()
+});
+
 module.exports = function(router) {
   router.get('/api/hackers', middleware.authorize(), (req, res) => {
     return hackerController.getAllHackers().then(hackers => {
@@ -116,6 +121,26 @@ module.exports = function(router) {
 
         default:
             res.status(500).json({'error': 'Unable to find a hacker with that qr code'});
+          break;
+      }
+    });
+  });
+
+  router.post('/api/hackers/:hacker_qr/toggle', middleware.validate(toggleSchema), (req, res) => {
+    return hackerController.toggleFieldTrue(req.params.hacker_qr, req.body.name, req.body.attribute).then(() => {
+      res.json({'message': 'Successfully updated the hacker'})
+    }).catch(err => {
+      switch (true) {
+        case err instanceof UnauthorizedError:
+          res.status(401).json({'error': err.message});
+          break;
+
+        case err instanceof InsufficientRoleError:
+          res.status(401).json({'error': err.message || err});
+          break;
+
+        default:
+            res.json({'error': err.message || err});
           break;
       }
     });

@@ -58,7 +58,7 @@ class _hackersView extends React.Component {
     let hackers = this.props.hackers.filter(hacker => {
       return hacker.name.toLowerCase().includes(search);
     });
-    
+
     hackers.sort(sortByProperty(this.state.sort));
 
     if (!this.state.asc) {

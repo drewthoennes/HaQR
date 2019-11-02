@@ -4,8 +4,14 @@ exports.getAllHackers = () => {
     return Hacker.find().select('-_id -fields').exec();
 };
 
-exports.getHacker = (qr) => {
-    return Hacker.findOne({qr: qr}).select('-_id').exec();
+exports.getHacker = (qr, id) => {
+    return Hacker.findOne({qr: qr}).select(id ? '' : '-_id').then(hacker => {
+        if (!hacker) {
+            throw new Error('A hacker with this QR does not exist');
+        }
+
+        return hacker;
+    });
 };
 
 exports.createHacker = (name, email, qr, role_id) => {
@@ -38,7 +44,8 @@ exports.createHacker = (name, email, qr, role_id) => {
             name: name,
             email: email,
             qr: qr,
-            fields: fields
+            fields: fields,
+            role: role_id
         });
 
         return hacker.save();
@@ -64,5 +71,38 @@ exports.toggleActive = (qr) => {
                 active: !hacker.active
             }
         });
+    });
+};
+
+exports.toggleFieldTrue = (qr, name, attrib) => {
+    return exports.getHacker(qr, true).then(hacker => {
+        let found = false;
+        let alreadyTrue = false;
+
+        hacker.fields = hacker.fields.map(field => {
+            if (field.name == name) {
+                field.attributes = field.attributes.map(attribute => {
+                    if (attribute.name == attrib) {
+                        found = true;
+                        alreadyTrue = alreadyTrue || attribute.had;
+
+                        return Object.assign(attribute, {had: true});
+                    }
+
+                    return attribute;
+                });
+            }
+
+            return field;
+        });
+
+        if (!found) {
+            throw new Error('Hacker does not have this field');
+        }
+        else if (alreadyTrue) {
+            throw new Error('Field is already true for this hacker');
+        }
+
+        return hacker.save();
     });
 };
