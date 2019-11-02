@@ -113,14 +113,19 @@ $xs: 400px;
         background: rgba(0, 0, 0, 0.6);
 
         .content {
+            #pageBar > input {
+                background: transparent;
+                border: 1px solid rgba(0, 0, 0, 0.15);
+            }
+
             .row {
                 input {
-                    background: rgba(0, 0, 0, 0);
+                    background: transparent;
                     border-color: rgba(0, 0, 0, 0.1);
                 }
 
                 .btn {
-                    background: rgba(0, 0, 0, 0);
+                    background: transparent;
                     border: 1px solid rgba(0, 0, 0, 0.15);
                 }
             }
