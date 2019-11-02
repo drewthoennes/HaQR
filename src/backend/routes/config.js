@@ -1,4 +1,5 @@
 const configController = require('@b/controllers/config');
+const hackerController = require('@b/controllers/hacker');
 const middleware = require('@b/middleware');
 
 const joi = require('@hapi/joi');
