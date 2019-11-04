@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import map from '@f/store/map';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
+import socket from '@f/socket';
 import {authorize, capitalizeFirst} from '@f/utils';
 import './styles.scss';
 
@@ -15,7 +16,8 @@ class HackerPage extends React.Component {
     this.state = {
       qr: undefined,
       hacker: undefined,
-      error: undefined
+      error: undefined,
+      hasUpdated: true
     };
 
     this.onBackClick = this.onBackClick.bind(this);
@@ -54,32 +56,36 @@ class HackerPage extends React.Component {
     }).then(res => {
       if (!res || !res.data || !res.data.hacker) {
         console.error('Could not retrieve hacker');
-        this.setState({error: res.data.error || 'Error retrieving hacker'});
+        this.setState({error: res.data.error || 'Error retrieving hacker', hasUpdated: true});
       }
       else if (!res.data.hacker.active) {
         this.props.history.push('/hackers');
       }
 
-      this.setState({hacker: res.data.hacker});
+      this.setState({hacker: res.data.hacker, hasUpdated: true});
     }).catch(err => {
       if (err.response.status === 401) {
         this.props.history.push('/unauthorized');
       } else {
-        this.setState({error: err.response.data.error});
+        this.setState({error: err.response.data.error, hasUpdated: true});
       }
     });
   }
 
   updateHacker(name, index) {
     let fields = this.constructFields(name, index);
+    let token = this.props.store.token;
+
+    this.setState({hasUpdated: false});
 
     axios.post(`/api/hackers/${this.state.qr}`, {
       fields: fields
     }, {
       headers: {
-        authorization: `token ${this.props.store.token}`
+        authorization: `token ${token}`
       }
     }).then(res => {
+      socket.emit('updatedInteractions', token);
       this.getHacker();
     }).catch(err => {
       authorize(this.props.history);
@@ -123,8 +129,8 @@ class HackerPage extends React.Component {
                     <div className="column justify-content-center">
                     {
                       property.had
-                      ? <button className="btn btn-success" onClick={() => this.updateHacker(this.state.hacker.fields[field].name, index)}>Complete</button>
-                      : <button className="btn btn-danger" onClick={() => this.updateHacker(this.state.hacker.fields[field].name, index)}>Incomplete</button>
+                      ? <button className="btn btn-success" onClick={() => this.updateHacker(this.state.hacker.fields[field].name, index)} disabled={!this.state.hasUpdated}>Complete</button>
+                      : <button className="btn btn-danger" onClick={() => this.updateHacker(this.state.hacker.fields[field].name, index)} disabled={!this.state.hasUpdated}>Incomplete</button>
                     }
                     </div>
                   </div>

@@ -4,6 +4,7 @@ import {
     SET_CONFIG,
     SET_HACKERS,
     SET_ROLES,
+    SET_INTERACTIONS,
     SET_USERS,
     SET_ACCOUNT,
     SET_LOADED,
@@ -37,6 +38,12 @@ export const setUsers = users => ({
 export const setRoles = roles => ({
     type: SET_ROLES,
     roles
+});
+
+export const setInteractions = (list, total) => ({
+    type: SET_INTERACTIONS,
+    list,
+    total
 });
 
 export const setAccount = account => ({

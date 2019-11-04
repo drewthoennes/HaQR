@@ -70,15 +70,14 @@ app.all('/*', function(req, res) {
 // Server-side Socket.IO
 io.on('connection', socket => {
 	let workspace = 'all';
+	let req = token => ({
+		headers: {
+			authorization: `token ${token}`
+		}
+	});
 
 	socket.on('join', (token) => {
-		let req = {
-			headers: {
-				authorization: `token ${token}`
-			}
-		}
-
-		authorize(req).then(() => {
+		authorize(req(token)).then(() => {
 			socket.join(workspace);
 		}).catch(err => {
 		});
@@ -89,53 +88,36 @@ io.on('connection', socket => {
 	});
 
 	socket.on('updatedConfig', (token) => {
-		let req = {
-			headers: {
-				authorization: `token ${token}`
-			}
-		}
-
-		authorize(req).then(() => {
+		authorize(req(token)).then(() => {
 			io.sockets.in(workspace).emit('updateConfig');
 		}).catch(err => {
 		});
 	});
 
 	socket.on('updatedHackers', (token) => {
-		let req = {
-			headers: {
-				authorization: `token ${token}`
-			}
-		}
-
-		authorize(req).then(() => {
+		authorize(req(token)).then(() => {
 			io.sockets.in(workspace).emit('updateHackers');
 		}).catch(err => {
 		});
 	});
 
 	socket.on('updatedUsers', (token) => {
-		let req = {
-			headers: {
-				authorization: `token ${token}`
-			}
-		}
-
-		authorize(req).then(() => {
+		authorize(req(token)).then(() => {
 			io.sockets.in(workspace).emit('updateUsers');
 		}).catch(err => {
 		});
 	});
 
 	socket.on('updatedRoles', (token) => {
-		let req = {
-			headers: {
-				authorization: `token ${token}`
-			}
-		}
-
-		authorize(req).then(() => {
+		authorize(req(token)).then(() => {
 			io.sockets.in(workspace).emit('updateRoles');
+		}).catch(err => {
+		});
+	});
+
+	socket.on('updatedInteractions', (token) => {
+		authorize(req(token)).then(() => {
+			io.sockets.in(workspace).emit('updateInteractions');
 		}).catch(err => {
 		});
 	});
@@ -147,7 +129,7 @@ io.on('connection', socket => {
 
 server.listen(PORT);
 
-console.log(chalk.green("Started on port " + PORT));
+console.log(chalk.green('Started on port ' + PORT));
 
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false); // Allows findOneAndUpdate()

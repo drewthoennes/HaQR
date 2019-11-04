@@ -5,6 +5,7 @@ import {
     SET_HACKERS,
     SET_USERS,
     SET_ROLES,
+    SET_INTERACTIONS,
     SET_ACCOUNT,
     SET_LOADED,
     CLEAR_ALL
@@ -23,6 +24,10 @@ let initialState = {
     hackers: [],
     users: [],
     roles: [],
+    interactions: {
+        list: [],
+        total: undefined
+    },
     loaded: false
 };
 
@@ -56,6 +61,14 @@ const account = (state = initialState, action) => {
         case SET_ROLES:
             return Object.assign({}, state, {
                 roles: action.roles
+            });
+
+        case SET_INTERACTIONS:
+            return Object.assign({}, state, {
+                interactions: {
+                    list: action.list,
+                    total: action.total
+                }
             });
 
         case SET_ACCOUNT:

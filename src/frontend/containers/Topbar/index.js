@@ -1,12 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import map from '@f/store/map';
-import axios from 'axios';
 import store from '@f/store';
 import {removeToken} from '@f/store/actions';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faSignOutAlt, faHome, faTools, faUser, faUserCircle} from '@fortawesome/free-solid-svg-icons';
+import {faSignOutAlt, faHome, faTools, faUser, faUserCircle, faClipboardList} from '@fortawesome/free-solid-svg-icons';
 import './styles.scss';
 
 class Topbar extends React.Component {
@@ -65,10 +64,17 @@ class Topbar extends React.Component {
     }
 
     let homeButton = '';
+    let interactionsButton = '';
     if (!this.props.noButtons) {
       homeButton = (
         <div className={`topbar-item column justify-content-center${this.props.home ? ' selected' : ''}`} onClick={() => this.props.history.push('/hackers')}>
             <FontAwesomeIcon icon={faHome}/>
+        </div>
+      );
+
+      interactionsButton = (
+        <div className={`topbar-item column justify-content-center${this.props.interactions ? ' selected' : ''}`} onClick={() => this.props.history.push('/interactions')}>
+          <FontAwesomeIcon icon={faClipboardList}/>
         </div>
       );
     }
@@ -109,6 +115,7 @@ class Topbar extends React.Component {
     return (
       <div id="topbar" className="row justify-content-end">
         {adminButton}
+        {interactionsButton}
         {homeButton}
         <div className="topbar-item column justify-content-center" onClick={this.showAccountDropdown}>
             <FontAwesomeIcon icon={faUser}/>

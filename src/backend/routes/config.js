@@ -22,7 +22,7 @@ module.exports = function(router) {
     });
 
     router.post('/api/config', middleware.validate(configSchema), middleware.authorize({roles: ['admin']}), (req, res) => {
-      return configController.updateConfig(req.body.config).then(() => {
+      return configController.updateConfig(req.auth.account._id, req.body.config).then(() => {
         res.json({'message': 'Successfully updated the configuration'});
       }).catch(err => {
         res.json({'error': 'There was an error updating your configuration: ' + err});

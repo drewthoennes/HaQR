@@ -20,7 +20,7 @@ module.exports = function(router) {
   });
 
   router.post('/api/roles', middleware.validate(roleSchema), middleware.authorize({roles: ['admin']}), (req, res) => {
-    rolesController.createRole(req.body.name, req.body.fields).then(role => {
+    rolesController.createRole(req.auth.account._id, req.body.name, req.body.fields).then(role => {
       res.json({'message': 'Successfully created role', 'role_id': role._id});
     }).catch(err => {
       res.json({'error': 'There was an error creating this role: ' + err});
@@ -28,7 +28,7 @@ module.exports = function(router) {
   });
 
   router.post('/api/roles/:role_id', middleware.validate(roleSchema), middleware.authorize({roles: ['admin']}), (req, res) => {
-    rolesController.updateRole(req.params.role_id, req.body.name, req.body.fields).then(() => {
+    rolesController.updateRole(req.auth.account._id, req.params.role_id, req.body.name, req.body.fields).then(() => {
       res.json({'message': 'Successfully updated role'});
     }).catch(err => {
       res.json({'error': 'There was an error updating role: ' + err});
@@ -36,7 +36,7 @@ module.exports = function(router) {
   });
 
   router.delete('/api/roles/:role_id', middleware.authorize({roles: ['admin']}), (req, res) => {
-    rolesController.deleteRoleAndHackers(req.params.role_id).then(() => {
+    rolesController.deleteRoleAndHackers(req.auth.account._id, req.params.role_id).then(() => {
       res.json({'message': 'Successfully deleted role'});
     }).catch(err => {
       res.json({'error': 'There was an error deleting role: ' + err});

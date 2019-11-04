@@ -1,4 +1,6 @@
 const {Config} = require('@b/models');
+const interactionsController = require('@b/controllers/interaction');
+const c = require('@b/const');
 
 exports.getConfig = () => {
     return Config.findOne({}).select('-_id -__v').then(config => {
@@ -12,10 +14,12 @@ exports.getConfig = () => {
     });
 };
 
-exports.updateConfig = (config) => {
+exports.updateConfig = (user_id, config) => {
     return Config.findOneAndUpdate({}, {
         $set: config
     }, {
         upsert: true // Create config if one doesn't already exist
-    }).exec();
+    }).then(() => {
+        return interactionsController.createInteraction(`Updated application settings`, c.interactions.EDIT, user_id);
+    });
 };

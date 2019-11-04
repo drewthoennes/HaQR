@@ -1,0 +1,59 @@
+$xl: 1200px;
+$lg: 1000px;
+$md: 800px;
+$sm: 600px;
+$xs: 400px;
+
+#interactionsPage {
+
+    .content {
+        width: 100%;
+        padding: 20px 15%;
+
+        p {
+            margin: 0px;
+        }
+
+        .fa-user-alt {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+
+            &-title.row {
+                margin-bottom: 10px;
+
+                p {
+                    font-size: 12px;
+                }
+            }
+
+            &-body {
+                width: calc(100% - 5px);
+            }
+
+            .type-bar {
+                width: 5px;
+                border-radius: 0rem 0.2rem 0.2rem 0rem;
+
+                &.creation {
+                    background: rgb(124, 225, 118);
+                }
+
+                &.modification {
+                    background: rgb(247, 183, 20);
+                }
+
+                &.deletion {
+                    background: rgb(243, 120, 120);
+                }
+
+                &.other {
+                    background: gray;
+                }
+            }
+        }
+    }
+}

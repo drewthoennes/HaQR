@@ -7,6 +7,7 @@ import {
     setHackers,
     setUsers,
     setRoles,
+    setInteractions,
     setLoaded
 } from '@f/store/actions';
 import socket from '@f/socket';
@@ -28,6 +29,7 @@ const init = () => {
   promises.push(getHackers(token).catch(err => history.push('/unauthorized')));
   promises.push(getUsers(token).catch(err => history.push('/unauthorized')));
   promises.push(getRoles(token).catch(err => {}));
+  promises.push(getInteractions(token).catch(err => {}));
 
   getAccount(token).then(() => {
     return Promise.all(promises);
@@ -38,22 +40,30 @@ const init = () => {
 
     socket.on('updateConfig', () => {
       getConfig(token).catch();
+      getInteractions(token).catch();
     });
 
     socket.on('updateHackers', () => {
         getHackers(token).catch(err => {
           history.push('/unauthorized')
         });
+        getInteractions(token).catch();
     });
 
     socket.on('updateUsers', () => {
         getUsers(token).catch(err => {
           history.push('/unauthorized')
         });
+        getInteractions(token).catch();
     });
 
     socket.on('updateRoles', () => {
       getRoles(token).catch();
+      getInteractions(token).catch();
+    });
+
+    socket.on('updateInteractions', () => {
+      getInteractions(token).catch();
     });
   }).catch(err => {
     history.push('/unauthorized');
@@ -136,6 +146,20 @@ const getRoles = (token) => {
     }
 
     store.dispatch(setRoles(res.data.roles));
+  });
+};
+
+const getInteractions = (token) => {
+  return axios.get('/api/interactions', {
+    headers: {
+      authorization: `token ${token}`
+    }
+  }).then(res => {
+    if (!res || !res.data || !res.data.interactions) {
+      throw new Error('There was an error retrieving interactions');
+    }
+
+    store.dispatch(setInteractions(res.data.interactions, res.data.total));
   });
 };
 

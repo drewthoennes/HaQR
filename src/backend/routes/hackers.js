@@ -47,7 +47,7 @@ module.exports = function(router) {
   });
 
   router.post('/api/hackers', middleware.validate(hackerSchema), middleware.authorize({roles: ['admin']}), (req, res) => {
-    return hackerController.createHacker(req.body.name, req.body.email, req.body.qr, req.body.role).then(hacker => {
+    return hackerController.createHacker(req.auth.account._id, req.body.name, req.body.email, req.body.qr, req.body.role).then(hacker => {
       res.json({'message': 'Successfully created hacker', 'hacker_qr': hacker.qr});
     }).catch(err => {
       switch (true) {
@@ -87,7 +87,7 @@ module.exports = function(router) {
   });
 
   router.post('/api/hackers/:hacker_qr', middleware.validate(updateHackerSchema), middleware.authorize(), (req, res) => {
-    return hackerController.updateHacker(req.params.hacker_qr, req.body.fields).then((hacker) => {
+    return hackerController.updateHacker(req.auth.account._id, req.params.hacker_qr, req.body.fields).then((hacker) => {
       return res.json({'message': 'Successfully updated hacker'});
     }).catch(err => {
       switch (true) {
@@ -107,7 +107,7 @@ module.exports = function(router) {
   });
 
   router.post('/api/hackers/:hacker_qr/active', middleware.authorize({roles: ['admin']}), (req, res) => {
-    return hackerController.toggleActive(req.params.hacker_qr).then(() => {
+    return hackerController.toggleActive(req.auth.account._id, req.params.hacker_qr).then(() => {
       res.json({'message': 'Successfully updated the hacker'})
     }).catch(err => {
       switch (true) {
@@ -127,7 +127,7 @@ module.exports = function(router) {
   });
 
   router.post('/api/hackers/:hacker_qr/toggle', middleware.validate(toggleSchema), (req, res) => {
-    return hackerController.toggleFieldTrue(req.params.hacker_qr, req.body.name, req.body.attribute).then(() => {
+    return hackerController.toggleFieldTrue(req.auth.account._id, req.params.hacker_qr, req.body.name, req.body.attribute).then(() => {
       res.json({'message': 'Successfully updated the hacker'})
     }).catch(err => {
       switch (true) {

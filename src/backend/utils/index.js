@@ -49,15 +49,9 @@ exports.authorize = (req, params = {}) => {
             authorized = false;
         }
 
-        if (params.account) {
-            return {
-                authorized: authorized,
-                account: user
-            };
-        }
-
         return {
-            authorized: authorized
+            authorized: authorized,
+            account: user
         };
     });
 };

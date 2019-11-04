@@ -1,9 +1,6 @@
 import React from 'react';
-import {connect} from 'react-redux';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {} from '@fortawesome/free-solid-svg-icons';
 import socket from '@f/socket';
 import './styles.scss';
 
@@ -12,6 +9,7 @@ class _settingsView extends React.Component {
     super(props);
 
     this.state = {
+      hasUpdated: true
     };
 
     this.toggleAuthorizeAll = this.toggleAuthorizeAll.bind(this);
@@ -22,6 +20,8 @@ class _settingsView extends React.Component {
 
   toggleAuthorizeAll() {
     let token = this.props.token;
+
+    this.setState({hasUpdated: false});
 
     axios.post('/api/config', {
       config: {
@@ -44,6 +44,8 @@ class _settingsView extends React.Component {
 
   togglePromoteAll() {
     let token = this.props.token;
+
+    this.setState({hasUpdated: false});
 
     axios.post('/api/config', {
       config: {
@@ -146,12 +148,12 @@ class _settingsView extends React.Component {
           <div className="card-body">
             <div className="setting">
               <div className="column justify-content-center"><h6>Authorize all new users</h6></div>
-              <button className={`btn btn-${this.props.config && this.props.config.authorizeAll ? 'success' : 'danger'}`} onClick={this.toggleAuthorizeAll}>{this.props.config && this.props.config.authorizeAll ? 'Enabled' : 'Disabled'}</button>
+              <button className={`btn btn-${this.props.config && this.props.config.authorizeAll ? 'success' : 'danger'}`} disabled={!this.state.hasUpdated} onClick={this.toggleAuthorizeAll}>{this.props.config && this.props.config.authorizeAll ? 'Enabled' : 'Disabled'}</button>
             </div>
             <h2 className="horizontal-line"></h2>
             <div className="setting">
               <div className="column justify-content-center"><h6>Promote all new users</h6></div>
-              <button className={`btn btn-${this.props.config && this.props.config.promoteAll ? 'success' : 'danger'}`} onClick={this.togglePromoteAll}>{this.props.config && this.props.config.promoteAll ? 'Enabled' : 'Disabled'}</button>
+              <button className={`btn btn-${this.props.config && this.props.config.promoteAll ? 'success' : 'danger'}`} disabled={!this.state.hasUpdated} onClick={this.togglePromoteAll}>{this.props.config && this.props.config.promoteAll ? 'Enabled' : 'Disabled'}</button>
             </div>
           </div>
         </div>

@@ -1,4 +1,6 @@
 const {Hacker, Role} = require('@b/models');
+const interactionsController = require('@b/controllers/interaction');
+const c = require('@b/const');
 
 exports.getAllHackers = () => {
     return Hacker.find().select('-_id -fields').exec();
@@ -14,7 +16,7 @@ exports.getHacker = (qr, id) => {
     });
 };
 
-exports.createHacker = (name, email, qr, role_id) => {
+exports.createHacker = (user_id, name, email, qr, role_id) => {
     return Hacker.findOne({qr: qr}).lean().then(hacker => {
         if (hacker) {
             throw new Error('A hacker with this qr code already exists');
@@ -49,17 +51,21 @@ exports.createHacker = (name, email, qr, role_id) => {
         });
 
         return hacker.save();
+    }).then(() => {
+        return interactionsController.createInteraction(`Created hacker ${name}`, c.interactions.CREATE, user_id);
     });
 };
 
-exports.updateHacker = (qr, fields) => {
+exports.updateHacker = (user_id, qr, fields) => {
     return Hacker.findOneAndUpdate({
         qr: qr
     }, {
         $set: {
             fields: fields
         }
-    }).exec();
+    }).then(hacker => {
+        return interactionsController.createInteraction(`Updated hacker ${hacker.name}`, c.interactions.EDIT, user_id);
+    });
 };
 
 exports.toggleActive = (qr) => {
@@ -71,6 +77,8 @@ exports.toggleActive = (qr) => {
                 active: !hacker.active
             }
         });
+    }).then(hacker => {
+        return interactionsController.createInteraction(`Toggled active hacker ${hacker.name}`, c.interactions.EDIT, user_id);
     });
 };
 
@@ -104,5 +112,7 @@ exports.toggleFieldTrue = (qr, name, attrib) => {
         }
 
         return hacker.save();
+    }).then(hacker => {
+        return interactionsController.createInteraction(`Scanned for field for hacker ${hacker.name}`, c.interactions.EDIT, user_id);
     });
 };

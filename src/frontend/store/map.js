@@ -7,6 +7,7 @@ let mapStateToProps = (state) => {
             hackers: state.account.hackers,
             users: state.account.users,
             roles: state.account.roles,
+            interactions: state.account.interactions,
             loaded: state.account.loaded
         }
     }

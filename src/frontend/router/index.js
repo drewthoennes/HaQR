@@ -5,6 +5,7 @@ import history from './history';
 import LoginPage from '@f/containers/LoginPage';
 import HackersPage from '@f/containers/HackersPage';
 import HackerPage from '@f/containers/HackerPage';
+import InteractionsPage from '@f/containers/InteractionsPage';
 import AdminPage from '@f/containers/AdminPage';
 import UnauthorizedPage from '@f/containers/UnauthorizedPage';
 
@@ -15,6 +16,7 @@ const router = () => {
         <Route path="/login" render={() => <LoginPage/>}/>
         <Route exact path="/hackers" render={() => <HackersPage/>}/>
         <Route path="/hackers/:qr" render={() => <HackerPage/>}/>
+        <Route path="/interactions" render={() => <InteractionsPage/>}/>
         <Route path="/admin" render={() => <AdminPage/>}/>
         <Route path="/unauthorized" render={() => <UnauthorizedPage/>}/>
         <Route path="*" render={() => <Redirect to='/login'/>}/>
