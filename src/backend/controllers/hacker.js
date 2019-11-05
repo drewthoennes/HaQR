@@ -82,7 +82,7 @@ exports.toggleActive = (qr) => {
     });
 };
 
-exports.toggleFieldTrue = (qr, name, attrib) => {
+exports.toggleFieldTrue = (user_id, qr, name, attrib) => {
     return exports.getHacker(qr, true).then(hacker => {
         let found = false;
         let alreadyTrue = false;

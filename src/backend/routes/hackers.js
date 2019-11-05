@@ -126,7 +126,7 @@ module.exports = function(router) {
     });
   });
 
-  router.post('/api/hackers/:hacker_qr/toggle', middleware.validate(toggleSchema), (req, res) => {
+  router.post('/api/hackers/:hacker_qr/toggle', middleware.validate(toggleSchema), middleware.authorize(), (req, res) => {
     return hackerController.toggleFieldTrue(req.auth.account._id, req.params.hacker_qr, req.body.name, req.body.attribute).then(() => {
       res.json({'message': 'Successfully updated the hacker'})
     }).catch(err => {

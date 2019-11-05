@@ -11,7 +11,7 @@ const roleSchema = joi.object().keys({
 });
 
 module.exports = function(router) {
-  router.get('/api/roles', middleware.authorize({roles: ['admin']}), (req, res) => {
+  router.get('/api/roles', middleware.authorize(), (req, res) => {
     rolesController.getRoles().then(roles => {
       res.json({'roles': roles});
     }).catch(err => {
