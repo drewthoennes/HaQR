@@ -1,4 +1,6 @@
 const {User} = require('@b/models');
+const interactionsController = require('@b/controllers/interaction');
+const c = require('@b/const');
 
 exports.countAuthorizedUsers = () => {
     return User.countDocuments({authorized: true}).exec();
@@ -68,22 +70,36 @@ exports.hasUser = (accounts) => {
         });
 };
 
-exports.authorizeUser = (id) => {
+exports.authorizeUser = (user_id, id) => {
     return User.findById(id).then(user => {
         return User.findByIdAndUpdate(id, {
             $set: {
                 authorized: !user.authorized
             }
         });
+    }).then(user => {
+        if (!user.authorized) {
+            return interactionsController.createInteraction(`Authorized ${user.name}`, c.interactions.OTHER, user_id);
+        }
+        else {
+            return interactionsController.createInteraction(`Deauthorized ${user.name}`, c.interactions.OTHER, user_id);
+        }
     });
 };
 
-exports.toggleUserRole = (id) => {
+exports.toggleUserRole = (user_id, id) => {
     return User.findById(id).then(user => {
         return User.findByIdAndUpdate(id, {
             $set: {
                 role: user.role === 'admin' ? 'member' : 'admin'
             }
         });
+    }).then(user => {
+        if (user.role === 'admin') {
+            return interactionsController.createInteraction(`Promoted ${user.name} to admin`, c.interactions.OTHER, user_id);
+        }
+        else {
+            return interactionsController.createInteraction(`Demoted ${user.name} to admin`, c.interactions.OTHER, user_id);
+        }
     });
 };

@@ -24,7 +24,7 @@ module.exports = function(router) {
   });
 
   router.post('/api/users/:user_id/authorize', middleware.authorize({roles: ['admin']}), (req, res) => {
-    return userController.authorizeUser(req.params.user_id).then(() => {
+    return userController.authorizeUser(req.auth.account._id, req.params.user_id).then(() => {
       res.json({'message': 'Successfully toggled user authorization'});
     }).catch(err => {
       res.status(500).json({'error': 'There was an error authorizing this user'});
@@ -33,7 +33,7 @@ module.exports = function(router) {
 
 
   router.post('/api/users/:user_id/role', middleware.authorize({roles: ['admin']}), (req, res) => {
-    return userController.toggleUserRole(req.params.user_id).then(() => {
+    return userController.toggleUserRole(req.auth.account._id, req.params.user_id).then(() => {
       res.json({'message': 'Successfully toggled user role'});
     }).catch(err => {
       res.status(500).json({'error': 'There was an error authorizing this user'});
