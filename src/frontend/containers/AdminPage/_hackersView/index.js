@@ -55,12 +55,31 @@ class _hackersView extends React.Component {
   render() {
     let search = this.state.search.toLowerCase();
 
-    let hackers = this.props.hackers.filter(hacker => {
-      return hacker.name.toLowerCase().includes(search);
+    let hackers = this.props.hackers;
+
+    // Populate role
+    if (this.props.roles && this.props.roles.length > 0) {
+      hackers = hackers.map(hacker => {
+        let role = this.props.roles.find(role => {
+          return role._id == hacker.role;
+        });
+
+        return Object.assign({}, hacker, {role: role.name});
+      });
+    }
+
+    // Filter by search
+    hackers = hackers.filter(hacker => {
+      let qr = String(hacker.qr).includes(search);
+      let name = hacker.name.toLowerCase().includes(search);
+      let email = hacker.email.toLowerCase().includes(search);
+      let role = hacker.role.toLowerCase().includes(search);
+
+      return qr || name || email || role;
     });
 
+    // Sort by column
     hackers.sort(sortByProperty(this.state.sort));
-
     if (!this.state.asc) {
       hackers.reverse();
     }
@@ -70,6 +89,7 @@ class _hackersView extends React.Component {
         <td scope="row">{hacker.qr}</td>
         <td scope="row">{hacker.name}</td>
         <td scope="row">{hacker.email}</td>
+        <td scope="row">{hacker.role}</td>
         <td className="row justify-content-around">
           <button className={`btn ${hacker.active ? 'btn-success' : 'btn-danger'}`} onClick={() => this.toggleActive(hacker.qr)}>{hacker.active ? 'Active' : 'Inactive'}</button>
         </td>
@@ -106,6 +126,14 @@ class _hackersView extends React.Component {
                   <p>Email</p>
                   <div className="column justify-content-center">
                     <FontAwesomeIcon icon={this.state.sort === 'email' ? this.state.asc ? faChevronUp : faChevronDown : faMinus}/>
+                  </div>
+                </div>
+              </th>
+              <th scope="col" onClick={() => this.sortBy('role')}>
+                <div className="row">
+                  <p>Role</p>
+                  <div className="column justify-content-center">
+                    <FontAwesomeIcon icon={this.state.sort === 'role' ? this.state.asc ? faChevronUp : faChevronDown : faMinus}/>
                   </div>
                 </div>
               </th>
