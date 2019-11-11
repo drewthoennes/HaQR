@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faCamera} from '@fortawesome/free-solid-svg-icons';
+import {faCamera, faRandom} from '@fortawesome/free-solid-svg-icons';
 import socket from '@f/socket';
 import {parseCSV} from '@f/utils';
 import './styles.scss';
@@ -27,6 +27,7 @@ class _addHackersView extends React.Component {
     this.hideScanner = this.hideScanner.bind(this);
     this.onQRScan = this.onQRScan.bind(this);
     this.setRole = this.setRole.bind(this);
+    this.createRandomUniqueQR = this.createRandomUniqueQR.bind(this);
   }
 
   onHackersChange(event) {
@@ -105,6 +106,18 @@ class _addHackersView extends React.Component {
     this.setState({role: role});
   }
 
+  createRandomUniqueQR() {
+    let qr = Math.floor(Math.random() * Math.pow(10, 13));
+
+    while (this.state.hackersCSV.includes(qr) || this.props.hackers.find(hacker => {
+      return hacker.qr == qr;
+    })) {
+      qr = Math.floor(Math.random() * Math.pow(10, 13));
+    }
+
+    this.setState({hackersCSV: `${this.state.hackersCSV}${qr}`});
+  }
+
   render() {
     let hackersError;
     let scanner;
@@ -130,15 +143,28 @@ class _addHackersView extends React.Component {
       <div id="_addHackersView" className={`tall${this.props.isBlurred ? ' blur' : ''}`}>
         <div className="cards">
           <div className="card">
-            <div className="card-header row justify-content-between">
+            <div className="card-header">
               <div className="column justify-content-center">
                 <h5>CSV Hackers Upload</h5>
               </div>
-              <button className="btn btn-blank" onClick={this.showScanner} aria-label="Scan qr code">
-                <div className="column justify-content-center">
-                  <FontAwesomeIcon icon={faCamera}/>
-                </div>
-              </button>
+
+              <div className="row row-between">
+                <button className="btn btn-blank" onClick={this.showScanner} aria-label="Scan qr code">
+                  <div className="row justify-content-center">
+                    <div className="column justify-content-center">
+                      <FontAwesomeIcon icon={faCamera}/>
+                    </div>
+                  </div>
+                </button>
+
+                <button className="btn btn-blank" onClick={this.createRandomUniqueQR} aria-label="Add random qr code">
+                  <div className="row justify-content-center">
+                    <div className="column justify-content-center">
+                      <FontAwesomeIcon icon={faRandom}/>
+                    </div>
+                  </div>
+                </button>
+              </div>
             </div>
             <div className="card-body">
               <div className="dropdown">

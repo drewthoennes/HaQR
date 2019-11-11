@@ -65,7 +65,7 @@ class AdminPage extends React.Component {
         view = (<HackersView hackers={this.props.store.hackers} roles={this.props.store.roles} token={this.props.store.token}/>);
         break;
       case 'addHackers':
-        view = (<AddHackersView token={this.props.store.token} roles={this.props.store.roles} isBlurred={this.state.isBlurred} blur={this.blur} unblur={this.unblur}/>);
+        view = (<AddHackersView token={this.props.store.token} roles={this.props.store.roles} hackers={this.props.store.hackers} isBlurred={this.state.isBlurred} blur={this.blur} unblur={this.unblur}/>);
         break;
       case 'users':
           view = (<UsersView users={this.props.store.users} token={this.props.store.token}/>);

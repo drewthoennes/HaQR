@@ -49,12 +49,36 @@ $xs: 400px;
     }
 
     .card-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
         h5 {
             margin: 0px;
         }
 
         .btn-blank {
             cursor: pointer;
+
+            &:last-child {
+                margin-left: 12px;
+            }
+        }
+
+        @media only screen and (max-width: $xs) {
+            flex-direction: column;
+
+            h5 {
+                margin-bottom: 5px;
+            }
+
+            .btn-blank {
+                width: calc(50% - 5px);
+
+                &:last-child {
+                    margin: 0px;
+                }
+            }
         }
     }
 
