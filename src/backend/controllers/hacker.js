@@ -68,7 +68,7 @@ exports.updateHacker = (user_id, qr, fields) => {
     });
 };
 
-exports.toggleActive = (qr) => {
+exports.toggleActive = (user_id, qr) => {
     return Hacker.findOne({qr: qr}).then(hacker => {
         return Hacker.findOneAndUpdate({
             qr: qr
