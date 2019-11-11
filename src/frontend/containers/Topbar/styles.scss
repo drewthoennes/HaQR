@@ -43,8 +43,15 @@ $xs: 400px;
                 padding-right: 10px;
             }
 
+            .column:last-child {
+                width: calc(100% - 46px);
+            }
+
             li {
                 margin: 0px;
+                text-overflow: ellipsis;
+                overflow-y: hidden;
+                white-space: nowrap;
 
                 &:first-child {
                     padding-bottom: 0px;

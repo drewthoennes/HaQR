@@ -137,9 +137,9 @@ class HackersPage extends React.Component {
     }
 
     return (
-      <div id="hackersPage" className={`content tall${this.state.showScanner ? ' blur' : ''}`}>
+      <div id="hackersPage" className={`content ${this.state.showScanner ? ' blur' : ''}`}>
         <Topbar home/>
-        <div className="content tall">
+        <div className="content">
           <div id="pageBar">
             <input className="form-control" type="text" value={this.state.search} aria-label="search" onChange={this.onSearchChange} placeholder="Search..."/>
 

@@ -82,7 +82,7 @@ class AdminPage extends React.Component {
       <div id="adminPage" className={`column${this.state.isBlurred ? ' blur' : ''}`} style={{minHeight: browserIsChrome() ? '100%' : ''}}>
         <Topbar admin/>
 
-        <div className="content tall">
+        <div className="content">
           <div id="sidebar" className="justify-content-start">
             <div className="list-group">
               <button className={`list-group-item${this.state.view === 'hackers' ? ' selected' : ''}`} onClick={() => this.changeView('hackers')}>Hackers</button>

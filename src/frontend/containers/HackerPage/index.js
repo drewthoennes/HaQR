@@ -163,7 +163,7 @@ class HackerPage extends React.Component {
     return (
       <div id="hackerPage" className="tall column">
         <Topbar/>
-        <div className="content tall">
+        <div className="content">
           <div className="row">
             <button className="btn btn-blank" onClick={this.onBackClick}>Back</button>
           </div>
