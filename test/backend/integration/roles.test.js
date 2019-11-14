@@ -14,7 +14,12 @@ let app;
 chai.use(chaiAsPromised);
 chai.use(chaiHttp);
 
+const interactionsController = require('@b/controllers/interaction');
 const middlware = require('@b/middleware');
+
+const stubInteractions = () => {
+    sinon.stub(interactionsController, 'createInteraction').callsFake(() => mocks.promise.resolve());
+}
 
 const stubAuthAndStart = (account, authorized) => {
     sinon.stub(middlware, 'authorize').callsFake(config => mocks.stubs.authMiddleware(account, authorized, config));
@@ -34,14 +39,14 @@ describe('Role routes should work as expected', () => {
 
     after(() => server.killSession());
 
-    it('/api/roles GET should fail if user is not an admin', done => {
+    it('/api/roles GET should resolve if user is not an admin', done => {
         let account = mocks.stubs.account();
         stubAuthAndStart(account, true);
 
         chai.request(app)
             .get('/api/roles')
         .then(res => {
-            expect(res.body).to.have.property('error');
+            expect(res.body).to.have.property('roles');
 
             done();
         }).catch(err => done(err));
@@ -49,6 +54,7 @@ describe('Role routes should work as expected', () => {
 
     it('/api/roles GET works as expected', done => {
         let account = Object.assign(mocks.stubs.account(), {role: 'admin'});
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();
@@ -78,6 +84,7 @@ describe('Role routes should work as expected', () => {
 
     it('/api/roles POST should fail if user is not an admin', done => {
         let account = mocks.stubs.account();
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         let role = mocks.stubs.role();
@@ -94,6 +101,7 @@ describe('Role routes should work as expected', () => {
 
     it('/api/roles POST works as expected', done => {
         let account = Object.assign(mocks.stubs.account(), {role: 'admin'});
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         let role = mocks.stubs.role();
@@ -111,6 +119,7 @@ describe('Role routes should work as expected', () => {
 
     it('/api/roles DELETE rejects if given qr is invalid', done => {
         let account = Object.assign(mocks.stubs.account(), {role: 'admin'});
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         chai.request(app)
@@ -124,6 +133,7 @@ describe('Role routes should work as expected', () => {
 
     it('/api/roles DELETE works as expected', done => {
         let account = Object.assign(mocks.stubs.account(), {role: 'admin'});
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();
@@ -149,6 +159,7 @@ describe('Role routes should work as expected', () => {
 
     it('/api/roles DELETE should delete any hackers of that role', done => {
         let account = Object.assign(mocks.stubs.account(), {role: 'admin'});
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();

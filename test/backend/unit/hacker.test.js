@@ -8,6 +8,7 @@ const proxyquire = require('proxyquire');
 
 chai.use(chaiAsPromised);
 
+const interactionsController = require('@b/controllers/interaction');
 const hackerController = proxyquire('@b/controllers/hacker', {
     '@b/models': {
         Hacker: mocks.models.hacker,
@@ -63,7 +64,7 @@ describe('The hacker controller should work as expected', () => {
             .stub(mocks.models.hacker, 'findOne')
             .returns(mocks.mongooseStub(sinon, ['lean'], mocks.promise.resolve(hacker)));
 
-        return expect(hackerController.createHacker(hacker.name, hacker.email, hacker.qr, mocks.objectId())).to.eventually.be.rejected.then(() => {
+        return expect(hackerController.createHacker(hacker.name, hacker.description, hacker.email, hacker.qr, mocks.objectId())).to.eventually.be.rejected.then(() => {
             sinon.assert.calledOnce(hackerStub);
         });
     });
@@ -80,7 +81,7 @@ describe('The hacker controller should work as expected', () => {
             .stub(mocks.models.role, 'findById')
             .returns(mocks.mongooseStub(sinon, ['lean', 'exec']), mocks.promise.resolve());
 
-        return expect(hackerController.createHacker(hacker.name, hacker.email, hacker.qr, mocks.objectId())).to.eventually.be.rejected.then(result => {
+        return expect(hackerController.createHacker(hacker.name, hacker.email, hacker.description, hacker.qr, mocks.objectId())).to.eventually.be.rejected.then(result => {
             sinon.assert.calledOnce(hackerStub);
             sinon.assert.calledOnce(roleStub);
         });
@@ -100,24 +101,35 @@ describe('The hacker controller should work as expected', () => {
 
         let saveStub = sinon
             .stub(mocks.models.hacker.prototype, 'save')
+            .returns(mocks.promise.resolve(hacker));
+
+        let interactionStub = sinon
+            .stub(interactionsController, 'createInteraction')
             .returns(mocks.promise.resolve());
 
-        return expect(hackerController.createHacker(hacker.name, hacker.email, hacker.qr, mocks.objectId())).to.eventually.be.fulfilled.then(result => {
+        return expect(hackerController.createHacker(mocks.objectId(), hacker.name, hacker.email, hacker.description, hacker.qr, mocks.objectId())).to.eventually.be.fulfilled.then(result => {
             sinon.assert.calledOnce(hackerStub);
             sinon.assert.calledOnce(roleStub);
             sinon.assert.calledOnce(saveStub);
+            sinon.assert.calledOnce(interactionStub);
         });
     });
 
     it('updateHacker should work as expected', () => {
         let hacker = mocks.stubs.hacker();
+
         let updateStub = sinon
             .stub(mocks.models.hacker, 'findOneAndUpdate')
-            .returns(mocks.mongooseStub(sinon, ['exec'], mocks.promise.resolve()));
+            .returns(mocks.promise.resolve(hacker));
 
-        return expect(hackerController.updateHacker(hacker.qr, hacker.fields)).to.eventually.be.fulfilled.then(result => {
+        let interactionStub = sinon
+            .stub(interactionsController, 'createInteraction')
+            .returns(mocks.promise.resolve());
+
+        return expect(hackerController.updateHacker(mocks.objectId(), hacker.qr, hacker.fields)).to.eventually.be.fulfilled.then(result => {
             expect(result).to.be.undefined;
             sinon.assert.calledOnce(updateStub);
+            sinon.assert.calledOnce(interactionStub);
         });
     });
 });

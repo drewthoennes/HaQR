@@ -16,7 +16,9 @@ exports.getHacker = (qr, id) => {
     });
 };
 
-exports.createHacker = (user_id, name, email, qr, role_id) => {
+exports.createHacker = (user_id, name, email, description, qr, role_id) => {
+    let ret;
+
     return Hacker.findOne({qr: qr}).lean().then(hacker => {
         if (hacker) {
             throw new Error('A hacker with this qr code already exists');
@@ -45,14 +47,18 @@ exports.createHacker = (user_id, name, email, qr, role_id) => {
         let hacker = new Hacker({
             name: name,
             email: email,
+            description: description,
             qr: qr,
             fields: fields,
             role: role_id
         });
 
         return hacker.save();
+    }).then(hacker => {
+        ret = hacker;
+        return interactionsController.createInteraction(`Created hacker ${hacker.name}`, c.interactions.CREATE, user_id);
     }).then(() => {
-        return interactionsController.createInteraction(`Created hacker ${name}`, c.interactions.CREATE, user_id);
+        return ret;
     });
 };
 

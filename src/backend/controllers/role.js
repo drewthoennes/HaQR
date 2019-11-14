@@ -7,6 +7,8 @@ exports.getRoles = () => {
 }
 
 exports.createRole = (user_id, name, fields) => {
+    let ret;
+
     return Role.findOne({name: name}).then(existingRole => {
         if (existingRole) {
             throw new Error('A role with this name already exists');
@@ -19,7 +21,10 @@ exports.createRole = (user_id, name, fields) => {
 
         return role.save();
     }).then(role => {
+        ret = role;
         return interactionsController.createInteraction(`Created role ${role.name}`, c.interactions.CREATE, user_id);
+    }).then(() => {
+        return ret;
     });
 }
 

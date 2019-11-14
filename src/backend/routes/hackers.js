@@ -6,6 +6,7 @@ const joi = require('@hapi/joi');
 const hackerSchema = joi.object().keys({
   name: joi.string().required(),
   email: joi.string().email().required(),
+  description: joi.string(),
   qr: joi.number().positive().required(),
   role: joi.string().alphanum().length(24)
 });
@@ -47,7 +48,7 @@ module.exports = function(router) {
   });
 
   router.post('/api/hackers', middleware.validate(hackerSchema), middleware.authorize({roles: ['admin']}), (req, res) => {
-    return hackerController.createHacker(req.auth.account._id, req.body.name, req.body.email, req.body.qr, req.body.role).then(hacker => {
+    return hackerController.createHacker(req.auth.account._id, req.body.name, req.body.email, req.body.description, req.body.qr, req.body.role).then(hacker => {
       res.json({'message': 'Successfully created hacker', 'hacker_qr': hacker.qr});
     }).catch(err => {
       switch (true) {

@@ -15,7 +15,12 @@ let app;
 chai.use(chaiAsPromised);
 chai.use(chaiHttp);
 
+const interactionsController = require('@b/controllers/interaction');
 const middlware = require('@b/middleware');
+
+const stubInteractions = () => {
+    sinon.stub(interactionsController, 'createInteraction').callsFake(() => mocks.promise.resolve());
+}
 
 const stubAuthAndStart = (account, authorized) => {
     sinon.stub(middlware, 'authorize').callsFake(config => mocks.stubs.authMiddleware(account, authorized, config));
@@ -37,24 +42,15 @@ describe('Hacker routes should work as expected', () => {
 
     it('/api/hackers GET POST should work as expected', done => {
         let account = mocks.stubs.account(true);
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();
-        let role = {
-            name: faker.random.word(),
-            fields: [
-                {
-                    name: faker.random.word(),
-                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
-                }, {
-                    name: faker.random.word(),
-                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
-                }
-            ]
-        }
+        let role = mocks.stubs.role();
         let hacker = {
             name: faker.name.findName(),
             email: faker.internet.email(),
+            description: faker.random.words(),
             qr: faker.random.number()
         };
 
@@ -80,6 +76,7 @@ describe('Hacker routes should work as expected', () => {
                 active: true,
                 name: hacker.name,
                 email: hacker.email,
+                description: hacker.description,
                 qr: hacker.qr,
                 role: hacker.role
             });
@@ -94,6 +91,7 @@ describe('Hacker routes should work as expected', () => {
 
     it('/api/hackers POST should fail if user is not an admin', done => {
         let account = mocks.stubs.account();
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         let hacker = {
@@ -115,6 +113,7 @@ describe('Hacker routes should work as expected', () => {
 
     it('/api/hackers POST should fail if missing required fields', done => {
         let account = mocks.stubs.account(true);
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         chai.request(app)
@@ -132,21 +131,11 @@ describe('Hacker routes should work as expected', () => {
 
     it('/api/hackers POST should fail if trying to create a hacker with an already-used qr', done => {
         let account = mocks.stubs.account(true);
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();
-        let role = {
-            name: faker.random.word(),
-            fields: [
-                {
-                    name: faker.random.word(),
-                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
-                }, {
-                    name: faker.random.word(),
-                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
-                }
-            ]
-        }
+        let role = mocks.stubs.role();
         let hacker = {
             name: faker.name.findName(),
             email: faker.internet.email(),
@@ -181,6 +170,7 @@ describe('Hacker routes should work as expected', () => {
 
     it('/api/hackers/:hacker_qr GET should resolve if member', done => {
         let account = mocks.stubs.account();
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         let hacker = {
@@ -202,6 +192,7 @@ describe('Hacker routes should work as expected', () => {
 
     it('/api/hackers/:hacker_qr GET should fail if the given qr is invalid', done => {
         let account = mocks.stubs.account();
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         chai.request(app)
@@ -215,6 +206,7 @@ describe('Hacker routes should work as expected', () => {
 
     it('/api/hackers/:hacker_qr GET should fail if the given qr does not exist', done => {
         let account = mocks.stubs.account();
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         chai.request(app)
@@ -228,24 +220,15 @@ describe('Hacker routes should work as expected', () => {
 
     it('/api/hackers/:hacker_qr GET should work as expected', done => {
         let account = mocks.stubs.account(true);
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();
-        let role = {
-            name: faker.random.word(),
-            fields: [
-                {
-                    name: faker.random.word(),
-                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
-                }, {
-                    name: faker.random.word(),
-                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
-                }
-            ]
-        }
+        let role = mocks.stubs.role();
         let hacker = {
             name: faker.name.findName(),
             email: faker.internet.email(),
+            description: faker.random.words(),
             qr: faker.random.number()
         };
 
@@ -271,6 +254,7 @@ describe('Hacker routes should work as expected', () => {
                 active: true,
                 name: hacker.name,
                 email: hacker.email,
+                description: hacker.description,
                 qr: hacker.qr,
                 fields: role.fields.map(field => {
                     return {
@@ -296,21 +280,11 @@ describe('Hacker routes should work as expected', () => {
 
     it('/api/hackers/:hacker_qr POST should fail if sent fields are invalid', done => {
         let account = mocks.stubs.account(true);
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();
-        let role = {
-            name: faker.random.word(),
-            fields: [
-                {
-                    name: faker.random.word(),
-                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
-                }, {
-                    name: faker.random.word(),
-                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
-                }
-            ]
-        }
+        let role = mocks.stubs.role();
         let hacker = {
             name: faker.name.findName(),
             email: faker.internet.email(),
@@ -364,21 +338,11 @@ describe('Hacker routes should work as expected', () => {
 
     it('/api/hackers/:hacker_qr POST should fail if qr is invalid', done => {
         let account = mocks.stubs.account(true);
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();
-        let role = {
-            name: faker.random.word(),
-            fields: [
-                {
-                    name: faker.random.word(),
-                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
-                }, {
-                    name: faker.random.word(),
-                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
-                }
-            ]
-        }
+        let role = mocks.stubs.role();
         let hacker = {
             name: faker.name.findName(),
             email: faker.internet.email(),
@@ -429,24 +393,15 @@ describe('Hacker routes should work as expected', () => {
 
     it('/api/hackers/:hacker_qr POST should work as expected', done => {
         let account = mocks.stubs.account(true);
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();
-        let role = {
-            name: faker.random.word(),
-            fields: [
-                {
-                    name: faker.random.word(),
-                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
-                }, {
-                    name: faker.random.word(),
-                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
-                }
-            ]
-        }
+        let role = mocks.stubs.role();
         let hacker = {
             name: faker.name.findName(),
             email: faker.internet.email(),
+            description: faker.random.words(),
             qr: faker.random.number()
         };
         let fields = [
@@ -494,6 +449,7 @@ describe('Hacker routes should work as expected', () => {
                 active: true,
                 name: hacker.name,
                 email: hacker.email,
+                description: hacker.description,
                 qr: hacker.qr,
                 fields: fields,
                 role: hacker.role
@@ -509,6 +465,7 @@ describe('Hacker routes should work as expected', () => {
 
     it('/api/hackers/:hacker_qr/active POST should fail if user is not an admin', done => {
         let account = mocks.stubs.account();
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         chai.request(app).post(`/api/hackers/${mocks.objectId()}/active`).then(res => {
@@ -522,21 +479,11 @@ describe('Hacker routes should work as expected', () => {
 
     it('/api/hackers/:hacker_qr/active POST should work as expected', done => {
         let account = mocks.stubs.account(true);
+        stubInteractions();
         stubAuthAndStart(account, true);
 
         let requester = chai.request(app).keepOpen();
-        let role = {
-            name: faker.random.word(),
-            fields: [
-                {
-                    name: faker.random.word(),
-                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
-                }, {
-                    name: faker.random.word(),
-                    attributes: [faker.random.word(), faker.random.word(), faker.random.word()]
-                }
-            ]
-        }
+        let role = mocks.stubs.role();
         let hacker = {
             name: faker.name.findName(),
             email: faker.internet.email(),

@@ -16,6 +16,7 @@ exports.hacker = () => ({
     _id: mongoose.Types.ObjectId(),
     name: faker.name.findName(),
     email: faker.internet.email(),
+    description: faker.random.words(),
     qr: faker.random.number(),
     fields: [
         {

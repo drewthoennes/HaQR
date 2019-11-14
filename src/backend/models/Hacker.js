@@ -9,6 +9,10 @@ var HackerSchema = new Schema({
     type: String,
     unique: true
   },
+  description: {
+    type: String,
+    default: ''
+  },
   qr: {
     type: Number,
     unique: true,
