@@ -35,7 +35,7 @@ class _addHackersView extends React.Component {
   }
 
   checkHackersFormatting() {
-    parseCSV(this.state.hackersCSV, 3).then(map => {
+    parseCSV(this.state.hackersCSV, 4).then(map => {
       this.setState({hackersCSVError: undefined});
     }).catch(err => {
       this.setState({hackersCSVError: err.message});
@@ -46,7 +46,7 @@ class _addHackersView extends React.Component {
     let token = this.props.token;
     let hackers;
 
-    parseCSV(this.state.hackersCSV, 3).then(map => {
+    parseCSV(this.state.hackersCSV, 4).then(map => {
       hackers = map;
 
       let promises = [];
@@ -54,12 +54,14 @@ class _addHackersView extends React.Component {
       hackers.forEach(hacker => {
         let name = hacker[0];
         let email = hacker[1];
-        let qr = hacker[2];
+        let description = hacker[2];
+        let qr = hacker[3];
 
         promises.push(
           axios.post('/api/hackers', {
             name: name,
             email: email,
+            description: description,
             qr: qr,
             role: this.state.role._id
           }, {
@@ -174,9 +176,9 @@ class _addHackersView extends React.Component {
                 </div>
               </div>
 
-              <p className="card-text">CSV Format: Name, Email, QR (required)</p>
+              <p className="card-text">CSV Format: Name, Email, Description, QR</p>
 
-              <textarea value={this.state.hackersCSV} placeholder="John Purdue, john@purdue.edu, 834263229619" onChange={this.onHackersChange}></textarea>
+              <textarea value={this.state.hackersCSV} placeholder="John Purdue, john@purdue.edu, Early admittance, 834263229619" onChange={this.onHackersChange}></textarea>
               <div id="hackers-buttons" className="buttons">
                 <button className="btn btn-blank" onClick={this.checkHackersFormatting}>Check Formatting</button>
                 <button className="btn btn-success" onClick={this.saveHackers}>Submit</button>

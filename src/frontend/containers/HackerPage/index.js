@@ -156,7 +156,10 @@ class HackerPage extends React.Component {
     let name = '';
     if (!this.state.error && this.state.hacker) {
       name = (
-        <h3 className="nameHeader">{this.state.hacker.name}</h3>
+        <div className="nameHeader">
+          <h3>{this.state.hacker.name}</h3>
+          <p>{this.state.hacker.description}</p>
+        </div>
       );
     }
 
