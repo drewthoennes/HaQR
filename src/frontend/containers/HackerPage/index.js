@@ -73,14 +73,19 @@ class HackerPage extends React.Component {
   }
 
   updateHacker(name, index) {
-    let fields = this.constructFields(name, index);
     let token = this.props.store.token;
+    let updated = {};
+
+    if (name === 'checkin') {
+      updated['checkin'] = !this.state.hacker.checkin.arrived
+    }
+    else {
+      updated['fields'] = this.constructFields(name, index);
+    }
 
     this.setState({hasUpdated: false});
 
-    axios.post(`/api/hackers/${this.state.qr}`, {
-      fields: fields
-    }, {
+    axios.post(`/api/hackers/${this.state.qr}`, updated, {
       headers: {
         authorization: `token ${token}`
       }
@@ -153,6 +158,26 @@ class HackerPage extends React.Component {
       );
     }
 
+    let checkin = '';
+    if (this.state.hacker && this.state.hacker.checkin && this.state.hacker.checkin.enabled) {
+      checkin = (
+        <div className="list-group">
+          <div className="list-group-item row justify-content-between">
+            <div className="column justify-content-center">
+              <p>Check-in</p>
+            </div>
+            <div className="column justify-content-center">
+            {
+              this.state.hacker.checkin.arrived
+              ? <button className="btn btn-success" onClick={() => this.updateHacker('checkin')} disabled={!this.state.hasUpdated}>Arrived</button>
+              : <button className="btn btn-danger" onClick={() => this.updateHacker('checkin')} disabled={!this.state.hasUpdated}>Absent</button>
+            }
+            </div>
+          </div>
+        </div>
+      );
+    }
+
     let name = '';
     if (!this.state.error && this.state.hacker) {
       name = (
@@ -171,6 +196,7 @@ class HackerPage extends React.Component {
             <button className="btn btn-blank" onClick={this.onBackClick}>Back</button>
           </div>
           {name}
+          {checkin}
           {this.state.error ? <p>{this.state.error}</p> : fields}
         </div>
       </div>

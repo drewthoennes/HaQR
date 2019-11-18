@@ -18,6 +18,18 @@ var HackerSchema = new Schema({
     unique: true,
     required: true
   },
+  checkin: {
+    enabled: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    arrived: {
+      type: Boolean,
+      required: true,
+      default: false
+    }
+  },
   fields: [{
     _id: false,
     name: {

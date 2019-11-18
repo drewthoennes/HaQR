@@ -9,6 +9,10 @@ var ConfigSchema = new Schema({
     promoteAll: {
         type: Boolean,
         default: false
+    },
+    activateOnCheckin: {
+        type: Boolean,
+        default: false
     }
 }, {
   collection: 'config',

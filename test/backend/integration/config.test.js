@@ -76,7 +76,8 @@ describe('Config routes should work as expected', () => {
         let requester = chai.request(app).keepOpen();
         let config = {
             authorizeAll: true,
-            promoteAll: false
+            promoteAll: false,
+            activateOnCheckin: true
         }
 
         requester
@@ -121,7 +122,8 @@ describe('Config routes should work as expected', () => {
         let requester = chai.request(app).keepOpen();
         let config = {
             authorizeAll: true,
-            promoteAll: false
+            promoteAll: false,
+            activateOnCheckin: true
         }
 
         requester

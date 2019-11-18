@@ -29,6 +29,18 @@ $xs: 400px;
         }
     }
 
+    #checkinRow {
+        margin-bottom: 20px;
+
+        input {
+            margin-right: 10px;
+        }
+
+        p {
+            margin: 0px;
+        }
+    }
+
     .cards {
         display: flex;
         flex-direction: row;

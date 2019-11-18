@@ -118,8 +118,12 @@ describe('The hacker controller should work as expected', () => {
     it('updateHacker should work as expected', () => {
         let hacker = mocks.stubs.hacker();
 
-        let updateStub = sinon
-            .stub(mocks.models.hacker, 'findOneAndUpdate')
+        let hackerStub = sinon
+            .stub(hackerController, 'getHacker')
+            .returns(mocks.promise.resolve(hacker));
+
+        let saveStub = sinon
+            .stub(hacker, 'save')
             .returns(mocks.promise.resolve(hacker));
 
         let interactionStub = sinon
@@ -128,7 +132,8 @@ describe('The hacker controller should work as expected', () => {
 
         return expect(hackerController.updateHacker(mocks.objectId(), hacker.qr, hacker.fields)).to.eventually.be.fulfilled.then(result => {
             expect(result).to.be.undefined;
-            sinon.assert.calledOnce(updateStub);
+            sinon.assert.calledOnce(hackerStub);
+            sinon.assert.calledOnce(saveStub);
             sinon.assert.calledOnce(interactionStub);
         });
     });

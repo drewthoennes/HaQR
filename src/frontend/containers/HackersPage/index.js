@@ -5,6 +5,7 @@ import map from '@f/store/map';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCamera, faCheckSquare} from '@fortawesome/free-solid-svg-icons';
+import socket from '@f/socket';
 import {authorize, sortByProperty} from '@f/utils';
 import './styles.scss';
 
@@ -35,6 +36,7 @@ class HackersPage extends React.Component {
     this.onQRScan = this.onQRScan.bind(this);
     this.openHackerPage = this.openHackerPage.bind(this);
     this.onSearchForChange = this.onSearchForChange.bind(this);
+    this.onSearchForCheckin = this.onSearchForCheckin.bind(this);
   }
 
   componentDidUpdate() {
@@ -58,7 +60,7 @@ class HackersPage extends React.Component {
   }
 
   onQRScan(qr) {
-    if (!this.state.scan.name) {
+    if (this.state.scan !== 'checkin' && !this.state.scan.name) {
       this.props.history.push(`/hackers/${qr}`);
       return;
     }
@@ -68,13 +70,20 @@ class HackersPage extends React.Component {
     this.hideScanner();
     this.scanModal.current.openModal();
 
-    axios.post(`/api/hackers/${qr}/toggle`, this.state.scan, {
+    let endpoint = `/api/hackers/${qr}/${this.state.scan === 'checkin' ? 'checkin' : 'toggle'}`;
+
+    console.log(endpoint);
+
+    axios.post(endpoint, this.state.scan, {
       headers: {
         authorization: `token ${token}`
       }
     }).then(res => {
       if (res && res.data && res.data.message) {
         this.scanModal.current.onSuccess();
+
+        if (this.state.scan === 'checkin') socket.emit('updatedHackers', token);
+
         return;
       }
 
@@ -96,7 +105,19 @@ class HackersPage extends React.Component {
     this.setState({scan: {name: name, attribute: attribute}});
   }
 
+  onSearchForCheckin() {
+    this.setState({scan: 'checkin'});
+  }
+
   render() {
+    let checkin = '';
+
+    if (this.props.store.hackers.find(hacker => {
+      return hacker && hacker.checkin && hacker.checkin.enabled;
+    })) {
+      checkin = (<a className="dropdown-item" onClick={this.onSearchForCheckin}>Check-in</a>);
+    }
+
     let roles = this.props.store.roles.filter(role => {
       return this.props.store.hackers.find(hacker => {
         return hacker.role == role._id;
@@ -104,6 +125,7 @@ class HackersPage extends React.Component {
     }).map(role => (
       <div key={role._id}>
         <a className="dropdown-item" onClick={() => this.onSearchForChange('', '')}>None</a>
+        {checkin}
         {
           role.fields.map(field => (
             <div key={field.name}>

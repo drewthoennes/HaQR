@@ -12,21 +12,21 @@ class _settingsView extends React.Component {
       hasUpdated: true
     };
 
-    this.toggleAuthorizeAll = this.toggleAuthorizeAll.bind(this);
-    this.togglePromoteAll = this.togglePromoteAll.bind(this);
+    this.toggleSetting = this.toggleSetting.bind(this);
     this.downloadHackersJSON = this.downloadHackersJSON.bind(this);
     this.downloadHackersCSV = this.downloadHackersCSV.bind(this);
   }
 
-  toggleAuthorizeAll() {
+  toggleSetting(name) {
     let token = this.props.token;
 
+    if (this.props.config[name] === undefined) return;
     this.setState({hasUpdated: false});
 
     axios.post('/api/config', {
       config: {
         ...this.props.config,
-        authorizeAll: !this.props.config.authorizeAll
+        [name]: !this.props.config[name]
       }
     }, {
       headers: {
@@ -34,35 +34,13 @@ class _settingsView extends React.Component {
       }
     }).then(res => {
       if (!res || !res.data) {
-          throw new Error('There was an error retrieving the config');
+          throw new Error('There was an error updating the config');
       }
 
       socket.emit('updatedConfig', token);
+      this.setState({hasUpdated: true});
     }).catch(err => {
-    });
-  }
-
-  togglePromoteAll() {
-    let token = this.props.token;
-
-    this.setState({hasUpdated: false});
-
-    axios.post('/api/config', {
-      config: {
-        ...this.props.config,
-        promoteAll: !this.props.config.promoteAll
-      }
-    }, {
-      headers: {
-        authorization: `token ${token}`
-      }
-    }).then(res => {
-      if (!res || !res.data) {
-          throw new Error('There was an error retrieving the config');
-      }
-
-      socket.emit('updatedConfig', token);
-    }).catch(err => {
+      this.setState({hasUpdated: true});
     });
   }
 
@@ -148,12 +126,21 @@ class _settingsView extends React.Component {
           <div className="card-body">
             <div className="setting">
               <div className="column justify-content-center"><h6>Authorize all new users</h6></div>
-              <button className={`btn btn-${this.props.config && this.props.config.authorizeAll ? 'success' : 'danger'}`} disabled={!this.state.hasUpdated} onClick={this.toggleAuthorizeAll}>{this.props.config && this.props.config.authorizeAll ? 'Enabled' : 'Disabled'}</button>
+              <button className={`btn btn-${this.props.config && this.props.config.authorizeAll ? 'success' : 'danger'}`} disabled={!this.state.hasUpdated} onClick={() => this.toggleSetting('authorizeAll')}>{this.props.config && this.props.config.authorizeAll ? 'Enabled' : 'Disabled'}</button>
             </div>
+
             <h2 className="horizontal-line"></h2>
+
             <div className="setting">
               <div className="column justify-content-center"><h6>Promote all new users</h6></div>
-              <button className={`btn btn-${this.props.config && this.props.config.promoteAll ? 'success' : 'danger'}`} disabled={!this.state.hasUpdated} onClick={this.togglePromoteAll}>{this.props.config && this.props.config.promoteAll ? 'Enabled' : 'Disabled'}</button>
+              <button className={`btn btn-${this.props.config && this.props.config.promoteAll ? 'success' : 'danger'}`} disabled={!this.state.hasUpdated} onClick={() => this.toggleSetting('promoteAll')}>{this.props.config && this.props.config.promoteAll ? 'Enabled' : 'Disabled'}</button>
+            </div>
+
+            <h2 className="horizontal-line"></h2>
+
+            <div className="setting">
+              <div className="column justify-content-center"><h6>Activate hackers on check-in</h6></div>
+              <button className={`btn btn-${this.props.config && this.props.config.activateOnCheckin ? 'success' : 'danger'}`} disabled={!this.state.hasUpdated} onClick={() => this.toggleSetting('activateOnCheckin')}>{this.props.config && this.props.config.activateOnCheckin ? 'Enabled' : 'Disabled'}</button>
             </div>
           </div>
         </div>

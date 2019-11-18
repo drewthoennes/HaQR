@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const faker = require('faker');
+const promise = require('./promise');
 
 exports.account = (isAdmin) => ({
     _id: mongoose.Types.ObjectId(),
@@ -29,7 +30,12 @@ exports.hacker = () => ({
             ]
         }
     ],
-    active: faker.random.boolean()
+    active: faker.random.boolean(),
+    checkin: {
+        enabled: true,
+        arrived: faker.random.boolean()
+    },
+    save: () => { return promise.resolve() }
 });
 
 exports.role = () => ({

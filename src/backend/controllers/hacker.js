@@ -1,4 +1,5 @@
 const {Hacker, Role} = require('@b/models');
+const configController = require('@b/controllers/config');
 const interactionsController = require('@b/controllers/interaction');
 const c = require('@b/const');
 
@@ -16,7 +17,7 @@ exports.getHacker = (qr, id) => {
     });
 };
 
-exports.createHacker = (user_id, name, email, description, qr, role_id) => {
+exports.createHacker = (user_id, name, email, description, qr, role_id, checkin = false) => {
     let ret;
 
     return Hacker.findOne({qr: qr}).lean().then(hacker => {
@@ -50,7 +51,11 @@ exports.createHacker = (user_id, name, email, description, qr, role_id) => {
             description: description,
             qr: qr,
             fields: fields,
-            role: role_id
+            role: role_id,
+            checkin: {
+                enabled: checkin,
+                arrived: false
+            }
         });
 
         return hacker.save();
@@ -62,13 +67,16 @@ exports.createHacker = (user_id, name, email, description, qr, role_id) => {
     });
 };
 
-exports.updateHacker = (user_id, qr, fields) => {
-    return Hacker.findOneAndUpdate({
-        qr: qr
-    }, {
-        $set: {
-            fields: fields
+exports.updateHacker = (user_id, qr, fields, arrived) => {
+    return exports.getHacker(qr, true).then(hacker => {
+        if (!hacker.checkin.enabled && arrived !== undefined) {
+            throw new Error('Checkin is disabled for this hacker');
         }
+
+        if (fields !== undefined) hacker.fields = fields;
+        if (arrived !== undefined) hacker.checkin.arrived = arrived;
+
+        return hacker.save();
     }).then(hacker => {
         return interactionsController.createInteraction(`Updated hacker ${hacker.name}`, c.interactions.EDIT, user_id);
     });
@@ -120,5 +128,28 @@ exports.toggleFieldTrue = (user_id, qr, name, attrib) => {
         return hacker.save();
     }).then(hacker => {
         return interactionsController.createInteraction(`Scanned for field for hacker ${hacker.name}`, c.interactions.EDIT, user_id);
+    });
+};
+
+exports.toggleCheckinTrue = async (user_id, qr) => {
+    let config = await configController.getConfig();
+
+    return exports.getHacker(qr, true).then(hacker => {
+        if (!hacker.checkin.enabled) {
+            throw new Error('Checkin is not enabled for this hacker');
+        }
+        else if (hacker.checkin.arrived) {
+            throw new Error('Hacker has already checked in');
+        }
+
+        if (config.activateOnCheckin) {
+            hacker.active = true;
+        }
+
+        hacker.checkin.arrived = true;
+
+        return hacker.save();
+    }).then(hacker => {
+        return interactionsController.createInteraction(`Checked in hacker ${hacker.name}`, c.interactions.EDIT, user_id);
     });
 };
