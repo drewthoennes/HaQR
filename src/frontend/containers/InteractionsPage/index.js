@@ -50,7 +50,7 @@ class InteractionsPage extends React.Component {
         <div className="card">
           <div className="card-body">
             <h5 className="card-title row">Older interactions hidden</h5>
-            <p>There are older interactions not currently being shown</p>
+            <p>{`There are ${this.props.store.interactions.total - this.props.store.interactions.list.length} older interactions not currently being shown`}</p>
           </div>
         </div>
       );
