@@ -60,6 +60,12 @@ exports.role = () => ({
     ],
 });
 
+exports.config = () => ({
+    authorizeAll: false,
+    promoteAll: false,
+    activateOnCheckin: true
+});
+
 exports.authMiddleware = (account, authorized, config) => {
     return (req, res, next) => {
         if (config && config.roles && !config.roles.includes(account.role)) {

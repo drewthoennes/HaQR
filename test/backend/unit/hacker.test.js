@@ -8,6 +8,7 @@ const proxyquire = require('proxyquire');
 
 chai.use(chaiAsPromised);
 
+const configController = require('@b/controllers/config');
 const interactionsController = require('@b/controllers/interaction');
 const hackerController = proxyquire('@b/controllers/hacker', {
     '@b/models': {
@@ -116,7 +117,12 @@ describe('The hacker controller should work as expected', () => {
     });
 
     it('updateHacker should work as expected', () => {
+        let config = mocks.stubs.config();
         let hacker = mocks.stubs.hacker();
+
+        let configStub = sinon
+            .stub(configController, 'getConfig')
+            .returns(mocks.promise.resolve(config));
 
         let hackerStub = sinon
             .stub(hackerController, 'getHacker')
@@ -132,6 +138,7 @@ describe('The hacker controller should work as expected', () => {
 
         return expect(hackerController.updateHacker(mocks.objectId(), hacker.qr, hacker.fields)).to.eventually.be.fulfilled.then(result => {
             expect(result).to.be.undefined;
+            sinon.assert.calledOnce(configStub);
             sinon.assert.calledOnce(hackerStub);
             sinon.assert.calledOnce(saveStub);
             sinon.assert.calledOnce(interactionStub);

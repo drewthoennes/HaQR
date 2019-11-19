@@ -67,14 +67,22 @@ exports.createHacker = (user_id, name, email, description, qr, role_id, checkin 
     });
 };
 
-exports.updateHacker = (user_id, qr, fields, arrived) => {
+exports.updateHacker = async (user_id, qr, fields, arrived) => {
+    let config = await configController.getConfig();
+
     return exports.getHacker(qr, true).then(hacker => {
         if (!hacker.checkin.enabled && arrived !== undefined) {
             throw new Error('Checkin is disabled for this hacker');
         }
 
         if (fields !== undefined) hacker.fields = fields;
-        if (arrived !== undefined) hacker.checkin.arrived = arrived;
+        if (arrived !== undefined) {
+            if (config.activateOnCheckin) {
+                hacker.active = arrived;
+            }
+
+            hacker.checkin.arrived = arrived;
+        }
 
         return hacker.save();
     }).then(hacker => {

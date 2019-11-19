@@ -58,9 +58,6 @@ class HackerPage extends React.Component {
         console.error('Could not retrieve hacker');
         this.setState({error: res.data.error || 'Error retrieving hacker', hasUpdated: true});
       }
-      else if (!res.data.hacker.active) {
-        this.props.history.push('/hackers');
-      }
 
       this.setState({hacker: res.data.hacker, hasUpdated: true});
     }).catch(err => {
@@ -91,6 +88,9 @@ class HackerPage extends React.Component {
       }
     }).then(res => {
       socket.emit('updatedInteractions', token);
+
+      if (name === 'checkin') socket.emit('updatedHackers', token);
+
       this.getHacker();
     }).catch(err => {
       authorize(this.props.history);
