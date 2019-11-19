@@ -34,7 +34,7 @@ class InteractionsPage extends React.Component {
             <h5 className="card-title row row-between">
               <div className="row">
                 <div className="column column-center"><FontAwesomeIcon icon={faUserAlt}/></div>
-                {interaction.user.name}
+                {interaction && interaction.user ? interaction.user.name : 'Deleted user'}
               </div>
               <p>{new Date(interaction.createdAt).toDateString()} {new Date(interaction.createdAt).toTimeString().substr(0, 8)}</p>
             </h5>
