@@ -46,11 +46,13 @@ class InteractionsPage extends React.Component {
     }
 
     if (this.props.store.interactions.total && this.props.store.interactions.total > 20) {
+      let hiddenInteractions = this.props.store.interactions.total - this.props.store.interactions.list.length;
+
       boundsCard = (
         <div className="card">
           <div className="card-body">
             <h5 className="card-title row">Older interactions hidden</h5>
-            <p>{`There are ${this.props.store.interactions.total - this.props.store.interactions.list.length} older interactions not currently being shown`}</p>
+            <p>{`There ${hiddenInteractions === 1 ? 'is' : 'are'} ${hiddenInteractions} older interaction${hiddenInteractions === 1 ? '' : 's'} not currently being shown`}</p>
           </div>
         </div>
       );
