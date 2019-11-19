@@ -2,6 +2,10 @@
     "name": "HaQR",
     "description": "A modular QR system for event management",
     "env": {
+        "JWT_SECRET=": {
+            "description": "The private key used to encrypt and decrypt the JWTs",
+            "value": ""
+        },
         "HEROKU_NAME": {
             "description": "Your heroku application's name",
             "value": "haqr"
