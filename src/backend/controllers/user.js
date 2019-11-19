@@ -32,14 +32,11 @@ exports.findUser = (accounts) => {
     return User.findOne(accounts).exec();
 };
 
-exports.findOrCreateUser = (accounts, name, email, github, authorized = false, promoted = false) => {
-    let totalUsers;
+exports.findOrCreateUser = async (accounts, name, email, github, authorized = false, promoted = false) => {
+    let totalUsers = await exports.countAuthorizedUsers();
+    let onlyUser = totalUsers === 0;
 
-    return exports.countAuthorizedUsers().then(count => {
-        totalUsers = count;
-
-        return User.findOne(accounts).exec()
-    }).then(user => {
+    return User.findOne(accounts).then(user => {
         if (!user) {
             let newUser = new User({
                 name: name,
@@ -47,14 +44,9 @@ exports.findOrCreateUser = (accounts, name, email, github, authorized = false, p
                 github: {
                     username: github
                 },
-                role: promoted ? 'admin' : 'member',
-                authorized: authorized
+                role: promoted || onlyUser ? 'admin' : 'member',
+                authorized: authorized || onlyUser,
             });
-
-            if (totalUsers === 0) {
-                newUser.role = 'admin';
-                newUser.authorized = true;
-            }
 
             return newUser.save();
         }

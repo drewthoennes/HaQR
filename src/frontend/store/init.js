@@ -70,13 +70,15 @@ const init = () => {
   });
 };
 
-const getAccount = (token) => {
+const getAccount = (token, secondAttempt = false) => {
   return axios.get('/api/account', {
     headers: {
       authorization: `token ${token}`
     }
   }).then(res => {
     if (!res || !res.data || !res.data.account) {
+      if (!secondAttempt) return getAccount(token, true);
+
       throw new Error('There was an error retrieving your account');
     }
 
@@ -84,13 +86,15 @@ const getAccount = (token) => {
   });
 };
 
-const getConfig = (token) => {
+const getConfig = (token, secondAttempt = false) => {
   return axios.get('/api/config', {
     headers: {
       authorization: `token ${token}`
     }
   }).then(res => {
     if (!res || !res.data || !res.data.config) {
+      if (!secondAttempt) return getConfig(token, true);
+
       throw new Error('There was an error retrieving the config');
     }
 
@@ -98,13 +102,15 @@ const getConfig = (token) => {
   });
 };
 
-const getHackers = (token) => {
+const getHackers = (token, secondAttempt = false) => {
   return axios.get('/api/hackers', {
     headers: {
       authorization: `token ${token}`
     }
   }).then(res => {
     if (!res || !res.data || !res.data.hackers) {
+      if (!secondAttempt) return getHackers(token, true);
+
       throw new Error('There was an error retrieving the hackers');
     }
 
@@ -112,13 +118,15 @@ const getHackers = (token) => {
   });
 };
 
-const getUsers = (token) => {
+const getUsers = (token, secondAttempt = false) => {
   return axios.get('/api/users', {
     headers: {
       authorization: `token ${token}`
     }
   }).then(res => {
     if (!res || !res.data || !res.data.users) {
+      if (!secondAttempt) return getUsers(token, true);
+
       throw new Error('There was an error retrieving the users');
     }
 
@@ -135,13 +143,15 @@ const getUsers = (token) => {
   });
 };
 
-const getRoles = (token) => {
+const getRoles = (token, secondAttempt = false) => {
   return axios.get('/api/roles', {
     headers: {
       authorization: `token ${token}`
     }
   }).then(res => {
     if (!res || !res.data || !res.data.roles) {
+      if (!secondAttempt) return getRoles(token, true);
+
       throw new Error('There was an error retrieving roles');
     }
 
@@ -149,13 +159,15 @@ const getRoles = (token) => {
   });
 };
 
-const getInteractions = (token) => {
+const getInteractions = (token, secondAttempt = false) => {
   return axios.get('/api/interactions', {
     headers: {
       authorization: `token ${token}`
     }
   }).then(res => {
     if (!res || !res.data || !res.data.interactions) {
+      if (!secondAttempt) return getInteractions(token, true);
+
       throw new Error('There was an error retrieving interactions');
     }
 
