@@ -153,6 +153,17 @@ class HackersPage extends React.Component {
       <button className="list-group-item" key={hacker.qr} onClick={() => this.openHackerPage(hacker.qr)}>{hacker.name} ({hacker.email})</button>
     ));
 
+    if (hackers.length === 0) {
+      hackers = (
+        <div className="card row">
+          <div className="card-body">
+            <h5 className="card-title row row-between">No active hackers</h5>
+            <p>Add or activate some hackers to get started</p>
+          </div>
+        </div>
+      );
+    }
+
     let scanner = '';
     if (this.state.showScanner) {
       scanner = (<QRReader onScan={this.onQRScan} onError={this.onQRError}/>);
