@@ -55,19 +55,20 @@ $xs: 400px;
                 width: 30%;
                 justify-content: flex-end;
 
+                #filterSelector {
+                    margin-left: 5px;
+                    max-width: calc(100% - 46px - 5px);
+                }
+
                 @media only screen and (max-width: $xs) {
                     width: 100%;
                     justify-content: space-between;
 
-                    #filterButton {
+                    #scanQRButton {
                         width: calc(50% - 5px);
-
-                        .btn {
-                            width: 100%;
-                        }
                     }
 
-                    #scanQRButton {
+                    #filterSelector {
                         width: calc(50% - 5px);
                     }
                 }

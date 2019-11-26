@@ -72,17 +72,19 @@ class HackersPage extends React.Component {
 
     let endpoint = `/api/hackers/${qr}/${this.state.scan === 'checkin' ? 'checkin' : 'toggle'}`;
 
-    console.log(endpoint);
-
     axios.post(endpoint, this.state.scan, {
       headers: {
         authorization: `token ${token}`
       }
     }).then(res => {
       if (res && res.data && res.data.message) {
-        this.scanModal.current.onSuccess();
-
-        if (this.state.scan === 'checkin') socket.emit('updatedHackers', token);
+        if (this.state.scan === 'checkin') {
+          this.scanModal.current.onSuccess(`Checked in hacker`);
+          socket.emit('updatedHackers', token);
+        }
+        else {
+          this.scanModal.current.onSuccess(`Updated field ${this.state.scan.attribute}`);
+        }
 
         return;
       }
@@ -101,8 +103,13 @@ class HackersPage extends React.Component {
     }
   }
 
-  onSearchForChange(name, attribute) {
-    this.setState({scan: {name: name, attribute: attribute}});
+  onSearchForChange(event) {
+    if (event.target.value === 'checkin') {
+      this.setState({scan: event.target.value});
+    }
+    else {
+      this.setState({scan: JSON.parse(event.target.value)});
+    }
   }
 
   onSearchForCheckin() {
@@ -115,31 +122,27 @@ class HackersPage extends React.Component {
     if (this.props.store.hackers.find(hacker => {
       return hacker && hacker.checkin && hacker.checkin.enabled;
     })) {
-      checkin = (<a className="dropdown-item" onClick={this.onSearchForCheckin}>Check-in</a>);
+      checkin = (<option onClick={this.onSearchForCheckin} value="checkin">Check-in</option>);
     }
 
     let roles = this.props.store.roles.filter(role => {
       return this.props.store.hackers.find(hacker => {
         return hacker.role == role._id;
       });
-    }).map(role => (
-      <div key={role._id}>
-        <a className="dropdown-item" onClick={() => this.onSearchForChange('', '')}>None</a>
-        {checkin}
-        {
-          role.fields.map(field => (
-            <div key={field.name}>
-              <h6 className="dropdown-header">{field.name}</h6>
-              {
-                field.attributes.map(attribute => (
-                  <a key={`${field.name}-${attribute}`} className="dropdown-item" onClick={() => this.onSearchForChange(field.name, attribute)}>{attribute}</a>
-                ))
-              }
-            </div>
+    }).map(role => {
+      return role.fields.map(field => {
+        let options = [];
+
+        options.push(<option key={field.name} disabled>{field.name}</option>);
+        options = options.concat(
+          field.attributes.map(attribute => (
+            <option key={`${field.name}-${attribute}`} value={JSON.stringify({name: field.name, attribute: attribute})}>{attribute}</option>
           ))
-        }
-      </div>
-    ));
+        );
+
+        return options;
+      });
+    });
 
     let search = this.state.search.toLowerCase();
     let hackers = this.props.store.hackers.filter(hacker => {
@@ -185,14 +188,12 @@ class HackersPage extends React.Component {
                 </div>
               </button>
 
-              <div id="filterButton" className="dropdown">
-                <button className={`btn btn-${this.state.scan.name === '' ? 'blank' : 'success'}`} type="button" id="dropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <FontAwesomeIcon icon={faCheckSquare}/>
-                </button>
-                <div className="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownButton">
-                  {roles}
-                </div>
-              </div>
+              <select id="filterSelector" className="form-control" onChange={this.onSearchForChange}>
+                <option className="dropdown-item" value={JSON.stringify({name: '', attribute: ''})}>None</option>
+                {checkin}
+                {roles}
+              </select>
+
             </div>
           </div>
 

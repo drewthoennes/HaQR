@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTimes, faSmileWink, faCheck} from '@fortawesome/free-solid-svg-icons';
 
-class GenericModal extends React.Component {
+class ScanModal extends React.Component {
   constructor (props) {
     super(props);
 
@@ -11,6 +11,7 @@ class GenericModal extends React.Component {
       showModal: false,
       loading: true,
       error: '',
+      message: '',
       styles: {
         modal: {
           content : {
@@ -48,14 +49,14 @@ class GenericModal extends React.Component {
   }
 
   closeModal() {
-    this.setState({showModal: false, loading: true, error: ''});
+    this.setState({showModal: false, loading: true, error: '', message: ''});
   }
 
-  onSuccess() {
-    this.setState({loading: false});
+  onSuccess(msg) {
+    this.setState({loading: false, message: msg});
     setTimeout(function() {
       this.closeModal();
-    }.bind(this), 800);
+    }.bind(this), 1000);
   }
 
   onError(err) {
@@ -78,9 +79,19 @@ class GenericModal extends React.Component {
     }
     else if (this.state.error === '') {
       content = (
-        <div className="row row-center tall">
-          <div className="column column-center">
-            <FontAwesomeIcon icon={faCheck}/>
+        <div>
+          <div style={this.state.styles.modal.title}>
+            <FontAwesomeIcon icon={faSmileWink} style={{'visibility': 'hidden'}}/>
+            <h3 style={{'margin': '0px 10px'}}>Success</h3>
+            <div style={{'display': 'flex', 'flexDirection': 'column', 'justifyContent': 'center'}}>
+              <FontAwesomeIcon icon={faTimes} onClick={this.closeModal} style={{'fontSize': '20px', 'cursor': 'pointer'}}/>
+            </div>
+          </div>
+
+          <div className="row row-center tall">
+            <div className="column column-center">
+              {this.state.message}
+            </div>
           </div>
         </div>
       );
@@ -90,7 +101,7 @@ class GenericModal extends React.Component {
         <div>
           <div style={this.state.styles.modal.title}>
             <FontAwesomeIcon icon={faSmileWink} style={{'visibility': 'hidden'}}/>
-            <h3 style={{'margin': '0px'}}>Error</h3>
+            <h3 style={{'margin': '0px 10px'}}>Error</h3>
             <div style={{'display': 'flex', 'flexDirection': 'column', 'justifyContent': 'center'}}>
               <FontAwesomeIcon icon={faTimes} onClick={this.closeModal} style={{'fontSize': '20px', 'cursor': 'pointer'}}/>
             </div>
@@ -108,7 +119,7 @@ class GenericModal extends React.Component {
     return (
       <div>
         <Modal
-          contentLabel="GenericModal"
+          contentLabel="ScanModal"
           isOpen={this.state.showModal}
           style={this.state.styles.modal}>
           {content}
@@ -118,7 +129,7 @@ class GenericModal extends React.Component {
   }
 }
 
-GenericModal.defaultProps = {
+ScanModal.defaultProps = {
   small: false,  // Sets modal size to small
   medium: false, // Sets modal size to medium
   large: false,  // Sets modal size to large
@@ -126,4 +137,4 @@ GenericModal.defaultProps = {
   content: ''    // JSX content inside the modal
 }
 
-export default GenericModal;
+export default ScanModal;
