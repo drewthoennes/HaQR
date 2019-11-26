@@ -25,15 +25,7 @@ const init = () => {
 
   let promises = [];
 
-  promises.push(getConfig(token).catch(err => {}));
-  promises.push(getHackers(token).catch(err => history.push('/unauthorized')));
-  promises.push(getUsers(token).catch(err => history.push('/unauthorized')));
-  promises.push(getRoles(token).catch(err => {}));
-  promises.push(getInteractions(token).catch(err => {}));
-
-  getAccount(token).then(() => {
-    return Promise.all(promises);
-  }).then(() => {
+  getInit(token).then(() => {
     store.dispatch(setLoaded());
 
     socket.emit('join', token);
@@ -67,6 +59,27 @@ const init = () => {
     });
   }).catch(err => {
     history.push('/unauthorized');
+  });
+};
+
+const getInit = (token, secondAttempt = false) => {
+  return axios.get('/api/init', {
+    headers: {
+      authorization: `token ${token}`
+    }
+  }).then(res => {
+    if (!res || !res.data || !res.data.account) {
+      if (!secondAttempt) return getInit(token, true);
+
+      throw new Error('There was an error retrieving initialization');
+    }
+
+    store.dispatch(setAccount(res.data.account));
+    store.dispatch(setConfig(res.data.config));
+    store.dispatch(setHackers(res.data.hackers));
+    store.dispatch(setUsers(res.data.users));
+    store.dispatch(setRoles(res.data.roles));
+    store.dispatch(setInteractions(res.data.interactions.interactions, res.data.interactions.total));
   });
 };
 

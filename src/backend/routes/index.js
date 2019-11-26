@@ -9,6 +9,7 @@ module.exports = function() {
   });
 
   require('./auth')(router);
+  require('./init')(router);
   require('./hackers')(router);
   require('./users')(router);
   require('./roles')(router);

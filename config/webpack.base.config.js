@@ -1,5 +1,6 @@
-const HtmlWebPackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 const path = require('path');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 const config = require('./index.js')();
 
 require('dotenv').config({path: path.resolve(__dirname, '../.env')});
@@ -9,9 +10,12 @@ function resolve(dir) {
 }
 
 module.exports = {
-  entry: './src/frontend/index.js',
+  entry: {
+    app: './src/frontend/index.js'
+  },
   output: {
-    filename: '[contenthash].js',
+    filename: '[name].bundle.[hash].js',
+    chunkFilename: '[name].bundle.[hash].js',
     path: resolve('dist'),
     publicPath: '/public/'
   },
@@ -23,50 +27,59 @@ module.exports = {
     extensions: ['.js', '.json', '.scss'],
     alias: {
         '@f': resolve('src/frontend'),
-        '@theme': resolve('src/frontend/assets/scss/_theme.scss')
+        '@theme': resolve('src/frontend/assets/_theme.scss'),
+        'jquery': 'jquery/dist/jquery.slim.js'
     }
   },
-  devtool: 'source-map',
   optimization: {
     splitChunks: {
-      chunks: 'all',
       cacheGroups: {
-        default: false,
-        vendors: false,
-        lodash: {
-          test: /[\\/]node_modules[\\/]/,
-          minSize: 100,
-          reuseExistingChunk: true,
+        // react: {
+        //   name: 'react',
+        //   chunks: 'all',
+        //   test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+        //   priority: 30
+        // },
+        // bootstrap: {
+        //   name: 'bootstrap',
+        //   chunks: 'all',
+        //   test: /[\\/]node_modules[\\/]bootstrap[\\/]/,
+        //   priority: 20
+        // },
+        vendor: {
           name: 'vendor',
-        },
+          chunks: 'initial',
+          test: /[\\/]node_modules[\\/]/,
+          enforce: true
+        }
       }
     }
   },
   module: {
     rules: [
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          use: {
-            loader: 'babel-loader',
-            options: {
-              babelrc: false,
-              presets: [
-                '@babel/preset-env',
-                '@babel/preset-react'
-              ],
-              plugins: [
-                '@babel/plugin-proposal-class-properties'
-              ],
-              cacheDirectory: true
-            }
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            babelrc: false,
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-react'
+            ],
+            plugins: [
+              '@babel/plugin-proposal-class-properties'
+            ],
+            cacheDirectory: true
           }
-        },
-        {
-          test:/\.(s*)css$/,
-          use: ['style-loader', 'css-loader', 'sass-loader']
         }
-      ]
+      },
+      {
+        test:/\.(s*)css$/,
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      }
+    ]
   },
   plugins: [
     new HtmlWebPackPlugin({
@@ -77,6 +90,12 @@ module.exports = {
         collapseWhitespace: true,
         removeAttributeQuotes: true
       }
+    }),
+    new webpack.ProvidePlugin({
+      $: 'jquery/dist/jquery.slim.js',
+      jQuery: 'jquery/dist/jquery.slim.js',
+      Button: 'exports-loader?Button!bootstrap/js/dist/button',
+      Modal: 'exports-loader?Modal!bootstrap/js/dist/modal'
     })
   ]
 };
