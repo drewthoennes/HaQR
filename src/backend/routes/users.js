@@ -7,19 +7,7 @@ module.exports = function(router) {
     return userController.getAllUsers().then(users => {
         res.json({users: users});
     }).catch(err => {
-      switch (true) {
-        case err instanceof UnauthorizedError:
-          res.status(401).json({'error': err.message});
-          break;
-
-        case err instanceof InsufficientRoleError:
-          res.status(401).json({'error': err.message});
-          break;
-
-        default:
-          res.status(500).json({'error': 'There was an error retrieving the users'});
-          break;
-      }
+      res.status(500).json({'error': 'There was an error retrieving the users'});
     });
   });
 

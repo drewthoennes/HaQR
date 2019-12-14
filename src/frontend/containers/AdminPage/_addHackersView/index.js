@@ -52,6 +52,11 @@ class _addHackersView extends React.Component {
     let token = this.props.token;
     let hackers;
 
+    if (!this.state.role) {
+      this.setState({hackersCSVError: 'Please select a role from the dropdown above before submitting'});
+      return;
+    }
+
     parseCSV(this.state.hackersCSV, 4).then(map => {
       hackers = map;
 

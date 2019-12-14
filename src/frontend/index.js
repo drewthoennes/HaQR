@@ -5,7 +5,8 @@ import store from '@f/store';
 import init from '@f/store/init';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/js/dist/button';
-import 'bootstrap/js/dist/modal';
+import 'bootstrap/js/dist/dropdown';
+import 'bootstrap/js/dist/modal'
 import './styles.scss';
 import Modal from 'react-modal';
 
