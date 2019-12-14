@@ -12,6 +12,6 @@ exports.decodeJWT = (token) => {
     try {
         return Promise.resolve(jwt.verify(token, process.env.JWT_SECRET));
     } catch (err) {
-        return Promise.reject(new Error('Invalid token'));
+        return Promise.reject(new Error(err.name === 'TokenExpiredError' ? 'Token has expired' : 'Invalid token'));
     }
 }

@@ -23,8 +23,6 @@ const init = () => {
 
   store.dispatch(setToken(token));
 
-  let promises = [];
-
   getInit(token).then(() => {
     store.dispatch(setLoaded());
 
@@ -58,6 +56,13 @@ const init = () => {
       getInteractions(token).catch();
     });
   }).catch(err => {
+    if (err.message == 'Token has expired') {
+      localStorage.removeItem('token');
+      history.push('/login');
+      window.location.reload();
+      return;
+    }
+
     history.push('/unauthorized');
   });
 };
@@ -71,7 +76,7 @@ const getInit = (token, secondAttempt = false) => {
     if (!res || !res.data || !res.data.account) {
       if (!secondAttempt) return getInit(token, true);
 
-      throw new Error('There was an error retrieving initialization');
+      throw new Error(res.data.error || 'There was an error retrieving initialization');
     }
 
     store.dispatch(setAccount(res.data.account));
