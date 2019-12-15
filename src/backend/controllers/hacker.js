@@ -17,7 +17,8 @@ exports.getHacker = (qr, id) => {
     });
 };
 
-exports.createHacker = (user_id, name, email, description, qr, role_id, checkin = false) => {
+exports.createHacker = async (user_id, name, email, description, qr, role_id, checkin = false) => {
+    let config = await configController.getConfig();
     let ret;
 
     return Hacker.findOne({qr: qr}).lean().then(hacker => {
@@ -55,7 +56,8 @@ exports.createHacker = (user_id, name, email, description, qr, role_id, checkin 
             checkin: {
                 enabled: checkin,
                 arrived: false
-            }
+            },
+            active: config.activeOnCreate
         });
 
         return hacker.save();

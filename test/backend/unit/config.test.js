@@ -8,12 +8,12 @@ const proxyquire = require('proxyquire');
 
 chai.use(chaiAsPromised);
 
-const hackerController = proxyquire('@b/controllers/config', {
+const configController = proxyquire('@b/controllers/config', {
     '@b/models': {
     }
 });
 
-describe('The hacker controller should work as expected', () => {
+describe('The config controller should work as expected', () => {
     afterEach(() => {
         sinon.restore();
     });

@@ -13,6 +13,10 @@ var ConfigSchema = new Schema({
     activateOnCheckin: {
         type: Boolean,
         default: false
+    },
+    activeOnCreate: {
+        type: Boolean,
+        default: false
     }
 }, {
   collection: 'config',

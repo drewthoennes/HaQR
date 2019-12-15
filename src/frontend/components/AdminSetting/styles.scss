@@ -1,0 +1,19 @@
+@import "~@theme";
+
+.card.adminSetting {
+    margin-bottom: 20px;
+
+    .card-header h5 {
+        margin: 0px;
+    }
+
+    .card-body {
+        button {
+            min-width: 100px;
+        }
+
+        .horizontal-line {
+            margin-bottom: 20px;
+        }
+    }
+}

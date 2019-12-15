@@ -8,7 +8,8 @@ const configSchema = joi.object().keys({
   config: joi.object().keys({
     authorizeAll: joi.boolean().required(),
     promoteAll: joi.boolean().required(),
-    activateOnCheckin: joi.boolean().required()
+    activateOnCheckin: joi.boolean().required(),
+    activeOnCreate: joi.boolean().required()
   }).required()
 });
 

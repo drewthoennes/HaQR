@@ -77,7 +77,8 @@ describe('Config routes should work as expected', () => {
         let config = {
             authorizeAll: true,
             promoteAll: false,
-            activateOnCheckin: true
+            activateOnCheckin: true,
+            activeOnCreate: false
         }
 
         requester
@@ -123,7 +124,8 @@ describe('Config routes should work as expected', () => {
         let config = {
             authorizeAll: true,
             promoteAll: false,
-            activateOnCheckin: true
+            activateOnCheckin: true,
+            activeOnCreate: false
         }
 
         requester

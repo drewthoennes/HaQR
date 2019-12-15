@@ -73,7 +73,7 @@ describe('Hacker routes should work as expected', () => {
             expect(res.body).to.have.property('hackers');
             expect(res.body.hackers).to.have.lengthOf(1);
             expect(res.body.hackers[0]).to.eql({
-                active: true,
+                active: false,
                 name: hacker.name,
                 email: hacker.email,
                 description: hacker.description,
@@ -206,7 +206,7 @@ describe('Hacker routes should work as expected', () => {
             expect(res.body).to.have.property('hackers');
             expect(res.body.hackers).to.have.lengthOf(1);
             expect(res.body.hackers[0]).to.eql({
-                active: true,
+                active: false,
                 name: hacker.name,
                 email: hacker.email,
                 description: hacker.description,
@@ -309,7 +309,7 @@ describe('Hacker routes should work as expected', () => {
         }).then(res => {
             expect(res.body).to.have.property('hacker');
             expect(res.body.hacker).to.eql({
-                active: true,
+                active: false,
                 name: hacker.name,
                 email: hacker.email,
                 description: hacker.description,
@@ -508,7 +508,7 @@ describe('Hacker routes should work as expected', () => {
         }).then(res => {
             expect(res.body).to.have.property('hacker');
             expect(res.body.hacker).to.eql({
-                active: true,
+                active: false,
                 name: hacker.name,
                 email: hacker.email,
                 description: hacker.description,
@@ -581,7 +581,7 @@ describe('Hacker routes should work as expected', () => {
         }).then(res => {
             expect(res.body).to.have.property('hacker');
             expect(res.body.hacker).to.have.property('active');
-            expect(res.body.hacker.active).to.be.false;
+            expect(res.body.hacker.active).to.be.true;
 
             requester.close();
             done();

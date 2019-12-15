@@ -63,7 +63,8 @@ exports.role = () => ({
 exports.config = () => ({
     authorizeAll: false,
     promoteAll: false,
-    activateOnCheckin: true
+    activateOnCheckin: true,
+    activeOnCreate: false
 });
 
 exports.authMiddleware = (account, authorized, config) => {

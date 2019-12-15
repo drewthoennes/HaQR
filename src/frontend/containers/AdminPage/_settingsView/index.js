@@ -4,6 +4,9 @@ import {withRouter} from 'react-router-dom';
 import socket from '@f/socket';
 import './styles.scss';
 
+import AdminSetting from '@f/components/AdminSetting';
+import AdminSettingRow from '@f/components/AdminSettingRow';
+
 class _settingsView extends React.Component {
   constructor(props) {
     super(props);
@@ -119,42 +122,32 @@ class _settingsView extends React.Component {
   }
 
   render() {
+    let config = this.props.config;
+
     return (
       <div id="_settingsView" className="tall">
-        <div className="card">
-          <div className="card-header"><h5>Application Settings</h5></div>
-          <div className="card-body">
-            <div className="setting">
-              <div className="column justify-content-center"><h6>Authorize all new users</h6></div>
-              <button className={`btn btn-${this.props.config && this.props.config.authorizeAll ? 'success' : 'danger'}`} disabled={!this.state.hasUpdated} onClick={() => this.toggleSetting('authorizeAll')}>{this.props.config && this.props.config.authorizeAll ? 'Enabled' : 'Disabled'}</button>
-            </div>
+        <AdminSetting name="User Settings">
+          <AdminSettingRow name="Authorize all new users" setting="authorizeAll" value={config && config.authorizeAll} tooltip="All new users will automatically be given access to the application" hasUpdated={this.state.hasUpdated} toggleSetting={this.toggleSetting}/>
+          <h2 className="horizontal-line"></h2>
+          <AdminSettingRow name="Promote all new users" setting="promoteAll" value={config && config.promoteAll} tooltip="All new users will automatically be given admin access" hasUpdated={this.state.hasUpdated} toggleSetting={this.toggleSetting}/>
+        </AdminSetting>
 
-            <h2 className="horizontal-line"></h2>
-
-            <div className="setting">
-              <div className="column justify-content-center"><h6>Promote all new users</h6></div>
-              <button className={`btn btn-${this.props.config && this.props.config.promoteAll ? 'success' : 'danger'}`} disabled={!this.state.hasUpdated} onClick={() => this.toggleSetting('promoteAll')}>{this.props.config && this.props.config.promoteAll ? 'Enabled' : 'Disabled'}</button>
-            </div>
-
-            <h2 className="horizontal-line"></h2>
-
-            <div className="setting">
-              <div className="column justify-content-center"><h6>Activate hackers on check-in</h6></div>
-              <button className={`btn btn-${this.props.config && this.props.config.activateOnCheckin ? 'success' : 'danger'}`} disabled={!this.state.hasUpdated} onClick={() => this.toggleSetting('activateOnCheckin')}>{this.props.config && this.props.config.activateOnCheckin ? 'Enabled' : 'Disabled'}</button>
-            </div>
-          </div>
-        </div>
+        <AdminSetting name="Hacker Settings">
+          <AdminSettingRow name="Activate hackers on check-in" setting="activateOnCheckin" value={config && config.activateOnCheckin} tooltip="When a user toggles a hacker's check-in field, the hacker will be activated" hasUpdated={this.state.hasUpdated} toggleSetting={this.toggleSetting}/>
+          <h2 className="horizontal-line"></h2>
+          <AdminSettingRow name="Toggle hackers active on creation" setting="activeOnCreate" value={config && config.activeOnCreate} tooltip="When a hacker is added, it will be automatically activated" hasUpdated={this.state.hasUpdated} toggleSetting={this.toggleSetting}/>
+        </AdminSetting>
 
         <div className="card">
           <div className="card-header"><h5>Export Hackers</h5></div>
           <div className="card-body">
             <div className="setting">
-              <div className="column justify-content-center"><h6>Export hackers as JSON</h6></div>
+              <div className="column justify-content-center" title="Downloads a JSON file containing all current hackers"><h6>Export hackers as JSON</h6></div>
               <button className={`btn btn-gray`} onClick={this.downloadHackersJSON}>Export</button>
             </div>
             <h2 className="horizontal-line"></h2>
             <div className="setting">
-              <div className="column justify-content-center"><h6>Export hackers as CSV</h6></div>
+              <div className="column justify-content-center" title="Downloads a CSV file containing all current hackers"><h6>Export hackers as CSV</h6></div>
               <button className={`btn btn-gray`} onClick={this.downloadHackersCSV}>Export</button>
             </div>
           </div>
