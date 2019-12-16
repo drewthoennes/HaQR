@@ -180,6 +180,11 @@ class HackersPage extends React.Component {
     // let lastButtonDisabled = hackers.length == 0 || this.state.page === pages;
     let halfButtons = Math.floor(this.state.pagesShown / 2);
 
+    // Verify current page is valid
+    if (pages > 0 && this.state.page > pages) {
+      this.changePage(1);
+    }
+
     // Add first button
     /*
     paginationButtons.push(
@@ -228,8 +233,6 @@ class HackersPage extends React.Component {
     }
     end = start + this.state.pagesShown;
 
-    console.log(`Page: ${this.state.page}, Pages: ${pages}, Pages shown: ${this.state.pagesShown}, Start: ${start}, End: ${end}`);
-
     if (hackers.length > 0) {
       paginationButtons = paginationButtons.concat(
         new Array(Math.min(pages, this.state.pagesShown)).fill(0).map((_, index) => {
@@ -271,6 +274,15 @@ class HackersPage extends React.Component {
     );
     */
 
+    let paginationDescriptor;
+    if (hackers.length > 0) {
+      paginationDescriptor = (
+        <div id="pagination-descriptor" className="column column-center">
+          <p>{`Showing ${(this.state.page - 1) * this.state.rowsPerPage + 1} - ${Math.min(hackers.length, this.state.page * this.state.rowsPerPage)} of ${hackers.length}`}</p>
+        </div>
+      );
+    }
+
     if (hackers.length === 0) {
       hackers = (
         <div className="card row">
@@ -280,11 +292,6 @@ class HackersPage extends React.Component {
           </div>
         </div>
       );
-    }
-
-
-    if (this.state.page > Math.ceil(hackers.length / this.state.rowsPerPage)) {
-      this.changePage(1);
     }
 
     // Limit rows to rowsPerPage
@@ -325,7 +332,11 @@ class HackersPage extends React.Component {
           <div className="list-group">
             {hackers}
           </div>
-          <div className="pagination-buttons">{paginationButtons}</div>
+
+          <div className="row row-end">
+            {paginationDescriptor}
+            <div id="pagination-buttons">{paginationButtons}</div>
+          </div>
         </div>
 
         {scanner}

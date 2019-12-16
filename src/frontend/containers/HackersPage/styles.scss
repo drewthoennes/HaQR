@@ -98,7 +98,7 @@
         }
     }
 
-    .pagination-buttons {
+    #pagination-buttons {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
@@ -136,6 +136,11 @@
             border-right: 0px;
             border-radius: 0px;
         }
+    }
+
+    #pagination-descriptor {
+        font-size: 12px;
+        opacity: 0.7;
     }
 
     .qrReader {
