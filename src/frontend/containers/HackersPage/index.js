@@ -283,7 +283,16 @@ class HackersPage extends React.Component {
       );
     }
 
-    if (hackers.length === 0) {
+    if (hackers.length === 0 && this.state.search !== '') {
+      hackers = (
+        <div className="card row">
+          <div className="card-body">
+            <h5 className="card-title row row-between">No hackers match that search</h5>
+          </div>
+        </div>
+      );
+    }
+    else if (hackers.length === 0) {
       hackers = (
         <div className="card row">
           <div className="card-body">
