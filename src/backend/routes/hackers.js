@@ -33,7 +33,7 @@ module.exports = function(router) {
     return hackerController.getAllHackers().then(hackers => {
       res.json({'message': 'Successfully retrieved hackers', 'hackers': hackers});
     }).catch(err => {
-      res.status(500).json({'error': 'There was an error retrieving the hackers'});
+      res.json({'error': 'There was an error retrieving the hackers'});
     });
   });
 
@@ -41,7 +41,7 @@ module.exports = function(router) {
     return hackerController.createHacker(req.auth.account._id, req.body.name, req.body.email, req.body.description, req.body.qr, req.body.role, req.body.checkin).then(hacker => {
       res.json({'message': 'Successfully created hacker', 'hacker_qr': hacker.qr});
     }).catch(err => {
-      res.status(500).json({'error': `Unable to create hacker: ${err.message || err}`});
+      res.json({'error': `Unable to create hacker: ${err.message || err}`});
     });
   });
 
@@ -49,7 +49,7 @@ module.exports = function(router) {
     return hackerController.getHacker(req.params.hacker_qr).then(hacker => {
       res.json({'message': 'Successfully retrieved hacker', 'hacker': hacker});
     }).catch(err => {
-      res.status(500).json({'error': 'Unable to find a hacker with that qr code'});
+      res.json({'error': 'Unable to find a hacker with that qr code'});
     });
   });
 
@@ -57,7 +57,7 @@ module.exports = function(router) {
     return hackerController.updateHacker(req.auth.account._id, req.params.hacker_qr, req.body.fields, req.body.checkin).then((hacker) => {
       return res.json({'message': 'Successfully updated hacker'});
     }).catch(err => {
-      res.status(500).json({'error': 'Unable to find a hacker with that qr code'});
+      res.json({'error': 'Unable to find a hacker with that qr code'});
     });
   });
 
@@ -65,7 +65,7 @@ module.exports = function(router) {
     return hackerController.toggleActive(req.auth.account._id, req.params.hacker_qr).then(() => {
       res.json({'message': 'Successfully updated the hacker'});
     }).catch(err => {
-      res.status(500).json({'error': 'Unable to find a hacker with that qr code'});
+      res.json({'error': 'Unable to find a hacker with that qr code'});
     });
   });
 
@@ -73,7 +73,7 @@ module.exports = function(router) {
     return hackerController.toggleFieldTrue(req.auth.account._id, req.params.hacker_qr, req.body.name, req.body.attribute).then(() => {
       res.json({'message': 'Successfully updated the hacker'})
     }).catch(err => {
-      res.status(500).json({'error': 'Unable to toggle hacker'});
+      res.json({'error': 'Unable to toggle this field for hacker'});
     });
   });
 
@@ -81,7 +81,7 @@ module.exports = function(router) {
     return hackerController.toggleCheckinTrue(req.auth.account._id, req.params.hacker_qr).then(() => {
       res.json({'message': 'Successfully checked in hacker'});
     }).catch(err => {
-      res.status(500).json({'error': 'Unable to checkin hacker'});
+      res.json({'error': 'Unable to checkin hacker'});
     });
   });
 }

@@ -4,7 +4,7 @@ import axios from 'axios';
 import map from '@f/store/map';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faCamera, faCheckSquare} from '@fortawesome/free-solid-svg-icons';
+import {faCamera, faChevronLeft, faChevronRight} from '@fortawesome/free-solid-svg-icons';
 import socket from '@f/socket';
 import {authorize, sortByProperty} from '@f/utils';
 import './styles.scss';
@@ -25,7 +25,10 @@ class HackersPage extends React.Component {
       },
       loaded: false,
       showScanner: false,
-      unauthorized: false
+      unauthorized: false,
+      page: 1,
+      pagesShown: 3,
+      rowsPerPage: 10
     };
 
     this.scanModal = React.createRef();
@@ -37,6 +40,8 @@ class HackersPage extends React.Component {
     this.openHackerPage = this.openHackerPage.bind(this);
     this.onSearchForChange = this.onSearchForChange.bind(this);
     this.onSearchForCheckin = this.onSearchForCheckin.bind(this);
+    this.filterRowsOnPage = this.filterRowsOnPage.bind(this);
+    this.changePage = this.changePage.bind(this);
   }
 
   componentDidUpdate() {
@@ -116,6 +121,17 @@ class HackersPage extends React.Component {
     this.setState({scan: 'checkin'});
   }
 
+  filterRowsOnPage(rows) {
+    let start = (this.state.page - 1) * this.state.rowsPerPage;
+    let end =  this.state.page * this.state.rowsPerPage;
+
+    return rows.slice(start, end);
+  }
+
+  changePage(page) {
+    this.setState({page: page});
+  }
+
   render() {
     let checkin = '';
 
@@ -156,6 +172,105 @@ class HackersPage extends React.Component {
       <button className="list-group-item" key={hacker.qr} onClick={() => this.openHackerPage(hacker.qr)}>{hacker.name} ({hacker.email})</button>
     ));
 
+    let paginationButtons = [];
+    let pages = Math.ceil(hackers.length / this.state.rowsPerPage);
+    // let firstButtonDisabled = hackers.length == 0 || this.state.page === 1;
+    let previousButtonDisabled = hackers.length == 0 || this.state.page === 1;
+    let nextButtonDisabled = hackers.length == 0 || this.state.page === pages;
+    // let lastButtonDisabled = hackers.length == 0 || this.state.page === pages;
+    let halfButtons = Math.floor(this.state.pagesShown / 2);
+
+    // Add first button
+    /*
+    paginationButtons.push(
+      <button
+        key="pagination-first"
+        className={firstButtonDisabled ? 'btn btn-blank btn-left disabled' : 'btn btn-blank btn-left'}
+        disabled={firstButtonDisabled}
+        onClick={() => this.changePage(1)}>
+        <div className="row">
+          <div className="column"><FontAwesomeIcon icon={faChevronLeft}/></div>
+          <div className="column"><FontAwesomeIcon icon={faChevronLeft}/></div>
+        </div>
+      </button>
+    );
+    */
+
+    // Add previous button
+    paginationButtons.push(
+      <button
+        key="pagination-previous"
+        className={`btn btn-blank btn-left${previousButtonDisabled ? ' disabled' : ''}`}
+        disabled={previousButtonDisabled}
+        onClick={() => this.changePage(this.state.page - 1)}>
+        <div className="row">
+          <div className="column">
+            <FontAwesomeIcon icon={faChevronLeft}/>
+          </div>
+        </div>
+      </button>
+    );
+
+    let start;
+    let end;
+
+    if (this.state.page <= halfButtons) { // Check for first halfButtons number of buttons
+      start = 1;
+    }
+    else if (pages - this.state.page <= halfButtons && this.state.page != 1) { // Check for last halfButtons number of buttons
+      start = pages - this.state.pagesShown + 1;
+
+      // Handle case where there are less pages than pagesShown
+      if (pages < this.state.pagesShown) start += this.state.pagesShown - pages;
+    }
+    else if (this.state.page > 1) {
+      start = this.state.page - halfButtons;
+    }
+    end = start + this.state.pagesShown;
+
+    console.log(`Page: ${this.state.page}, Pages: ${pages}, Pages shown: ${this.state.pagesShown}, Start: ${start}, End: ${end}`);
+
+    if (hackers.length > 0) {
+      paginationButtons = paginationButtons.concat(
+        new Array(Math.min(pages, this.state.pagesShown)).fill(0).map((_, index) => {
+          return (
+            <button key={`pagination-button-${start + index}`} className={this.state.page === start + index ? 'btn btn-blank page disabled' : 'btn btn-blank page'} value={start + index} onClick={() => this.changePage(start + index)} disabled={this.state.page === start + index}>{start + index}</button>
+          );
+        })
+      );
+    }
+
+    // Add next button
+    paginationButtons.push(
+      <button
+        key="pagination-next"
+        className={`btn btn-blank btn-right${nextButtonDisabled ? ' disabled' : ''}`}
+        disabled={nextButtonDisabled}
+        onClick={() => this.changePage(this.state.page + 1)}>
+        <div className="row">
+          <div className="column">
+            <FontAwesomeIcon icon={faChevronRight}/>
+          </div>
+        </div>
+      </button>
+    );
+
+    // Add last button
+    /*
+    paginationButtons.push(
+      <button
+        key="pagination-last"
+        className={lastButtonDisabled ? 'btn btn-blank btn-right disabled' : 'btn btn-blank btn-right'}
+        disabled={lastButtonDisabled}
+        onClick={() => this.changePage(pages)}>
+        <div className="row">
+          <div className="column"><FontAwesomeIcon icon={faChevronRight}/></div>
+          <div className="column"><FontAwesomeIcon icon={faChevronRight}/></div>
+        </div>
+      </button>
+    );
+    */
+
     if (hackers.length === 0) {
       hackers = (
         <div className="card row">
@@ -165,6 +280,16 @@ class HackersPage extends React.Component {
           </div>
         </div>
       );
+    }
+
+
+    if (this.state.page > Math.ceil(hackers.length / this.state.rowsPerPage)) {
+      this.changePage(1);
+    }
+
+    // Limit rows to rowsPerPage
+    if (hackers.length > 0) {
+      hackers = this.filterRowsOnPage(hackers);
     }
 
     let scanner = '';
@@ -200,6 +325,7 @@ class HackersPage extends React.Component {
           <div className="list-group">
             {hackers}
           </div>
+          <div className="pagination-buttons">{paginationButtons}</div>
         </div>
 
         {scanner}

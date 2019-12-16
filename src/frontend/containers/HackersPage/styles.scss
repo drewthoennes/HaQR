@@ -98,6 +98,46 @@
         }
     }
 
+    .pagination-buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        margin: 20px 0px 20px 20px;
+
+        .disabled {
+            cursor: auto;
+        }
+
+        .btn-left {
+            border-right: 0px;
+
+            p {
+                display: inline;
+            }
+
+            .column {
+                justify-content: center;
+                padding-right: 5px;
+            }
+        }
+
+        .btn-right {
+            p {
+                display: inline;
+            }
+
+            .column {
+                justify-content: center;
+                padding-left: 5px;
+            }
+        }
+
+        .page {
+            border-right: 0px;
+            border-radius: 0px;
+        }
+    }
+
     .qrReader {
         width: 320px;
         position: absolute;

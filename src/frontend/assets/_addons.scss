@@ -58,8 +58,23 @@
     }
 }
 
+.btn-left {
+    border-radius: 3px 0px 0px 3px;
+}
+
+.btn-right {
+    border-radius: 0px 3px 3px 0px;
+}
+
+.btn-top {
+    border-radius: 3px 3px 0px 0px;
+}
+
+.btn-bottom {
+    border-radius: 0px 0px 3px 3px;
+}
+
 .btn-blank {
-    cursor: pointer;
     background: white;
     border: 1px solid rgba(0, 0, 0, 0.15);
 }

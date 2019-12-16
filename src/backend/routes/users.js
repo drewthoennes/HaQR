@@ -7,7 +7,7 @@ module.exports = function(router) {
     return userController.getAllUsers().then(users => {
         res.json({users: users});
     }).catch(err => {
-      res.status(500).json({'error': 'There was an error retrieving the users'});
+      res.json({'error': 'There was an error retrieving the users'});
     });
   });
 
@@ -15,7 +15,7 @@ module.exports = function(router) {
     return userController.authorizeUser(req.auth.account._id, req.params.user_id).then(() => {
       res.json({'message': 'Successfully toggled user authorization'});
     }).catch(err => {
-      res.status(500).json({'error': 'There was an error authorizing this user'});
+      res.json({'error': 'There was an error authorizing this user'});
     });
   });
 
@@ -24,7 +24,7 @@ module.exports = function(router) {
     return userController.toggleUserRole(req.auth.account._id, req.params.user_id).then(() => {
       res.json({'message': 'Successfully toggled user role'});
     }).catch(err => {
-      res.status(500).json({'error': 'There was an error authorizing this user'});
+      res.json({'error': 'There was an error authorizing this user'});
     });
   });
 }
