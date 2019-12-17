@@ -1,12 +1,17 @@
 import React from 'react';
-import {connect} from 'react-redux';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faMinus, faChevronUp, faChevronDown} from '@fortawesome/free-solid-svg-icons';
 import {sortByProperty} from '@f/utils';
 import socket from '@f/socket';
 import './styles.scss';
+
+import GenericTable from '@f/components/GenericTable';
+
+const columns = [
+  {name: 'Name', value: 'name'},
+  {name: 'Email', value: 'email'},
+  {name: '', value: ''},
+];
 
 class _usersView extends React.Component {
   constructor(props) {
@@ -19,6 +24,7 @@ class _usersView extends React.Component {
     };
 
     this.onSearchChange = this.onSearchChange.bind(this);
+    this.onSortChange = this.onSortChange.bind(this);
     this.sortBy = this.sortBy.bind(this);
     this.toggleAuthorized = this.toggleAuthorized.bind(this);
     this.toggleAdmin = this.toggleAdmin.bind(this);
@@ -29,6 +35,10 @@ class _usersView extends React.Component {
 
   onSearchChange(event) {
     this.setState({search: event.target.value});
+  }
+
+  onSortChange(sort, asc) {
+    this.setState({sort: sort, asc: asc});
   }
 
   sortBy(sort) {
@@ -51,7 +61,7 @@ class _usersView extends React.Component {
       socket.emit('updatedUsers', token);
     }).catch(err => {
     });
-  }  
+  }
 
   toggleAdmin(id) {
     let token = this.props.token;
@@ -75,9 +85,8 @@ class _usersView extends React.Component {
     let users = this.props.users.filter(user => {
       return user && user.name && user.name.toLowerCase().includes(search);
     });
-    
-    users.sort(sortByProperty(this.state.sort));
 
+    users.sort(sortByProperty(this.state.sort));
     if (!this.state.asc) {
       users.reverse();
     }
@@ -99,32 +108,7 @@ class _usersView extends React.Component {
           <input className="form-control" type="text" value={this.state.search} aria-label="search" onChange={this.onSearchChange} placeholder="Search"/>
         </div>
 
-        <table className="table table-striped">
-          <thead>
-            <tr>
-            <th scope="col" onClick={() => this.sortBy('name')}>
-                <div className="row">
-                  <p>Name</p>
-                  <div className="column justify-content-center">
-                    <FontAwesomeIcon icon={this.state.sort === 'name' ? this.state.asc ? faChevronUp : faChevronDown : faMinus}/>
-                  </div>
-                </div>
-              </th>
-              <th scope="col" onClick={() => this.sortBy('email')}>
-                <div className="row">
-                  <p>Email</p>
-                  <div className="column justify-content-center">
-                    <FontAwesomeIcon icon={this.state.sort === 'email' ? this.state.asc ? faChevronUp : faChevronDown : faMinus}/>
-                  </div>
-                </div>
-              </th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {users}
-          </tbody>
-        </table>
+        <GenericTable columns={columns} rows={users} onSortChange={this.onSortChange}/>
       </div>
     );
   }

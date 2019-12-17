@@ -2,29 +2,39 @@ import React from 'react';
 import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faMinus, faChevronUp, faChevronDown, faPlus} from '@fortawesome/free-solid-svg-icons';
+import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {sortByProperty} from '@f/utils';
 import socket from '@f/socket';
 import './styles.scss';
 
+import GenericTable from '@f/components/GenericTable';
 import GenericModal from '@f/components/GenericModal';
 import AddRoleModal from './AddRoleModal';
 import DeleteRoleModal from './DeleteRoleModal';
+
+const columns = [
+  {name: 'Name', value: 'name'},
+  {name: 'Fields', value: ''},
+  {name: '', value: ''},
+];
 
 class _rolesView extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      deleting: '',
+      search: '',
       sort: '',
-      asc: false
+      asc: false,
+      deleting: ''
     };
 
     this.addRoleModal = React.createRef();
     this.deleteRoleModal = React.createRef();
 
     this.sortBy = this.sortBy.bind(this);
+    this.onSortChange = this.onSortChange.bind(this);
+    this.onSearchChange = this.onSearchChange.bind(this);
     this.openAddRoleModal = this.openAddRoleModal.bind(this);
     this.addRoleModalConfirm = this.addRoleModalConfirm.bind(this);
     this.addRoleModalCancel = this.addRoleModalCancel.bind(this);
@@ -39,6 +49,14 @@ class _rolesView extends React.Component {
     }
 
     this.setState({sort: sort, asc: true});
+  }
+
+  onSortChange(sort, asc) {
+    this.setState({sort: sort, asc: asc});
+  }
+
+  onSearchChange(event) {
+    this.setState({search: event.target.value});
   }
 
   openAddRoleModal() {
@@ -93,7 +111,9 @@ class _rolesView extends React.Component {
   }
 
   render() {
-    let roles = this.props.roles;
+    let roles = this.props.roles.filter(role => {
+      return role.name.toLowerCase().includes(this.state.search.toLowerCase());
+    });
 
     roles.sort(sortByProperty(this.state.sort));
 
@@ -121,7 +141,7 @@ class _rolesView extends React.Component {
           }
         </td>
         <td className="row justify-content-around">
-          <button className="btn btn-danger" onClick={() => this.openDeleteRoleModal(role._id)}>Delete</button>
+          <button id="delete-button" className="btn btn-danger" onClick={() => this.openDeleteRoleModal(role._id)}>Delete</button>
         </td>
       </tr>
     ));
@@ -131,33 +151,17 @@ class _rolesView extends React.Component {
 
     return (
       <div id="_rolesView" className="tall">
-        <button title="Add role" className="btn btn-blank" onClick={this.openAddRoleModal}>
-          <FontAwesomeIcon icon={faPlus}/>
-        </button>
+        <div id="search-add-bar" className="row row-between">
+          <div id="searchbar" className="row">
+            <input className="form-control" type="text" value={this.state.search} aria-label="search" onChange={this.onSearchChange} placeholder="Search"/>
+          </div>
 
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th scope="col" onClick={() => this.sortBy('name')}>
-                <div className="row">
-                  <p>Name</p>
-                  <div className="column justify-content-center">
-                    <FontAwesomeIcon icon={this.state.sort === 'name' ? this.state.asc ? faChevronUp : faChevronDown : faMinus}/>
-                  </div>
-                </div>
-              </th>
-              <th scope="col">
-                <div className="row">
-                  <p>Fields</p>
-                </div>
-              </th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {roles}
-          </tbody>
-        </table>
+          <button title="Add role" className="btn btn-blank" onClick={this.openAddRoleModal}>
+            <FontAwesomeIcon icon={faPlus}/>
+          </button>
+        </div>
+
+        <GenericTable columns={columns} rows={roles} onSortChange={this.onSortChange}/>
 
         <GenericModal ref={this.addRoleModal} large title="Add Role" content={addRoleModal}/>
         <GenericModal ref={this.deleteRoleModal} small title="Delete Role" content={deleteRoleModal}/>

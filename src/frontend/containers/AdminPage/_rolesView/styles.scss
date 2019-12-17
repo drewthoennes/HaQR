@@ -1,56 +1,37 @@
 @import "~@theme";
 
 #_rolesView {
+    $buttons: 1;
+    $button-padding: 30px;
+    $button-width: 120px;
+    $total-width: $buttons * ($button-width + $button-padding);
+
     .btn-blank {
         margin-bottom: 20px;
         float: right;
     }
 
-    .table {
-        background: white;
-        border: 1px solid #dee2e6;
+    #search-add-bar {
+        margin-bottom: 20px;
 
-        th {
-            width: 25%; /* Needed to fill the table rows completely */
-            border-bottom-width: 1px;
+        #searchbar {
+            padding: 5px;
+            width: 30%;
 
-            .row .column {
-                margin-left: 8px;
-
-                svg {
-                    font-size: 12px;
-                }
+            @media only screen and (max-width: $lg) {
+                width: 50%;
+            }
+            @media only screen and (max-width: $md) {
+                width: 70%;
             }
         }
+    }
 
-        th, td {
-            border-top: 0px;
-        }
+    .table td.row.justify-content-around {
+        width: $total-width; /* Needed to keep the toggle buttons inline */
+    }
 
-        ul {
-            margin: 0px;
-        }
-
-        tbody tr:nth-child(odd) {
-            background: rgba(0, 0, 0, 0.025);
-        }
-
-        .btn-success, .btn-danger {
-            min-width: 110px;
-        }
-
-        @media only screen and (max-width: $sm) {
-            overflow-x: scroll;
-            display: block;
-            white-space: nowrap;
-        }
-
-        /* We don't add scrolling for $md because the content becomes horizontal and doesn't need scroll until $sm  */
-
-        @media only screen and (max-width: $sm) {
-            overflow-x: scroll;
-            display: block;
-            white-space: nowrap;
-        }
+    #delete-button {
+        min-width: $button-width;
     }
 }

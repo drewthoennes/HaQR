@@ -159,7 +159,7 @@ class _addHackersView extends React.Component {
           <div className="card">
             <div className="card-header">
               <div className="column justify-content-center">
-                <h5>CSV Hackers Upload</h5>
+                <h5>Import CSV</h5>
               </div>
 
               <div className="row row-between">

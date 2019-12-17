@@ -1,3 +1,13 @@
+/*
+ * parseJson
+ *
+ * node parseJson.js users.json applications.json
+ *
+ * @args
+ * users.json           Path to JSON for users table (uses columns user_id, first_name, last_name)
+ * applications.json    Path to JSON for applications table (uses columns id, email, rsvp)
+ */
+
 const fs = require('fs');
 const idLength = 13;
 
