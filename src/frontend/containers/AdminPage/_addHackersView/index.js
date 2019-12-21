@@ -3,6 +3,7 @@ import axios from 'axios';
 import {withRouter} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCamera, faRandom} from '@fortawesome/free-solid-svg-icons';
+import insertTextAtCursor from 'insert-text-at-cursor';
 import socket from '@f/socket';
 import {parseCSV} from '@f/utils';
 import './styles.scss';
@@ -122,14 +123,15 @@ class _addHackersView extends React.Component {
 
   createRandomUniqueQR() {
     let qr = Math.floor(Math.random() * Math.pow(10, 13));
+    let csv = this.state.hackersCSV;
 
-    while (this.state.hackersCSV.includes(qr) || this.props.hackers.find(hacker => {
+    while (csv.includes(qr) || this.props.hackers.find(hacker => {
       return hacker.qr == qr;
     })) {
       qr = Math.floor(Math.random() * Math.pow(10, 13));
     }
 
-    this.setState({hackersCSV: `${this.state.hackersCSV}${qr}`});
+    insertTextAtCursor(document.getElementById('hacker-textarea'), qr);
   }
 
   render() {
@@ -195,7 +197,7 @@ class _addHackersView extends React.Component {
 
               <p className="card-text">CSV Format: Name, Email, Description, QR</p>
 
-              <textarea value={this.state.hackersCSV} placeholder="John Purdue, john@purdue.edu, Early admittance, 834263229619" onChange={this.onHackersChange}></textarea>
+              <textarea id="hacker-textarea" value={this.state.hackersCSV} placeholder="John Purdue, john@purdue.edu, Early admittance, 834263229619" onChange={this.onHackersChange}></textarea>
               <div id="hackers-buttons" className="buttons">
                 <button className="btn btn-blank" onClick={this.checkHackersFormatting}>Check Formatting</button>
                 <button className="btn btn-success" onClick={this.saveHackers}>Submit</button>

@@ -6,13 +6,13 @@
     $button-width: 120px;
     $total-width: $buttons * ($button-width + $button-padding);
 
-    .btn-blank {
-        margin-bottom: 20px;
-        float: right;
-    }
-
     #search-add-bar {
         margin-bottom: 20px;
+
+        .btn-blank {
+            margin-bottom: 20px;
+            float: right;
+        }
 
         #searchbar {
             padding: 5px;
