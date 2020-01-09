@@ -6,8 +6,8 @@
             "description": "The private key used to encrypt and decrypt the JWTs",
             "value": ""
         },
-        "HEROKU_NAME": {
-            "description": "Your heroku application's name",
+        "ROOT_URL": {
+            "description": "The URL of your application",
             "value": ""
         },
         "APPLICATION_NAME": {

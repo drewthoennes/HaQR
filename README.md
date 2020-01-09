@@ -63,7 +63,7 @@ Deploy the application to production in minutes with Heroku!
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/drewthoennes/HaQR/tree/master)
 
-In order to deploy, make sure you create a [GitHub OAuth application](https://github.com/settings/applications) for your HaQR instance.
+In order to deploy, make sure you create a [GitHub OAuth application](https://github.com/settings/applications) for your HaQR instance. The homepage URL is just the ROOT_URL environment variable and the callback URL is ```{ROOT_URL}/api/auth/github/redirect```.
 
 #### Local development
 To run the application locally, install and start MongoDB and then run:

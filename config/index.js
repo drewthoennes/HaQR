@@ -4,7 +4,7 @@ module.exports = (env) => {
     // Production config
     return {
       'port': process.env.PORT,
-      'host': `https://${process.env.HEROKU_NAME}.herokuapp.com`,
+      'host': process.env.ROOT_URL,
       'name': process.env.APPLICATION_NAME,
       'database': {
         'uri': process.env.MONGODB_URI,
