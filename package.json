@@ -1,6 +1,6 @@
 {
   "name": "haqr",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A modular QR system for event management",
   "private": true,
   "main": "server.js",
