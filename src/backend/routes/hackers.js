@@ -8,8 +8,7 @@ const hackerSchema = joi.object().keys({
   email: joi.string().email().required(),
   description: joi.string(),
   qr: joi.number().positive().required(),
-  role: joi.string().alphanum().length(24).required(),
-  checkin: joi.boolean().optional()
+  role: joi.string().alphanum().length(24).required()
 });
 
 const updateHackerSchema = joi.object().keys({
@@ -19,8 +18,7 @@ const updateHackerSchema = joi.object().keys({
       had: joi.boolean().required(),
       name: joi.string().required()
     })).required()
-  })).optional(),
-  checkin: joi.boolean()
+  })).optional()
 });
 
 const toggleSchema = joi.object().keys({
@@ -38,7 +36,7 @@ module.exports = function(router) {
   });
 
   router.post('/api/hackers', middleware.authorize({roles: ['admin']}), middleware.validate(hackerSchema), (req, res) => {
-    return hackerController.createHacker(req.auth.account._id, req.body.name, req.body.email, req.body.description, req.body.qr, req.body.role, req.body.checkin).then(hacker => {
+    return hackerController.createHacker(req.auth.account._id, req.body.name, req.body.email, req.body.description, req.body.qr, req.body.role).then(hacker => {
       res.json({'message': 'Successfully created hacker', 'hacker_qr': hacker.qr});
     }).catch(err => {
       res.json({'error': `Unable to create hacker: ${err.message || err}`});
@@ -54,7 +52,7 @@ module.exports = function(router) {
   });
 
   router.post('/api/hackers/:hacker_qr', middleware.authorize(), middleware.validate(updateHackerSchema), (req, res) => {
-    return hackerController.updateHacker(req.auth.account._id, req.params.hacker_qr, req.body.fields, req.body.checkin).then((hacker) => {
+    return hackerController.updateHacker(req.auth.account._id, req.params.hacker_qr, req.body.fields).then((hacker) => {
       return res.json({'message': 'Successfully updated hacker'});
     }).catch(err => {
       res.json({'error': 'Unable to find a hacker with that qr code'});
@@ -78,10 +76,10 @@ module.exports = function(router) {
   });
 
   router.post('/api/hackers/:hacker_qr/checkin', middleware.authorize(), (req, res) => {
-    return hackerController.toggleCheckinTrue(req.auth.account._id, req.params.hacker_qr).then(() => {
-      res.json({'message': 'Successfully checked in hacker'});
+    return hackerController.toggleCheckin(req.auth.account._id, req.params.hacker_qr).then(() => {
+      res.json({'message': 'Successfully toggled checkin for hacker'});
     }).catch(err => {
-      res.json({'error': 'Unable to checkin hacker'});
+      res.json({'error': 'Unable to find a hacker with that qr code'});
     });
   });
 }

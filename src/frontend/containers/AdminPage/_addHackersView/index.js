@@ -18,11 +18,9 @@ class _addHackersView extends React.Component {
       role: '',
       hackersCSV: '',
       hackersCSVError: undefined,
-      showScanner: false,
-      checkin: false
+      showScanner: false
     };
 
-    this.onCheckboxChange = this.onCheckboxChange.bind(this);
     this.onHackersChange = this.onHackersChange.bind(this);
     this.checkHackersFormatting = this.checkHackersFormatting.bind(this);
     this.saveHackers = this.saveHackers.bind(this);
@@ -31,10 +29,6 @@ class _addHackersView extends React.Component {
     this.onQRScan = this.onQRScan.bind(this);
     this.setRole = this.setRole.bind(this);
     this.createRandomUniqueQR = this.createRandomUniqueQR.bind(this);
-  }
-
-  onCheckboxChange(event) {
-    this.setState({checkin: event.target.checked});
   }
 
   onHackersChange(event) {
@@ -75,8 +69,7 @@ class _addHackersView extends React.Component {
             email: email,
             description: description,
             qr: qr,
-            role: this.state.role._id,
-            checkin: this.state.checkin
+            role: this.state.role._id
           }, {
             headers: {
               authorization: `token ${token}`
@@ -88,7 +81,7 @@ class _addHackersView extends React.Component {
       return Promise.all(promises);
     }).then(() => {
       socket.emit('updatedHackers', token);
-      this.setState({role: '', hackersCSV: '', hackersCSVError: undefined, showScanner: false, checkin: false});
+      this.setState({role: '', hackersCSV: '', hackersCSVError: undefined, showScanner: false});
     }).catch(err => {
       console.error(err);
     });
@@ -188,11 +181,6 @@ class _addHackersView extends React.Component {
                 <div className="dropdown-menu" aria-labelledby="rolesDropdown">
                   {roles}
                 </div>
-              </div>
-
-              <div id="checkinRow" className="row">
-                <div className="column column-center"><input type="checkbox" value={this.state.checkin} onChange={this.onCheckboxChange}/></div>
-                <p>Include check-in field</p>
               </div>
 
               <p className="card-text">CSV Format: Name, Email, Description, QR</p>

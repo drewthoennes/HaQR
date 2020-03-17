@@ -22,6 +22,7 @@ class HackerPage extends React.Component {
 
     this.onBackClick = this.onBackClick.bind(this);
     this.getHacker = this.getHacker.bind(this);
+    this.toggleCheckin = this.toggleCheckin.bind(this);
     this.updateHacker = this.updateHacker.bind(this);
     this.constructFields = this.constructFields.bind(this);
   }
@@ -69,16 +70,29 @@ class HackerPage extends React.Component {
     });
   }
 
+  toggleCheckin() {
+    let token = this.props.store.token;
+    this.setState({hasUpdated: false});
+
+    axios.post(`/api/hackers/${this.state.qr}/active`, {}, {
+      headers: {
+        authorization: `token ${token}`
+      }
+    }).then(res => {
+      socket.emit('updatedInteractions', token);
+      socket.emit('updatedHackers', token);
+
+      this.getHacker();
+    }).catch(err => {
+      authorize(this.props.history);
+    });
+  }
+
   updateHacker(name, index) {
     let token = this.props.store.token;
     let updated = {};
 
-    if (name === 'checkin') {
-      updated['checkin'] = !this.state.hacker.checkin.arrived
-    }
-    else {
-      updated['fields'] = this.constructFields(name, index);
-    }
+    updated.fields = this.constructFields(name, index);
 
     this.setState({hasUpdated: false});
 
@@ -159,7 +173,7 @@ class HackerPage extends React.Component {
     }
 
     let checkin = '';
-    if (this.state.hacker && this.state.hacker.checkin && this.state.hacker.checkin.enabled) {
+    if (this.state.hacker && this.props.store.config && this.props.store.config.activateOnCheckin) {
       checkin = (
         <div className="list-group">
           <div className="list-group-item row justify-content-between">
@@ -168,9 +182,9 @@ class HackerPage extends React.Component {
             </div>
             <div className="column justify-content-center">
             {
-              this.state.hacker.checkin.arrived
-              ? <button className="btn btn-success" onClick={() => this.updateHacker('checkin')} disabled={!this.state.hasUpdated}>Arrived</button>
-              : <button className="btn btn-danger" onClick={() => this.updateHacker('checkin')} disabled={!this.state.hasUpdated}>Absent</button>
+              this.state.hacker.active
+              ? <button className="btn btn-success" onClick={this.toggleCheckin} disabled={!this.state.hasUpdated}>Arrived</button>
+              : <button className="btn btn-danger" onClick={this.toggleCheckin} disabled={!this.state.hasUpdated}>Absent</button>
             }
             </div>
           </div>

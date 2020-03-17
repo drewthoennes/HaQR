@@ -78,11 +78,7 @@ describe('Hacker routes should work as expected', () => {
                 email: hacker.email,
                 description: hacker.description,
                 qr: hacker.qr,
-                role: hacker.role,
-                checkin: {
-                    enabled: false,
-                    arrived: false
-                }
+                role: hacker.role
             });
 
             requester.close();
@@ -163,60 +159,6 @@ describe('Hacker routes should work as expected', () => {
             return requester.post('/api/hackers').send(hacker);
         }).then(res => {
             expect(res.body).to.have.property('error');
-
-            requester.close();
-            done();
-        }).catch(err => {
-            requester.close();
-            done(err)
-        });
-    });
-
-    it('/api/hackers POST with checkin field should work', done => {
-        let account = mocks.stubs.account(true);
-        stubInteractions();
-        stubAuthAndStart(account, true);
-
-        let requester = chai.request(app).keepOpen();
-        let role = mocks.stubs.role();
-        let hacker = {
-            name: faker.name.findName(),
-            email: faker.internet.email(),
-            description: faker.random.words(),
-            qr: faker.random.number(),
-            checkin: true
-        };
-
-        requester
-            .post('/api/roles')
-            .send(role)
-        .then(res => {
-            expect(res.body).to.have.property('message');
-            expect(res.body).to.have.property('role_id');
-
-            hacker = Object.assign(hacker, {role: res.body.role_id});
-
-            return requester.post('/api/hackers').send(hacker);
-        }).then(res => {
-            expect(res.body).to.have.property('message');
-            expect(res.body).to.have.property('hacker_qr');
-
-            return requester.get('/api/hackers');
-        }).then(res => {
-            expect(res.body).to.have.property('hackers');
-            expect(res.body.hackers).to.have.lengthOf(1);
-            expect(res.body.hackers[0]).to.eql({
-                active: false,
-                name: hacker.name,
-                email: hacker.email,
-                description: hacker.description,
-                qr: hacker.qr,
-                role: hacker.role,
-                checkin: {
-                    enabled: true,
-                    arrived: false
-                }
-            });
 
             requester.close();
             done();
@@ -314,6 +256,7 @@ describe('Hacker routes should work as expected', () => {
                 email: hacker.email,
                 description: hacker.description,
                 qr: hacker.qr,
+                role: hacker.role,
                 fields: role.fields.map(field => {
                     return {
                         name: field.name,
@@ -324,12 +267,7 @@ describe('Hacker routes should work as expected', () => {
                             }
                         })
                     }
-                }),
-                role: hacker.role,
-                checkin: {
-                    enabled: false,
-                    arrived: false
-                }
+                })
             });
 
             requester.close();
@@ -514,11 +452,7 @@ describe('Hacker routes should work as expected', () => {
                 description: hacker.description,
                 qr: hacker.qr,
                 fields: fields,
-                role: hacker.role,
-                checkin: {
-                    enabled: false,
-                    arrived: false
-                }
+                role: hacker.role
             });
 
             requester.close();
@@ -582,56 +516,6 @@ describe('Hacker routes should work as expected', () => {
             expect(res.body).to.have.property('hacker');
             expect(res.body.hacker).to.have.property('active');
             expect(res.body.hacker.active).to.be.true;
-
-            requester.close();
-            done();
-        }).catch(err => {
-            requester.close();
-            done(err)
-        });
-    });
-
-    it('/api/hackers/:hacker_qr/checkin POST should work as expected', done => {
-        let account = mocks.stubs.account(true);
-        stubInteractions();
-        stubAuthAndStart(account, true);
-
-        let requester = chai.request(app).keepOpen();
-        let role = mocks.stubs.role();
-        let hacker = {
-            name: faker.name.findName(),
-            email: faker.internet.email(),
-            qr: faker.random.number(),
-            checkin: true
-        };
-        let hacker_qr;
-
-        requester
-            .post('/api/roles')
-            .send(role)
-        .then(res => {
-            expect(res.body).to.have.property('message');
-            expect(res.body).to.have.property('role_id');
-
-            hacker = Object.assign(hacker, {role: res.body.role_id});
-
-            return requester.post('/api/hackers').send(hacker);
-        }).then(res => {
-            expect(res.body).to.have.property('message');
-            expect(res.body).to.have.property('hacker_qr');
-
-            hacker_qr = res.body.hacker_qr;
-
-            return requester.post(`/api/hackers/${hacker_qr}/checkin`);
-        }).then(res => {
-            expect(res.body).to.have.property('message');
-
-            return requester.get(`/api/hackers/${hacker_qr}`);
-        }).then(res => {
-            expect(res.body).to.have.property('hacker');
-            expect(res.body.hacker).to.have.property('checkin');
-            expect(res.body.hacker.checkin).to.have.property('arrived');
-            expect(res.body.hacker.checkin.arrived).to.be.true;
 
             requester.close();
             done();

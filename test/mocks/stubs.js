@@ -31,10 +31,6 @@ exports.hacker = () => ({
         }
     ],
     active: faker.random.boolean(),
-    checkin: {
-        enabled: true,
-        arrived: faker.random.boolean()
-    },
     save: () => { return promise.resolve() }
 });
 

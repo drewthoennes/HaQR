@@ -76,6 +76,7 @@ class HackersPage extends React.Component {
     this.scanModal.current.openModal();
 
     let endpoint = `/api/hackers/${qr}/${this.state.scan === 'checkin' ? 'checkin' : 'toggle'}`;
+    let alreadyActive = this.props.store.hackers.find(hacker => hacker.qr == qr).active;
 
     axios.post(endpoint, this.state.scan, {
       headers: {
@@ -84,7 +85,7 @@ class HackersPage extends React.Component {
     }).then(res => {
       if (res && res.data && res.data.message) {
         if (this.state.scan === 'checkin') {
-          this.scanModal.current.onSuccess(`Checked in hacker`);
+          this.scanModal.current.onSuccess(alreadyActive ? 'Checked hacker out' : 'Checked in hacker');
           socket.emit('updatedHackers', token);
         }
         else {
@@ -135,9 +136,7 @@ class HackersPage extends React.Component {
   render() {
     let checkin = '';
 
-    if (this.props.store.hackers.find(hacker => {
-      return hacker && hacker.checkin && hacker.checkin.enabled;
-    })) {
+    if (this.props.store.config && this.props.store.config.activateOnCheckin) {
       checkin = (<option onClick={this.onSearchForCheckin} value="checkin">Check-in</option>);
     }
 
