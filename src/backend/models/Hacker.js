@@ -46,7 +46,8 @@ var HackerSchema = new Schema({
   }
 }, {
   collection: 'hackers',
-  versionKey: false
+  versionKey: false,
+  timestamps: true
 });
 
 module.exports = mongoose.model('Hacker', HackerSchema);

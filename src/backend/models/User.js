@@ -32,7 +32,8 @@ var UserSchema = new Schema({
   }
 }, {
   collection: 'users',
-  versionKey: false
+  versionKey: false,
+  timestamps: true
 });
 
 module.exports = mongoose.model('User', UserSchema);

@@ -78,7 +78,9 @@ describe('Hacker routes should work as expected', () => {
                 email: hacker.email,
                 description: hacker.description,
                 qr: hacker.qr,
-                role: hacker.role
+                role: hacker.role,
+                createdAt: res.body.hackers[0].createdAt,
+                updatedAt: res.body.hackers[0].updatedAt
             });
 
             requester.close();
@@ -267,7 +269,9 @@ describe('Hacker routes should work as expected', () => {
                             }
                         })
                     }
-                })
+                }),
+                createdAt: res.body.hacker.createdAt,
+                updatedAt: res.body.hacker.updatedAt
             });
 
             requester.close();
@@ -452,7 +456,9 @@ describe('Hacker routes should work as expected', () => {
                 description: hacker.description,
                 qr: hacker.qr,
                 fields: fields,
-                role: hacker.role
+                role: hacker.role,
+                createdAt: res.body.hacker.createdAt,
+                updatedAt: res.body.hacker.updatedAt
             });
 
             requester.close();
