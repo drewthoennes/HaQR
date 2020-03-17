@@ -35,7 +35,7 @@ exports.hacker = () => ({
 });
 
 exports.role = () => ({
-    name: faker.name.findName(),
+    name: faker.random.word(),
     fields: [
         {
             name: faker.random.word(),
@@ -54,6 +54,28 @@ exports.role = () => ({
             ]
         }
     ],
+    randomFields: function() { // Creates fields with random boolean values
+        let random = [];
+
+        for (let field in this.fields) {
+            let temp = {};
+
+            temp.name = this.fields[field].name;
+            temp.attributes = [];
+
+            for (let attrib in this.fields[field].attributes) {
+
+                temp.attributes.push({
+                    name: this.fields[field].attributes[attrib],
+                    had: faker.random.boolean()
+                });
+            }
+
+            random.push(temp);
+        }
+
+        return random;
+    }
 });
 
 exports.config = () => ({

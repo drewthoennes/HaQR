@@ -68,8 +68,26 @@ exports.createHacker = async (user_id, name, email, description, qr, role_id) =>
 exports.updateHacker = async (user_id, qr, fields, arrived) => {
     let config = await configController.getConfig();
 
+    if (fields === undefined) throw new Error('Fields cannot be undefined');
+
     return exports.getHacker(qr, true).then(hacker => {
-        if (fields !== undefined) hacker.fields = fields;
+        // Check to make sure we only update fields that exist
+        for (let field in hacker.fields) {
+            let candidate = hacker.fields[field];
+            let actual = hacker.fields.find(field => field.name === candidate.name);
+
+            if (!actual) {
+                throw new Error('Trying to update hacker with a field that does not exist');
+            }
+
+            for (let attribute in candidate.attributes) {
+                if (!actual.attributes.find(attr => attr.name === candidate.attributes[attribute].name)) {
+                    throw new Error('Trying to update hacker with a field that does not exist');
+                }
+            }
+        }
+
+        hacker.fields = fields;
 
         if (arrived !== undefined && config.activateOnCheckin) {
             hacker.active = arrived;

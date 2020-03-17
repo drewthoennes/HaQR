@@ -340,7 +340,7 @@ describe('Hacker routes should work as expected', () => {
         });
     });
 
-    it('/api/hackers/:hacker_qr POST should fail if qr is invalid', done => {
+    it('/api/hackers/:hacker_qr POST should fail if attribute names differ from hacker attributes', done => {
         let account = mocks.stubs.account(true);
         stubInteractions();
         stubAuthAndStart(account, true);
@@ -354,20 +354,63 @@ describe('Hacker routes should work as expected', () => {
         };
         let fields = [
             {
-                name: faker.random.word(),
+                name: role.fields[0].name,
                 attributes: [
-                    {name: faker.random.word()}, // Missing `had` field
-                    {had: false, name: faker.random.word()}
+                    {had: false, name: role.fields[0].attributes[0].name},
+                    {had: false, name: role.fields[0].attributes[1].name}
                 ]
             },
             {
-                // Missing `name` field
+                name: role.fields[1].name,
                 attributes: [
-                    {had: false, name: faker.random.word()},
-                    {had: false, name: faker.random.word()}
+                    {had: false, name: role.fields[1].attributes[0].name},
+                    {had: false, name: faker.random.word()} // This should differ from the name of this attribute in the role
                 ]
             }
         ];
+        let hacker_qr;
+
+        requester
+            .post('/api/roles')
+            .send(role)
+        .then(res => {
+            expect(res.body).to.have.property('message');
+            expect(res.body).to.have.property('role_id');
+
+            hacker = Object.assign(hacker, {role: res.body.role_id});
+
+            return requester.post('/api/hackers').send(hacker);
+        }).then(res => {
+            expect(res.body).to.have.property('message');
+            expect(res.body).to.have.property('hacker_qr');
+
+            hacker_qr = res.body.hacker_qr;
+
+            return requester.post(`/api/hackers/${hacker_qr}`).send({fields: fields});
+        }).then(res => {
+            expect(res.body).to.have.property('error');
+
+            requester.close();
+            done();
+        }).catch(err => {
+            requester.close();
+            done(err)
+        });
+    });
+
+    it('/api/hackers/:hacker_qr POST should fail if qr is invalid', done => {
+        let account = mocks.stubs.account(true);
+        stubInteractions();
+        stubAuthAndStart(account, true);
+
+        let requester = chai.request(app).keepOpen();
+        let role = mocks.stubs.role();
+        let hacker = {
+            name: faker.name.findName(),
+            email: faker.internet.email(),
+            qr: faker.random.number()
+        };
+        let fields = role.randomFields();
 
         requester
             .post('/api/roles')
@@ -408,22 +451,7 @@ describe('Hacker routes should work as expected', () => {
             description: faker.random.words(),
             qr: faker.random.number()
         };
-        let fields = [
-            {
-                name: faker.random.word(),
-                attributes: [
-                    {had: false, name: faker.random.word()},
-                    {had: false, name: faker.random.word()}
-                ]
-            },
-            {
-                name: faker.random.word(),
-                attributes: [
-                    {had: false, name: faker.random.word()},
-                    {had: false, name: faker.random.word()}
-                ]
-            }
-        ];
+        let fields = role.randomFields();
         let hacker_qr;
 
         requester
