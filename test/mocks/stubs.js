@@ -2,15 +2,22 @@ const mongoose = require('mongoose');
 const faker = require('faker');
 const promise = require('./promise');
 
-exports.account = (isAdmin) => ({
+exports.account = (isAdmin, isOwner) => ({
     _id: mongoose.Types.ObjectId(),
     github: {
         username: faker.internet.userName()
     },
     name: faker.name.findName(),
     email: faker.internet.email(),
-    role: isAdmin ? 'admin' : 'member',
+    role: isOwner ? 'owner' : isAdmin ? 'admin' : 'member',
     authorized: true,
+});
+
+exports.config = () => ({
+    authorizeAll: false,
+    promoteAll: false,
+    activateOnCheckin: true,
+    activeOnCreate: false
 });
 
 exports.hacker = () => ({
@@ -78,11 +85,14 @@ exports.role = () => ({
     }
 });
 
-exports.config = () => ({
-    authorizeAll: false,
-    promoteAll: false,
-    activateOnCheckin: true,
-    activeOnCreate: false
+exports.user = (authorized, role) => ({
+    name: faker.name.findName(),
+    email: faker.internet.email(),
+    github: {
+        username: faker.internet.userName()
+    },
+    role: role ? role : faker.random.arrayElement(['member', 'admin', 'owner']),
+    authorized: authorized ? authorized : faker.random.boolean()
 });
 
 exports.authMiddleware = (account, authorized, config) => {

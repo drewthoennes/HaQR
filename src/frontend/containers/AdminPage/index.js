@@ -39,7 +39,7 @@ class AdminPage extends React.Component {
 
   checkIfAuthorized() {
     // Redirect if unauthorized
-    if (this.props.store.account.role && this.props.store.account.role !== 'admin') {
+    if (this.props.store.account.role && this.props.store.account.role !== 'admin' && this.props.store.account.role !== 'owner') {
       this.props.history.push('/hackers');
     }
   }
@@ -68,7 +68,7 @@ class AdminPage extends React.Component {
         view = (<AddHackersView token={this.props.store.token} roles={this.props.store.roles} hackers={this.props.store.hackers} isBlurred={this.state.isBlurred} blur={this.blur} unblur={this.unblur}/>);
         break;
       case 'users':
-          view = (<UsersView users={this.props.store.users} token={this.props.store.token}/>);
+          view = (<UsersView users={this.props.store.users} account={this.props.store.account} token={this.props.store.token}/>);
           break;
       case 'roles':
         view = (<RolesView roles={this.props.store.roles} token={this.props.store.token}/>);

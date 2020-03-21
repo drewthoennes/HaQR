@@ -11,7 +11,7 @@ module.exports = function(router) {
     });
   });
 
-  router.post('/api/users/:user_id/authorize', middleware.authorize({roles: ['admin']}), (req, res) => {
+  router.post('/api/users/:user_id/authorize', middleware.authorize({roles: ['admin', 'owner']}), (req, res) => {
     return userController.authorizeUser(req.auth.account._id, req.params.user_id).then(() => {
       res.json({'message': 'Successfully toggled user authorization'});
     }).catch(err => {
@@ -19,12 +19,19 @@ module.exports = function(router) {
     });
   });
 
-
-  router.post('/api/users/:user_id/role', middleware.authorize({roles: ['admin']}), (req, res) => {
+  router.post('/api/users/:user_id/role', middleware.authorize({roles: ['admin', 'owner']}), (req, res) => {
     return userController.toggleUserRole(req.auth.account._id, req.params.user_id).then(() => {
       res.json({'message': 'Successfully toggled user role'});
     }).catch(err => {
-      res.json({'error': 'There was an error authorizing this user'});
+      res.json({'error': 'There was an error changing the role of this user'});
+    });
+  });
+
+  router.post('/api/users/:user_id/ownership', middleware.authorize({roles: ['owner']}), (req, res) => {
+    return userController.transferOwnership(req.auth.account._id, req.params.user_id).then(() => {
+      res.json({'message': 'Successfully transfered ownership'});
+    }).catch(err => {
+      res.json({'error': 'There was an error transfering ownership'});
     });
   });
 }

@@ -55,7 +55,7 @@ class Topbar extends React.Component {
 
   render() {
     let adminButton = '';
-    if (!this.props.noButtons && this.props.store.account && this.props.store.account.role === 'admin') {
+    if (!this.props.noButtons && this.props.store.account && (this.props.store.account.role === 'admin' || this.props.store.account.role === 'owner')) {
       adminButton = (
         <div className={`topbar-item column justify-content-center${this.props.admin ? ' selected' : ''}`} onClick={() => this.props.history.push('/admin')}>
           <FontAwesomeIcon icon={faTools}/>

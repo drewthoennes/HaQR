@@ -1,20 +1,31 @@
 @import "~@theme";
 
 #_usersView {
-    $buttons: 2;
+    $small-buttons: 2;
     $button-padding: 30px;
-    $button-width: 120px;
-    $total-width: $buttons * ($button-width + $button-padding);
+    $large-button-width: 180px;
+    $small-button-width: 120px;
+    $non-owner-width: $small-buttons * ($small-button-width + $button-padding);
+    $owner-width: $large-button-width + $button-padding + $non-owner-width;
 
     #searchbar {
         margin-bottom: 20px;
     }
 
     .table td.row.justify-content-around {
-        width: $total-width; /* Needed to keep the toggle buttons inline */
+        width: $non-owner-width; /* Needed to keep the toggle buttons inline */
+    }
+
+    .owner.table td.row.justify-content-around {
+        width: $owner-width; /* Needed to keep the toggle buttons inline */
+    }
+
+
+    #ownership-button {
+        min-width: $large-button-width;
     }
 
     #authorize-button, #admin-button {
-        min-width: $button-width;
+        min-width: $small-button-width;
     }
 }

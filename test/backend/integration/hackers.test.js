@@ -182,7 +182,8 @@ describe('Hacker routes should work as expected', () => {
             role: mocks.objectId()
         };
 
-        chai.request(app).get('/api/hackers').send(hacker)
+        chai.request(app)
+            .get('/api/hackers')
         .then(res => {
             expect(res.body).to.have.property('hackers');
 

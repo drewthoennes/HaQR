@@ -10,7 +10,7 @@ exports.getAllHackers = () => {
 exports.getHacker = (qr, id) => {
     return Hacker.findOne({qr: qr}).select(id ? '' : '-_id').then(hacker => {
         if (!hacker) {
-            throw new Error('A hacker with this QR does not exist');
+            throw new Error('A hacker with this qr code does not exist');
         }
 
         return hacker;

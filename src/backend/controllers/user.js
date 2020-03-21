@@ -44,7 +44,8 @@ exports.findOrCreateUser = async (accounts, name, email, github, authorized = fa
                 github: {
                     username: github
                 },
-                role: promoted || onlyUser ? 'admin' : 'member',
+
+                role: onlyUser ? 'owner' : promoted ? 'admin' : 'member',
                 authorized: authorized || onlyUser,
             });
 
@@ -64,6 +65,8 @@ exports.hasUser = (accounts) => {
 
 exports.authorizeUser = (user_id, id) => {
     return User.findById(id).then(user => {
+        if (!user) throw new Error('A user with this id does not exist');
+
         return User.findByIdAndUpdate(id, {
             $set: {
                 authorized: !user.authorized
@@ -81,6 +84,8 @@ exports.authorizeUser = (user_id, id) => {
 
 exports.toggleUserRole = (user_id, id) => {
     return User.findById(id).then(user => {
+        if (user.role === 'owner') throw new Error('Cannot toggle role of owner without explicitly choosing another user to transfer ownership to');
+
         return User.findByIdAndUpdate(id, {
             $set: {
                 role: user.role === 'admin' ? 'member' : 'admin'
@@ -93,5 +98,21 @@ exports.toggleUserRole = (user_id, id) => {
         else {
             return interactionsController.createInteraction(`Demoted ${user.name} to admin`, c.interactions.OTHER, user_id);
         }
+    });
+};
+
+exports.transferOwnership = async (user_id, id) => {
+    let owner = await User.findById(user_id);
+    let toPromote = await User.findById(id);
+
+    if (owner.role !== 'owner') throw new Error('Given owner is not actually the owner');
+
+    owner.role = 'admin';
+    toPromote.role = 'owner';
+
+    return owner.save().then(() => {
+        return toPromote.save();
+    }).then(user => {
+        return interactionsController.createInteraction(`${user.name} transfered ownership to ${toPromote.name}`, c.interactions.OTHER, user_id);
     });
 };

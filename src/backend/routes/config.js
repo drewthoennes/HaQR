@@ -23,7 +23,7 @@ module.exports = function(router) {
       });
     });
 
-    router.post('/api/config', middleware.authorize({roles: ['admin']}), middleware.validate(configSchema), (req, res) => {
+    router.post('/api/config', middleware.authorize({roles: ['admin', 'owner']}), middleware.validate(configSchema), (req, res) => {
       return configController.updateConfig(req.auth.account._id, req.body.config).then(() => {
         res.json({'message': 'Successfully updated the configuration'});
       }).catch(err => {

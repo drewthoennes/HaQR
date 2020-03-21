@@ -140,7 +140,7 @@ class GenericTable extends React.Component {
 
     return (
       <>
-        <table id="generic-table" className="table table-striped">
+        <table id="generic-table" className={`table table-striped${this.props.className ? ' ' + this.props.className : ''}`}>
           <thead><tr>{columns}</tr></thead>
           <tbody>{rows}</tbody>
         </table>
@@ -155,12 +155,13 @@ class GenericTable extends React.Component {
 }
 
 GenericTable.defaultProps = {
-    columns: [],            // Array of the column names
-    rows: [],               // Rows to display in table
-    paginated: true,        // Boolean of whether or not to show pagination
-    pagesShown: 3,          // Number of buttons in pagination bar
-    rowsPerPage: 10,        // Number of rows per paginated page
-    onSortChange: () => {}  // Callback for when column sort changes
+  className: '',          // The class name on the table element
+  columns: [],            // Array of the column names
+  rows: [],               // Rows to display in table
+  paginated: true,        // Boolean of whether or not to show pagination
+  pagesShown: 3,          // Number of buttons in pagination bar
+  rowsPerPage: 10,        // Number of rows per paginated page
+  onSortChange: () => {}  // Callback for when column sort changes
 }
 
 export default GenericTable;

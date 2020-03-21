@@ -10,7 +10,7 @@ import GenericTable from '@f/components/GenericTable';
 const columns = [
   {name: 'Name', value: 'name'},
   {name: 'Email', value: 'email'},
-  {name: '', value: ''},
+  {name: '', value: ''}
 ];
 
 class _usersView extends React.Component {
@@ -26,6 +26,7 @@ class _usersView extends React.Component {
     this.onSearchChange = this.onSearchChange.bind(this);
     this.onSortChange = this.onSortChange.bind(this);
     this.sortBy = this.sortBy.bind(this);
+    this.transferOwnership = this.transferOwnership.bind(this);
     this.toggleAuthorized = this.toggleAuthorized.bind(this);
     this.toggleAdmin = this.toggleAdmin.bind(this);
   }
@@ -48,6 +49,19 @@ class _usersView extends React.Component {
     }
 
     this.setState({sort: sort, asc: true});
+  }
+
+  transferOwnership(id) {
+    let token = this.props.token;
+
+    axios.post(`/api/users/${id}/ownership`, {}, {
+      headers: {
+        authorization: `token ${token}`
+      }
+    }).then(res => {
+      socket.emit('updatedUsers', token);
+    }).catch(err => {
+    });
   }
 
   toggleAuthorized(id) {
@@ -90,14 +104,19 @@ class _usersView extends React.Component {
     if (!this.state.asc) {
       users.reverse();
     }
-
     users = users.map(user => (
       <tr key={user._id}>
         <td scope="row">{user.name}</td>
         <td scope="row">{user.email}</td>
         <td className="row justify-content-around">
-          <button id="authorize-button" className={`btn ${user.authorized ? 'btn-success' : 'btn-danger'}`} disabled={user.role === 'admin' && admins.length === 1} onClick={() => this.toggleAuthorized(user._id)}>{user.authorized ? 'Authorized' : 'Unauthorized'}</button>
-          <button id="admin-button" className={`btn ${user.role === 'admin' ? 'btn-success' : 'btn-blank'}`} disabled={user.role === 'admin' && admins.length === 1} onClick={() => this.toggleAdmin(user._id)}>{user.role === 'admin' ? 'Admin' : 'Member'}</button>
+          {this.props.account.role === 'owner' && user.role !== 'owner' ?
+            <button id="ownership-button" className="btn btn-blank" onClick={() => this.transferOwnership(user._id)}>Transfer Ownership</button> :
+           this.props.account.role === 'owner' && user.role === 'owner' ?
+            <button id="ownership-button" className="btn btn-blank" style={{'visibility': 'hidden'}}>Hi there :)</button>
+           : ''
+          }
+          <button id="authorize-button" className={`btn ${user.authorized ? 'btn-success' : 'btn-danger'}`} disabled={user.role === 'owner'} onClick={() => this.toggleAuthorized(user._id)}>{user.authorized ? 'Authorized' : 'Unauthorized'}</button>
+          <button id="admin-button" className={`btn ${user.role === 'owner' || user.role === 'admin' ? 'btn-success' : 'btn-blank'}`} disabled={user.role === 'owner'} onClick={() => this.toggleAdmin(user._id)}>{user.role === 'owner' ? 'Owner' : user.role === 'admin' ? 'Admin' : 'Member'}</button>
         </td>
       </tr>
     ));
@@ -108,7 +127,7 @@ class _usersView extends React.Component {
           <input className="form-control" type="text" value={this.state.search} aria-label="search" onChange={this.onSearchChange} placeholder="Search"/>
         </div>
 
-        <GenericTable columns={columns} rows={users} onSortChange={this.onSortChange}/>
+        <GenericTable className={this.props.account.role === 'owner' ? 'owner' : ''} columns={columns} rows={users} onSortChange={this.onSortChange}/>
       </div>
     );
   }
