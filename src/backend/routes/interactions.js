@@ -9,4 +9,20 @@ module.exports = function(router) {
       res.json({'error': 'There was an error getting interactions: ' + err});
     });
   });
+
+  router.delete('/api/interactions', middleware.authorize({roles: ['owner']}), (req, res) => {
+    interactionsController.deleteInteractions().then(() => {
+      res.json({'message': 'Successfully deleted interactions'});
+    }).catch(err => {
+      res.json({'error': 'There was an error deleting interactions'});
+    });
+  });
+
+  router.delete('/api/interactions/:interaction_id', middleware.authorize({roles: ['owner']}), (req, res) => {
+    interactionsController.deleteInteraction(req.params.interaction_id).then(() => {
+      res.json({'message': 'Successfully deleted the interaction'});
+    }).catch(err => {
+      res.json({'error': 'There was an error deleting the interaction'});
+    });
+  });
 }

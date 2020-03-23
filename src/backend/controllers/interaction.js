@@ -37,3 +37,13 @@ exports.createInteraction = (description, type, user_id) => {
         return interaction.save();
     });
 }
+
+exports.deleteInteraction = (id) => {
+    return Interaction.findOneAndRemove({_id: id}).then(interaction => {
+        if (!interaction) throw new Error('No interaction with this id exists');
+    });
+}
+
+exports.deleteInteractions = () => {
+    return Interaction.deleteMany();
+}

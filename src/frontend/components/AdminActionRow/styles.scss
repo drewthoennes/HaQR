@@ -1,0 +1,48 @@
+@import "~@theme";
+
+.setting {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    h6 {
+        margin: 0px;
+    }
+
+    &:last-child {
+        margin-bottom: 0px;
+    }
+
+    #setting-tooltip {
+        display: flex;
+        margin-left: 10px;
+        cursor: pointer;
+        opacity: 0.4;
+
+        &:hover {
+            opacity: 0.9;
+        }
+    }
+
+    @media only screen and (max-width: $sm) {
+        flex-direction: column;
+
+        .column {
+            margin-bottom: 10px;
+
+            h6 {
+                text-align: center;
+            }
+        }
+
+        .setting-name {
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        #setting-tooltip {
+            margin: 0px;
+        }
+    }
+}

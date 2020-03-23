@@ -6,6 +6,7 @@ import './styles.scss';
 
 import AdminSetting from '@f/components/AdminSetting';
 import AdminSettingRow from '@f/components/AdminSettingRow';
+import AdminActionRow from '@f/components/AdminActionRow';
 
 class _settingsView extends React.Component {
   constructor(props) {
@@ -16,10 +17,10 @@ class _settingsView extends React.Component {
     };
 
     this.toggleSetting = this.toggleSetting.bind(this);
+    this.flushInteractions = this.flushInteractions.bind(this);
     this.downloadHackersJSON = this.downloadHackersJSON.bind(this);
     this.downloadHackersCSV = this.downloadHackersCSV.bind(this);
   }
-
   toggleSetting(name) {
     let token = this.props.token;
 
@@ -41,6 +42,21 @@ class _settingsView extends React.Component {
       }
 
       socket.emit('updatedConfig', token);
+      this.setState({hasUpdated: true});
+    }).catch(err => {
+      this.setState({hasUpdated: true});
+    });
+  }
+
+  flushInteractions() {
+    let token = this.props.token;
+
+    axios.delete('/api/interactions', {
+      headers: {
+        authorization: `token ${token}`
+      }
+    }).then(res => {
+      socket.emit('updatedInteractions', token);
       this.setState({hasUpdated: true});
     }).catch(err => {
       this.setState({hasUpdated: true});
@@ -124,10 +140,19 @@ class _settingsView extends React.Component {
   render() {
     let config = this.props.config;
 
+    let interactionSettings;
+    if (this.props.account && this.props.account.role === 'owner') {
+      interactionSettings = (
+        <AdminSetting name="Interaction Settings">
+          <AdminActionRow name="Flush all interactions" tooltip="Deletes all existing interactions" button="Flush" hasUpdated={this.state.hasUpdated} action={this.flushInteractions}/>
+        </AdminSetting>
+      );
+    }
+
     return (
       <div id="_settingsView" className="tall">
         <AdminSetting name="User Settings">
-          <AdminSettingRow name="Authorize all new users" setting="authorizeAll" value={config && config.authorizeAll} tooltip="All new users will automatically be given access to the application" hasUpdated={this.state.hasUpdated} toggleSetting={this.toggleSetting}/>
+          <AdminSettingRow name="Authorize all new users" setting="authorizeAll" value={config && config.authorizeAll} tooltip="All current interactions will be deleted" hasUpdated={this.state.hasUpdated} toggleSetting={this.toggleSetting}/>
           <h2 className="horizontal-line"></h2>
           <AdminSettingRow name="Promote all new users" setting="promoteAll" value={config && config.promoteAll} tooltip="All new users will automatically be given admin access" hasUpdated={this.state.hasUpdated} toggleSetting={this.toggleSetting}/>
         </AdminSetting>
@@ -138,20 +163,13 @@ class _settingsView extends React.Component {
           <AdminSettingRow name="Toggle hackers active on creation" setting="activeOnCreate" value={config && config.activeOnCreate} tooltip="When a hacker is added, it will be automatically activated" hasUpdated={this.state.hasUpdated} toggleSetting={this.toggleSetting}/>
         </AdminSetting>
 
-        <div className="card">
-          <div className="card-header"><h5>Export Hackers</h5></div>
-          <div className="card-body">
-            <div className="setting">
-              <div className="column justify-content-center" title="Downloads a JSON file containing all current hackers"><h6>Export hackers as JSON</h6></div>
-              <button className={`btn btn-gray`} onClick={this.downloadHackersJSON}>Export</button>
-            </div>
-            <h2 className="horizontal-line"></h2>
-            <div className="setting">
-              <div className="column justify-content-center" title="Downloads a CSV file containing all current hackers"><h6>Export hackers as CSV</h6></div>
-              <button className={`btn btn-gray`} onClick={this.downloadHackersCSV}>Export</button>
-            </div>
-          </div>
-        </div>
+        {interactionSettings}
+
+        <AdminSetting name="Export Hackers">
+          <AdminActionRow name="Export hackers as JSON" tooltip="Downloads a JSON file containing all current hackers" button="Export" hasUpdated={this.state.hasUpdated} action={this.downloadHackersJSON}/>
+          <h2 className="horizontal-line"></h2>
+          <AdminActionRow name="Export hackers as CSV" tooltip="Downloads a CSV file containing all current hackers" button="Export" hasUpdated={this.state.hasUpdated} action={this.downloadHackersCSV}/>
+        </AdminSetting>
       </div>
     );
   }
