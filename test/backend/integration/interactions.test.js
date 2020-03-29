@@ -34,20 +34,19 @@ const createInteraction = (description, type, user_id) => {
 describe('Interactions routes should work as expected', () => {
     let first;
     let second;
-    let user;
+    let owner;
 
     beforeEach(done => {
-
         mongo.beforeEach().then(() => {
             let user = mocks.stubs.user(true, 'owner');
             return createUser(user.github.username, user.name, user.email, true, true);
-        }).then(usr => {
-            user = usr;
-            return createInteraction('This is the first interaction', c.interactions.CREATE, user._id);
+        }).then(user => {
+            owner = user;
+            return createInteraction('This is the first interaction', c.interactions.CREATE, owner._id);
         }).then(interaction => {
             first = interaction;
 
-            return createInteraction('This is the second interaction', c.interactions.DELETE, user._id);
+            return createInteraction('This is the second interaction', c.interactions.DELETE, owner._id);
         }).then(interaction => {
             second = interaction;
             done();
@@ -63,7 +62,7 @@ describe('Interactions routes should work as expected', () => {
     after(() => server.killSession());
 
     it('/api/interactions GET should work as expected', done => {
-        let account = Object.assign(mocks.stubs.account(), {_id: user._id});
+        let account = Object.assign(mocks.stubs.account(), {_id: owner._id});
         stubAuthAndStart(account, true);
 
         let keys = ['_id', 'type', 'description', 'user', 'createdAt'];
@@ -78,7 +77,7 @@ describe('Interactions routes should work as expected', () => {
                 let interaction = res.body.interactions[index];
 
                 expect(interaction).to.have.property('user');
-                expect(interaction.user.name).to.equal(user.name);
+                expect(interaction.user.name).to.equal(owner.name);
 
                 if (interaction._id == first._id) {
                     expect(interaction).to.have.keys(...keys);
@@ -102,17 +101,69 @@ describe('Interactions routes should work as expected', () => {
         });
     });
 
-    it('/api/interactions DELETE should work as expected', done => {
-        let account = Object.assign(mocks.stubs.account(), {_id: user._id});
+    it('/api/interactions DELETE should fail if user is not the owner', done => {
+        let account = mocks.stubs.account();
         stubAuthAndStart(account, true);
 
-        done();
+        chai.request(app)
+            .delete('/api/interactions')
+        .then(res => {
+            expect(res.body).to.have.property('error');
+            done();
+        });
+    });
+
+    it('/api/interactions DELETE should work as expected', done => {
+        let account = owner
+        stubAuthAndStart(account, true);
+
+        let requester = chai.request(app).keepOpen();
+
+        requester.delete('/api/interactions').then(res => {
+            expect(res.body).to.have.property('message');
+            return requester.get('/api/interactions');
+        }).then(res => {
+            expect(res.body).to.have.property('interactions');
+            expect(res.body.interactions).to.have.length(0);
+
+            requester.close();
+            done();
+        }).catch(err => {
+            requester.close();
+            done(err);
+        });
+    });
+
+    it('/api/interactions/:interaction_id DELETE should fail if user is not the owner', done => {
+        let account = mocks.stubs.account();
+        stubAuthAndStart(account, true);
+
+        chai.request(app)
+            .delete(`/api/interactions/${first._id}`)
+        .then(res => {
+            expect(res.body).to.have.property('error');
+            done();
+        });
     });
 
     it('/api/interactions/:interaction_id DELETE should work as expected', done => {
-        let account = Object.assign(mocks.stubs.account(), {_id: user._id});
+        let account = owner
         stubAuthAndStart(account, true);
 
-        done();
+        let requester = chai.request(app).keepOpen();
+
+        requester.delete(`/api/interactions/${first._id}`).then(res => {
+            expect(res.body).to.have.property('message');
+            return requester.get('/api/interactions');
+        }).then(res => {
+            expect(res.body).to.have.property('interactions');
+            expect(res.body.interactions).to.have.length(1);
+
+            requester.close();
+            done();
+        }).catch(err => {
+            requester.close();
+            done(err);
+        });
     });
 });
